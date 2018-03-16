@@ -1,4 +1,0 @@
-/home/chrx/Documents/CKEngine/engine/build/../bin/libCKEngine.a
-/home/chrx/Documents/CKEngine/engine/build/../bin/include/EngineConfig.hpp
-/home/chrx/Documents/CKEngine/engine/build/../bin/include/Engine.hpp
-/home/chrx/Documents/CKEngine/engine/build/../bin/include/Stuff.hpp
