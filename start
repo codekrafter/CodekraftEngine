@@ -1,0 +1,51 @@
+#!/bin/bash
+
+TARGET=""
+CLEAN=0
+
+if [ $1 == "clean" ]; then
+	CLEAN=1
+	TARGET=$2
+else
+	CLEAN=0
+	TARGET=$1
+fi
+
+cd engine
+cd build
+cmake .. >/dev/null
+if [ $CLEAN -eq 1 ]; then
+make clean
+fi
+make all
+make install >/dev/null
+cd ../..
+
+if [ $TARGET == "editor" ]; then
+	cd editor
+	cd build
+	cmake .. >/dev/null
+	if [ $CLEAN -eq 1 ]; then
+	make clean
+	fi
+	make all
+	make install > /dev/null
+	cd ..
+	cd bin
+	./Editor
+elif [ $TARGET = "game" ]; then
+	cd testgame
+	cd build
+	cmake .. >/dev/null
+	if [ $CLEAN -eq 1 ]; then
+	make clean
+	fi
+	make all
+	make install > /dev/null
+	cd ..
+	cd bin
+	./TestGame
+else
+	echo "Please provide a valid target"
+	echo 'A valid target is "editor" or "game"'
+fi

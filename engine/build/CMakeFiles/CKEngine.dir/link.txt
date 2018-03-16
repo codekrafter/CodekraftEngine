@@ -1,0 +1,2 @@
+/usr/bin/ar qc libCKEngine.a  CMakeFiles/CKEngine.dir/src/Engine.cpp.o
+/usr/bin/ranlib libCKEngine.a

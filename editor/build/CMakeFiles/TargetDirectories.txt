@@ -1,0 +1,7 @@
+/home/chrx/Documents/CKEngine/editor/build/CMakeFiles/install.dir
+/home/chrx/Documents/CKEngine/editor/build/CMakeFiles/list_install_components.dir
+/home/chrx/Documents/CKEngine/editor/build/CMakeFiles/rebuild_cache.dir
+/home/chrx/Documents/CKEngine/editor/build/CMakeFiles/Editor.dir
+/home/chrx/Documents/CKEngine/editor/build/CMakeFiles/install/local.dir
+/home/chrx/Documents/CKEngine/editor/build/CMakeFiles/install/strip.dir
+/home/chrx/Documents/CKEngine/editor/build/CMakeFiles/edit_cache.dir
