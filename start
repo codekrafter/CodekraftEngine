@@ -2,13 +2,24 @@
 
 TARGET=""
 CLEAN=0
+RUN="no"
 
 if [ $1 == "clean" ]; then
 	CLEAN=1
 	TARGET=$2
+	if [ $# -lt 3 ]; then
+		RUN="no"
+	else
+		RUN=$3
+	fi
 else
 	CLEAN=0
 	TARGET=$1
+	if [ $# -lt 2 ]; then
+		RUN="no"
+	else
+		RUN=$2
+	fi
 fi
 
 cd engine
@@ -28,11 +39,14 @@ if [ $TARGET == "editor" ]; then
 	if [ $CLEAN -eq 1 ]; then
 	make clean
 	fi
+	make clean
 	make all
 	make install > /dev/null
 	cd ..
 	cd bin
+if [ $RUN == "run" ]; then
 	./Editor
+fi
 elif [ $TARGET = "game" ]; then
 	cd testgame
 	cd build
@@ -40,11 +54,14 @@ elif [ $TARGET = "game" ]; then
 	if [ $CLEAN -eq 1 ]; then
 	make clean
 	fi
+	make clean
 	make all
 	make install > /dev/null
 	cd ..
 	cd bin
+if [ $RUN == "run" ]; then
 	./TestGame
+fi
 else
 	echo "Please provide a valid target"
 	echo 'A valid target is "editor" or "game"'
