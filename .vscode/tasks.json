@@ -1,0 +1,43 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build everything",
+            "type": "shell",
+            "command": "./start editor && ./start game",
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "run editor",
+            "type": "shell",
+            "command": "./start editor run",
+            "group": "build"
+        },
+        {
+            "label": "run testgame",
+            "type": "shell",
+            "command": "./start game run",
+            "group": "build"
+        },
+        {
+            "label": "clean editor",
+            "type": "shell",
+            "command": "./start clean editor",
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "clean testgame",
+            "type": "shell",
+            "command": "./start clean game",
+            "group": "build"
+        }
+    ]
+}

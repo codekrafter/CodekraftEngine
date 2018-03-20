@@ -11,7 +11,6 @@ Asset* AssetFactory::create(std::string type)
 {
     if (type == "SHADER")
     {
-        std::cout << "returning new shader" << std::endl;
         return new Shader();
     }
     else

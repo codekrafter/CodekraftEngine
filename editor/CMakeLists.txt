@@ -24,7 +24,7 @@ include_directories(../engine/bin/include)
 link_directories(../engine/bin/)
 
 add_executable(Editor ${SRC})
-target_link_libraries(Editor CKEngine.a)
+target_link_libraries(Editor CKEngine.a glfw3 GL assimp ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
 target_link_libraries(Editor ${wxWidgets_LIBRARIES})
 
 install(TARGETS Editor DESTINATION bin)

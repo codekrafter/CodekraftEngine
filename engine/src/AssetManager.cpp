@@ -2,6 +2,11 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <typeinfo>
+
+#include "TP/cereal/types/unordered_map.hpp"
+#include "TP/cereal/types/memory.hpp"
+#include "TP/cereal/archives/binary.hpp"
 
 #include "AssetManager.hpp"
 #include "Asset.hpp"
@@ -11,6 +16,22 @@
 
 namespace ck
 {
+
+    AssetFile::AssetFile()
+    {
+        type = "NULL";
+    }
+    AssetFile::AssetFile(std::string t,std::shared_ptr<Asset> a)
+    {
+        type = t;
+        asset = a;
+    }
+
+    template <class Archive>
+    void AssetFile::serialize( Archive & ar )
+    {
+        ar( type,asset );
+    }
 
 std::vector<std::string> AssetManager::split_string(const std::string &str,
                                                     const std::string &delimiter)
@@ -35,7 +56,7 @@ AssetManager::AssetManager(){};
 
 AssetManager::~AssetManager(){};
 
-Asset *AssetManager::loadAsset(std::string name)
+/*Asset *AssetManager::loadAsset(std::string name)
 {
     std::ifstream file;
     file.open(name);
@@ -102,21 +123,42 @@ Asset *AssetManager::loadAsset(std::string name)
     }
     file.close();
     Asset *asset = AssetFactory::create(type);
-    /*if (data.substr(data.length() - 1, data.length()) == "\n")
+    if (data.substr(data.length() - 1, data.length()) == "\n")
     {
-        data = data.substr(data.length() - 1, data.length());
-    }*/
+        data = data.substr(0, data.length()-1);
+    }
     asset->deserialize(data);
-};
+    return asset;
+};*/
+
+AssetFile AssetManager::loadAsset(std::string name)
+{
+    std::ifstream is(name,std::ios::binary);
+    cereal::BinaryInputArchive archive(is);
+    AssetFile file;
+    archive(file);
+    return file;
+}
 
 bool AssetManager::saveAsset(Asset *asset, std::string name)
+{
+    std::ofstream os(name, std::ios::binary);
+    cereal::BinaryOutputArchive archive(os);
+
+    std::shared_ptr<Asset> sptr(asset);
+    AssetFile file(asset->getType(), sptr);
+    archive(file);
+}
+
+
+/*bool AssetManager::saveAsset(Asset *asset, std::string name)
 {
     std::ofstream file;
     file.open(name);
     file << "[ TYPE " << asset->getType() << " VER " << asset->getVersion() << " ]" << std::endl;
     file << asset->serialize() << std::flush;
     file.close();
-};
+};*/
 
 bool AssetManager::fileExists(std::string fileName)
 {

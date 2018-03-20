@@ -18,7 +18,8 @@ Shader::Shader()
     version = 1;
     type = "SHADER";
     ///*
-    *vertex = R"(#version 330 core
+    *vertex = R"(
+#version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
@@ -33,8 +34,11 @@ void main()
 {
     TexCoords = aTexCoords;    
     gl_Position = projection * view * model * vec4(aPos, 1.0);
-};)";
-    *fragment = R"(#version 330 core
+}
+)";
+    // Texture Fragment Shader
+    /**fragment = R"(
+#version 330 core
 out vec4 FragColor;
 
 in vec2 TexCoords;
@@ -44,7 +48,20 @@ uniform sampler2D texture_diffuse1;
 void main()
 {    
     FragColor = texture(texture_diffuse1, TexCoords);
-})";
+}
+
+)";*/
+// Solid color fragment shader
+*fragment = R"(
+#version 330 core
+out vec4 FragColor;
+
+void main()
+{    
+    FragColor = vec4(0.6f,0.6f,0.6f,1.0f);
+}
+
+)";
     *geometry = "";
     //*/
 }
@@ -53,8 +70,9 @@ Shader::~Shader()
     delete vertex;
     delete fragment;
     delete geometry;
-}
-void Shader::deserialize(std::string data)
+};
+
+/*void Shader::deserialize(std::string data)
 {
     std::vector<std::string> lines = AssetManager::split_string(data, "\n");
     std::string sel = "";
@@ -75,23 +93,15 @@ void Shader::deserialize(std::string data)
             }
             else if (sel == "VERTEX")
             {
-                //vertex->append(line.c_str());
-                //vertex->assign(*vertex + line);
+                *vertex = *vertex + line + "\n";
             }
             else if (sel == "FRAGMENT")
             {
-                fragment->append(line.c_str());
+                *fragment = *fragment + line + "\n";
             }
             else if (sel == "GEOMETRY")
             {
-                if (false) //line.length() > 1)
-                {
-                    geometry->append(line.c_str());
-                }
-                else
-                {
-                    //geometry = new std::string("");
-                }
+                *geometry = *geometry + line + "\n";
             }
             else
             {
@@ -110,12 +120,15 @@ std::string Shader::serialize()
       << "!!GEOMETRY" << std::endl
       << geometry << std::endl;
     return s.str();
+}*/
+template <class Archive>
+void Shader::serialize( Archive & ar )
+{
+    ar( type,version,*vertex,*fragment,*geometry );
 }
 
 void Shader::init()
 {
-    std::cout << *vertex << std::endl;
-    return;
     // 2. compile shaders
     unsigned int vid, fid;
     int success;
@@ -242,7 +255,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-            std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
+            std::cerr << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
                       << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     }
@@ -252,7 +265,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-            std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
+            std::cerr << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
                       << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     }

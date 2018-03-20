@@ -38,13 +38,14 @@ int main(int argc, char *argv[])
 {
     CKEngine *engine = initEngine();
     ck::AssetManager *am = new ck::AssetManager();
-    //am->saveAsset(shader, "shader.cka");
-    ck::Asset *shader = am->loadAsset("shader.cka");
-    std::cout << "test" << std::endl;
-    std::cout << "is: " << typeid(*shader).name() << std::endl;
-    std::cout << "test2" << std::endl;
+    ck::Shader *shader = new ck::Shader();
+    am->saveAsset(shader, "shader.ckb");
+    ck::AssetFile file = am->loadAsset("shader.ckb");
+    //ck::Shader* shader = static_cast<ck::Shader*>(file.asset.get());
     //shader->deserialize(std::string(d));
-    //shader->init();
-    //run(engine);
+    shader->init();
+    shader->use();
+    engine->getDisplay()->shader = shader;
+    run(engine);
     return 0;
 }
