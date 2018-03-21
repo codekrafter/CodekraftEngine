@@ -11,6 +11,7 @@ addons:
         sources:
             - ubuntu-toolchain-r-test
             - sourceline: 'deb http://repos.codelite.org/wx3.1.0/ubuntu/ trusty universe'
+            - sourceline: 'http://ppa.launchpad.net/keithw/glfw3/ubuntu trusty main'
         packages:
             - lcov
             - libwxbase3.1-0-unofficial
@@ -19,6 +20,8 @@ addons:
             - libwxgtk3.1-dev
             - wx3.1-headers
             - wx-common
+            - libglfw3
+            - libglfw3-dev
 
 branches:
   only:
