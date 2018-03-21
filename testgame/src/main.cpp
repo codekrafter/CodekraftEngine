@@ -38,20 +38,26 @@ int main(int argc, char *argv[])
 {
     CKEngine *engine = initEngine();
     ck::AssetManager *am = new ck::AssetManager();
-    ck::Shader *shader = new ck::Shader();
+    //ck::Shader *shader = new ck::Shader();
     //am->saveAsset(shader, "shader.ckb");
-    //ck::AssetFile shaderFile = am->loadAsset("shader.ckb");
-    //ck::Shader *shader = static_cast<ck::Shader *>(shaderFile.asset.get());
-    //ck::AssetFile modelFile = am->loadAsset("model.ckb");
+    ck::AssetFile shaderFile = am->loadAsset("shader.ckb");
+    ck::Asset *sasset = shaderFile.asset.get();
+    std::cout << typeid(*sasset).name() << std::endl;
+    ck::Shader *shader = static_cast<ck::Shader *>(sasset);
     ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
+    std::cout << "# of meshes: " << smesh->getMeshes().size() << std::endl;
     am->saveAsset(smesh, "nanosuit.ckb");
+    //ck::AssetFile modelFile = am->loadAsset("nanosuit.ckb");
+    //std::cout << "type: " << modelFile.type << std::endl;
+    //ck::Asset *masset = modelFile.asset.get();
+    //ck::StaticMesh *smesh = dynamic_cast<ck::StaticMesh *>(masset);
+    std::cout << "# of meshes: " << smesh->getMeshes().size() << std::endl;
 
     smesh->init();
     shader->init();
     shader->use();
     engine->getDisplay()->shader = shader;
     engine->getDisplay()->smesh = smesh;
-    //engine->getDisplay()->mmodel = nullptr;//model;
     run(engine);
     //delete shader;
     //delete model;

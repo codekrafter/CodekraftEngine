@@ -53,17 +53,7 @@ StaticMesh::~StaticMesh()
 template <class Archive>
 void StaticMesh::serialize(Archive &ar)
 {
-    std::vector<std::shared_ptr<Mesh>> ms;
-    for (Mesh *mesh : meshes)
-    {
-        ms.push_back(std::shared_ptr<Mesh>(mesh));
-    }
-    ar(cereal::base_class<ck::Asset>(this), ms);
-    meshes.clear();
-    for (std::shared_ptr<Mesh> m : ms)
-    {
-        meshes.push_back(m.get());
-    }
+    ar(cereal::base_class<ck::Asset>(this), meshes);
 };
 std::vector<Mesh *> StaticMesh::getMeshes()
 {

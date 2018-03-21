@@ -22,7 +22,7 @@ public:
   void serialize(Archive &ar);
   void init();
   void draw();
-  std::vector<Mesh *> getMeshes();
+  std::vector<std::shared_ptr<Mesh>> getMeshes();
   virtual std::string getType();
   virtual int getVersion();
 };
