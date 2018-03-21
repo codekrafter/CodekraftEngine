@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include <typeinfo>
+#include <type_traits>
 
 #include "TP/cereal/types/unordered_map.hpp"
 #include "TP/cereal/types/memory.hpp"
@@ -13,6 +14,7 @@
 #include "AssetFactory.hpp"
 #include "base64.hpp"
 #include "Shader.hpp"
+#include "StaticMesh.hpp"
 
 namespace ck
 {
@@ -20,8 +22,9 @@ namespace ck
 AssetFile::AssetFile()
 {
     type = "NULL";
+    asset = nullptr;
 }
-AssetFile::AssetFile(std::string t, std::shared_ptr<Asset> a)
+AssetFile::AssetFile(std::string t, std::shared_ptr<Asset> &a)
 {
     type = t;
     asset = a;
@@ -140,14 +143,43 @@ AssetFile AssetManager::loadAsset(std::string name)
     return file;
 }
 
+template <typename T>
+struct empty_delete
+{
+    empty_delete() /* noexcept */
+    {
+    }
+
+    template <typename U>
+    empty_delete(const empty_delete<U> &,
+                 typename std::enable_if<
+                     std::is_convertible<U *, T *>::value>::type * = nullptr) /* noexcept */
+    {
+    }
+
+    void operator()(T *const) const /* noexcept */
+    {
+        // do nothing
+    }
+};
+
 bool AssetManager::saveAsset(Asset *asset, std::string name)
 {
+    /*if (fileExists(name))
+    {
+        std::cout << "File '" << name << "' already exits, removing it" << std::endl;
+        std::remove(name.c_str());
+    }*/
     std::ofstream os(name, std::ios::binary);
-    cereal::BinaryOutputArchive archive(os);
-
-    std::shared_ptr<Asset> sptr(asset);
+    empty_delete<Asset> ed;
+    std::shared_ptr<Asset> sptr(asset, ed);
+    std::cout << "saving asset of type: " << asset->getType() << std::endl;
     AssetFile file(asset->getType(), sptr);
-    //archive(file);
+    {
+        cereal::BinaryOutputArchive archive(os);
+        archive(file);
+    }
+    sptr.reset();
 }
 
 /*bool AssetManager::saveAsset(Asset *asset, std::string name)

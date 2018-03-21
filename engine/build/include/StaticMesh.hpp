@@ -10,20 +10,21 @@ namespace ck
 {
 class StaticMesh : public Asset
 {
-  private:
-    std::vector<Mesh *> meshes;
-    //std::vector<Material*> materials;
+private:
+  std::vector<Mesh *> meshes;
+  //std::vector<Material*> materials;
 
-  public:
-    StaticMesh();
-    StaticMesh(std::string path);
-    ~StaticMesh();
-    template <class Archive>
-    void serialize(Archive &ar);
-    void init();
-    void draw();
-    int getVersion();
-    std::string getType();
+public:
+  StaticMesh();
+  StaticMesh(std::string path);
+  ~StaticMesh();
+  template <class Archive>
+  void serialize(Archive &ar);
+  void init();
+  void draw();
+  std::vector<Mesh *> getMeshes();
+  virtual std::string getType();
+  virtual int getVersion();
 };
 }
 // Include any archives you plan on using with your type before you register it

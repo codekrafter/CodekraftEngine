@@ -3,17 +3,19 @@
 #include "Asset.hpp"
 #include <vector>
 #include <string>
+#include "TP/cereal/types/vector.hpp"
+#include "TP/cereal/types/memory.hpp"
 
 namespace ck
 {
-  struct AssetFile
+struct AssetFile
 {
-    std::string type;
-    std::shared_ptr<Asset> asset;
-    AssetFile();
-    AssetFile(std::string t,std::shared_ptr<Asset> a);
-    template <class Archive>
-    void serialize( Archive & ar );
+  std::string type;
+  std::shared_ptr<Asset> asset;
+  AssetFile();
+  AssetFile(std::string t, std::shared_ptr<Asset> &a);
+  template <class Archive>
+  void serialize(Archive &ar);
 };
 class AssetManager
 {
@@ -22,7 +24,7 @@ private:
 
 public:
   static std::vector<std::string> split_string(const std::string &str,
-                                        const std::string &delimiter);
+                                               const std::string &delimiter);
   AssetManager();
   ~AssetManager();
   AssetFile loadAsset(std::string fileName);

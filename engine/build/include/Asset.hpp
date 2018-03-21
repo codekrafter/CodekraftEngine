@@ -11,12 +11,21 @@ protected:
   std::string type;
 
 public:
-  Asset() {version=1;type="GENERIC";};
-  virtual ~Asset() {};
+  Asset()
+  {
+    version = 1;
+    type = "GENERIC";
+  };
+  Asset(const Asset &a)
+  {
+    version = a.version;
+    type = a.type;
+  }
+  virtual ~Asset(){};
   template <class Archive>
-  void serialize( Archive & ar ) {};
-  virtual std::string getType(){return type;};
+  void serialize(Archive &ar) { ar(version, type); };
+  virtual std::string getType() { return type; };
   /// Get version, should be an integer. Used in header
-  virtual int getVersion(){return version;};
+  virtual int getVersion() { return version; };
 };
 }

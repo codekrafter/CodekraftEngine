@@ -3,6 +3,7 @@
 #include "Asset.hpp"
 #include "TP/OBJ_Loader.h"
 #include "TP/glad/glad.h"
+
 namespace ck
 {
 Mesh::Mesh(){};
@@ -28,6 +29,8 @@ void Mesh::serialize(Archive &archive)
 };
 void Mesh::init()
 {
+    std::cout << "# of vertices: " << vertices.size() << std::endl;
+    std::cout << "# of indices: " << indices.size() << std::endl;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);

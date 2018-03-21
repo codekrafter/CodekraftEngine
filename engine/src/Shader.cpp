@@ -36,7 +36,7 @@ void main()
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }
 )";
-    *fragment = R"(
+    /*fragment = R"(
 #version 330 core
 out vec4 FragColor;
 
@@ -49,9 +49,9 @@ void main()
     FragColor = texture(texture_diffuse1, TexCoords);
 }
 
-)";
+)";*/
     // Solid color fragment shader
-    /*fragment = R"(
+    fragment = new std::string(R"(
 #version 330 core
 out vec4 FragColor;
 
@@ -60,7 +60,7 @@ void main()
     FragColor = vec4(0.6f,0.6f,0.6f,1.0f);
 }
 
-)";
+)");
     *geometry = "";
     //*/
 }
@@ -123,7 +123,7 @@ std::string Shader::serialize()
 template <class Archive>
 void Shader::serialize(Archive &ar)
 {
-    ar(type, version, *vertex, *fragment, *geometry);
+    ar(cereal::base_class<ck::Asset>(this), type, version, *vertex, *fragment, *geometry);
 }
 
 void Shader::init()

@@ -3,9 +3,15 @@
 namespace ck
 {
 
-StaticMesh::StaticMesh(){};
+StaticMesh::StaticMesh()
+{
+    version = 1;
+    type = "STATICMESH";
+};
 StaticMesh::StaticMesh(std::string path)
 {
+    version = 1;
+    type = "STATICMESH";
     // Initialize Loader
     objl::Loader Loader;
 
@@ -27,15 +33,14 @@ StaticMesh::StaticMesh(std::string path)
     }
 };
 
-int StaticMesh::getVersion()
-{
-    return 1;
-}
-
 std::string StaticMesh::getType()
 {
-    return "STATICMESH";
+    return type;
 }
+int StaticMesh::getVersion()
+{
+    return version;
+};
 
 StaticMesh::~StaticMesh()
 {
@@ -53,8 +58,18 @@ void StaticMesh::serialize(Archive &ar)
     {
         ms.push_back(std::shared_ptr<Mesh>(mesh));
     }
-    ar(ms);
+    ar(cereal::base_class<ck::Asset>(this), ms);
+    meshes.clear();
+    for (std::shared_ptr<Mesh> m : ms)
+    {
+        meshes.push_back(m.get());
+    }
 };
+std::vector<Mesh *> StaticMesh::getMeshes()
+{
+    return meshes;
+}
+
 void StaticMesh::init()
 {
     for (Mesh *mesh : meshes)
