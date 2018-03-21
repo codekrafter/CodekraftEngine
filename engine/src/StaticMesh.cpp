@@ -29,7 +29,7 @@ StaticMesh::StaticMesh(std::string path)
     // Go through each loaded mesh and add it to render pool
     for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
     {
-        meshes.push_back(new ck::Mesh(Loader.LoadedMeshes[i]));
+        meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i])));
     }
 };
 
@@ -44,9 +44,9 @@ int StaticMesh::getVersion()
 
 StaticMesh::~StaticMesh()
 {
-    for (Mesh *mesh : meshes)
+    for (std::shared_ptr<Mesh> mesh : meshes)
     {
-        delete mesh;
+        delete mesh.get();
         mesh = nullptr;
     }
 };
@@ -57,19 +57,24 @@ void StaticMesh::serialize(Archive &ar)
 };
 std::vector<Mesh *> StaticMesh::getMeshes()
 {
-    return meshes;
+    std::vector<Mesh *> ms;
+    for (std::shared_ptr<Mesh> m : meshes)
+    {
+        ms.push_back(m.get());
+    }
+    return ms;
 }
 
 void StaticMesh::init()
 {
-    for (Mesh *mesh : meshes)
+    for (std::shared_ptr<Mesh> mesh : meshes)
     {
         mesh->init();
     }
 };
 void StaticMesh::draw()
 {
-    for (Mesh *mesh : meshes)
+    for (std::shared_ptr<Mesh> mesh : meshes)
     {
         mesh->draw();
     }

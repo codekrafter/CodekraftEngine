@@ -11,7 +11,7 @@ namespace ck
 class StaticMesh : public Asset
 {
 private:
-  std::vector<Mesh *> meshes;
+  std::vector<std::shared_ptr<Mesh>> meshes;
   //std::vector<Material*> materials;
 
 public:
@@ -22,7 +22,7 @@ public:
   void serialize(Archive &ar);
   void init();
   void draw();
-  std::vector<std::shared_ptr<Mesh>> getMeshes();
+  std::vector<Mesh *> getMeshes();
   virtual std::string getType();
   virtual int getVersion();
 };

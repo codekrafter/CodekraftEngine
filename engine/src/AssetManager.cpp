@@ -136,11 +136,19 @@ AssetManager::~AssetManager(){};
 
 AssetFile AssetManager::loadAsset(std::string name)
 {
+    return map[name];
+}
+
+void AssetManager::open(std::string fname)
+{
+    if(!map.empty())
+    {
+        reset();
+    }
     std::ifstream is(name, std::ios::binary);
     cereal::BinaryInputArchive archive(is);
     AssetFile file;
-    archive(file);
-    return file;
+    archive(map);
 }
 
 template <typename T>
@@ -163,24 +171,47 @@ struct empty_delete
     }
 };
 
-bool AssetManager::saveAsset(Asset *asset, std::string name)
+bool AssetManager::saveAsset(std::string name, Asset *asset)
 {
-    /*if (fileExists(name))
-    {
-        std::cout << "File '" << name << "' already exits, removing it" << std::endl;
-        std::remove(name.c_str());
-    }*/
-    std::ofstream os(name, std::ios::binary);
     empty_delete<Asset> ed;
     std::shared_ptr<Asset> sptr(asset, ed);
     std::cout << "saving asset of type: " << asset->getType() << std::endl;
     AssetFile file(asset->getType(), sptr);
+    if (map.count(name))
+    {
+        std::cout << "Could not save asset " << name << "because it already exists" << std::endl;
+        return false;
+    }
+    else
+    {
+        map[name] = file;
+    }
+    //sptr.reset();
+}
+
+void AssetManager::reset()
+{
+    map.clear();
+}
+
+AssetManager::close()
+{
+    if (fileExists(name))
+    {
+        std::cout << "File '" << name << "' already exits, removing it" << std::endl;
+        std::remove(name.c_str());
+    }
+    std::ofstream os(name, std::ios::binary);
+
     {
         cereal::BinaryOutputArchive archive(os);
-        archive(file);
+        archive(map);
     }
-    sptr.reset();
-}
+    for (std::pair<std::string, AssetFile> p : map)
+    {
+        p.second.asset.reset();
+    }
+};
 
 /*bool AssetManager::saveAsset(Asset *asset, std::string name)
 {

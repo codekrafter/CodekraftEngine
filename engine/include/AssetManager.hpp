@@ -21,13 +21,21 @@ class AssetManager
 {
 private:
   bool fileExists(std::string fileName);
+  std::map<std::string, AssetFile> map;
+
 
 public:
   static std::vector<std::string> split_string(const std::string &str,
                                                const std::string &delimiter);
   AssetManager();
   ~AssetManager();
-  AssetFile loadAsset(std::string fileName);
-  bool saveAsset(Asset *asset, std::string fileName);
+  /// Open file for loading
+  void open(std::string fname);
+  /// Resets internal asset map
+  void reset();
+  AssetFile loadAsset(std::string name);
+  bool saveAsset(std::string name, Asset *asset);
+  /// Save map to file
+  void close(std::string fname);
 };
 }
