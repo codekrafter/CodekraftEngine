@@ -36,8 +36,7 @@ void main()
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }
 )";
-    // Texture Fragment Shader
-    /**fragment = R"(
+    *fragment = R"(
 #version 330 core
 out vec4 FragColor;
 
@@ -50,9 +49,9 @@ void main()
     FragColor = texture(texture_diffuse1, TexCoords);
 }
 
-)";*/
-// Solid color fragment shader
-*fragment = R"(
+)";
+    // Solid color fragment shader
+    /*fragment = R"(
 #version 330 core
 out vec4 FragColor;
 
@@ -122,9 +121,9 @@ std::string Shader::serialize()
     return s.str();
 }*/
 template <class Archive>
-void Shader::serialize( Archive & ar )
+void Shader::serialize(Archive &ar)
 {
-    ar( type,version,*vertex,*fragment,*geometry );
+    ar(type, version, *vertex, *fragment, *geometry);
 }
 
 void Shader::init()

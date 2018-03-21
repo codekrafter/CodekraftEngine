@@ -50,7 +50,7 @@ fi
 elif [ $TARGET = "game" ]; then
 	cd testgame
 	cd build
-	cmake .. >/dev/null
+	cmake -DCMAKE_BUILD_TYPE=DEBUG .. >/dev/null
 	if [ $CLEAN -eq 1 ]; then
 	make clean
 	fi

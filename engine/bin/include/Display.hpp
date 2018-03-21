@@ -5,6 +5,8 @@
 #include "TP/glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Shader.hpp"
+#include "Model.hpp"
+#include "Mesh.hpp"
 #include <TP/glm/glm.hpp>
 
 class Display
@@ -29,10 +31,12 @@ private:
   float lastFrame = 0.0f;
 
   // Used to render basic cube, not in final version
-  unsigned int VBO, VAO;
+  unsigned int VBO, VAO, EBO;
   glm::mat4 model;
   glm::mat4 view;
   glm::mat4 projection;
+  vector<ck::Vertex> vertices;
+  vector<unsigned int> indices;
 
 public:
   Display() : Display(false){};
@@ -42,4 +46,5 @@ public:
   ~Display();
   GLFWwindow *getWindow();
   ck::Shader *shader;
+  ck::Model *mmodel;
 };

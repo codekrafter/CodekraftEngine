@@ -1,6 +1,7 @@
 #include <iostream>
 #include <typeinfo>
 #include "Engine.hpp"
+#include "Model.hpp"
 
 const char *d = R"(
 !!VERTEX
@@ -39,13 +40,20 @@ int main(int argc, char *argv[])
     CKEngine *engine = initEngine();
     ck::AssetManager *am = new ck::AssetManager();
     ck::Shader *shader = new ck::Shader();
-    am->saveAsset(shader, "shader.ckb");
-    ck::AssetFile file = am->loadAsset("shader.ckb");
-    //ck::Shader* shader = static_cast<ck::Shader*>(file.asset.get());
-    //shader->deserialize(std::string(d));
+    //am->saveAsset(shader, "shader.ckb");
+    //ck::AssetFile shaderFile = am->loadAsset("shader.ckb");
+    //ck::Shader *shader = static_cast<ck::Shader *>(shaderFile.asset.get());
+    //ck::AssetFile modelFile = am->loadAsset("model.ckb");
+    //ck::Model *model = new ck::Model("raw/nanosuit/nanosuit.obj");
+    //ck::Model *model = static_cast<ck::Model*>(modelFile.asset.get());
+    //am->saveAsset(model, "model.ckb");
     shader->init();
     shader->use();
     engine->getDisplay()->shader = shader;
+    engine->getDisplay()->mmodel = nullptr;//model;
     run(engine);
+    std::cout << "deleting stuff" << std::endl;
+    //delete shader;
+    //delete model;
     return 0;
 }
