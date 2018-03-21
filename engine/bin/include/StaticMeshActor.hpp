@@ -1,19 +1,19 @@
 #pragma once
 
 #include "Actor.hpp"
-#include "Model.hpp"
+#include "StaticMesh.hpp"
 
 namespace ck
 {
 class StaticMeshActor : Actor
 {
-  private:
-    Model *model;
+private:
+  StaticMesh *mesh;
 
-  public:
-    StaticMeshActor(std::string name);
-    StaticMeshActor(Model *m);
-    ~StaticMeshActor();
-    virtual void onTick(float dt);
+public:
+  StaticMeshActor(std::string name);
+  StaticMeshActor(StaticMesh *m);
+  ~StaticMeshActor();
+  virtual void onTick(float dt);
 };
 }

@@ -17,21 +17,21 @@
 namespace ck
 {
 
-    AssetFile::AssetFile()
-    {
-        type = "NULL";
-    }
-    AssetFile::AssetFile(std::string t,std::shared_ptr<Asset> a)
-    {
-        type = t;
-        asset = a;
-    }
+AssetFile::AssetFile()
+{
+    type = "NULL";
+}
+AssetFile::AssetFile(std::string t, std::shared_ptr<Asset> a)
+{
+    type = t;
+    asset = a;
+}
 
-    template <class Archive>
-    void AssetFile::serialize( Archive & ar )
-    {
-        ar( type,asset );
-    }
+template <class Archive>
+void AssetFile::serialize(Archive &ar)
+{
+    ar(type, asset);
+}
 
 std::vector<std::string> AssetManager::split_string(const std::string &str,
                                                     const std::string &delimiter)
@@ -133,7 +133,7 @@ AssetManager::~AssetManager(){};
 
 AssetFile AssetManager::loadAsset(std::string name)
 {
-    std::ifstream is(name,std::ios::binary);
+    std::ifstream is(name, std::ios::binary);
     cereal::BinaryInputArchive archive(is);
     AssetFile file;
     archive(file);
@@ -147,9 +147,8 @@ bool AssetManager::saveAsset(Asset *asset, std::string name)
 
     std::shared_ptr<Asset> sptr(asset);
     AssetFile file(asset->getType(), sptr);
-    archive(file);
+    //archive(file);
 }
-
 
 /*bool AssetManager::saveAsset(Asset *asset, std::string name)
 {

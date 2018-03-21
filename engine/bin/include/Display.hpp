@@ -5,8 +5,7 @@
 #include "TP/glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Shader.hpp"
-#include "Model.hpp"
-#include "Mesh.hpp"
+#include "StaticMesh.hpp"
 #include <TP/glm/glm.hpp>
 
 class Display
@@ -35,8 +34,8 @@ private:
   glm::mat4 model;
   glm::mat4 view;
   glm::mat4 projection;
-  vector<ck::Vertex> vertices;
-  vector<unsigned int> indices;
+  std::vector<ck::Vertex> vertices;
+  std::vector<unsigned int> indices;
 
 public:
   Display() : Display(false){};
@@ -46,5 +45,5 @@ public:
   ~Display();
   GLFWwindow *getWindow();
   ck::Shader *shader;
-  ck::Model *mmodel;
+  ck::StaticMesh *smesh;
 };
