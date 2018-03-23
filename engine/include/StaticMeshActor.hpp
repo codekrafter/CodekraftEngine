@@ -5,7 +5,7 @@
 
 namespace ck
 {
-class StaticMeshActor : Actor
+class StaticMeshActor : public Actor
 {
 private:
   StaticMesh *mesh;

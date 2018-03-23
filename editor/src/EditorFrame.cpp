@@ -3,6 +3,8 @@
 #include <wx/wx.h>
 #endif
 
+#include <wx/glcanvas.h>
+
 #include "EditorFrame.hpp"
 
 EditorFrame::EditorFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
@@ -21,6 +23,7 @@ EditorFrame::EditorFrame(const wxString &title, const wxPoint &pos, const wxSize
     SetMenuBar(menuBar);
     CreateStatusBar();
     SetStatusText("STATUS BAR");
+    wxGLCanvas canvas(this);
 }
 void EditorFrame::OnExit(wxCommandEvent &event)
 {

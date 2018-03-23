@@ -7,7 +7,8 @@
 
 #include <Camera.hpp>
 #include <vector>
-
+namespace ck
+{
 // Constructor with vectors
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
 {
@@ -93,5 +94,6 @@ void Camera::updateCameraVectors()
     // Also re-calculate the Right and Up vector
     Right = glm::normalize(glm::cross(Front, WorldUp)); // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
     Up = glm::normalize(glm::cross(Right, Front));
+}
 }
 #endif

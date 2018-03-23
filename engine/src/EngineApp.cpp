@@ -2,10 +2,12 @@
 
 #include "EngineApp.hpp"
 #include "Display.hpp"
-
-CKEngine::CKEngine()
+namespace ck
 {
-    display = new Display();
+CKEngine::CKEngine(bool mw)
+{
+    makeWindow = mw;
+    display = new Display(!makeWindow);
 };
 CKEngine::~CKEngine()
 {
@@ -20,4 +22,5 @@ Display *CKEngine::getDisplay()
 void CKEngine::update()
 {
     display->update();
+}
 }

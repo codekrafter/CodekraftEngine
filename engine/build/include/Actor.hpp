@@ -5,13 +5,14 @@
 
 namespace ck
 {
-class Actor : GameObject
+class Actor : public GameObject
 {
-  private:
-  protected:
-    Transform transform;
+private:
+protected:
+  Transform transform;
 
-  public:
-    inline Transform getTransform() { return transform; }
+public:
+  Actor(){};
+  inline Transform getTransform() { return transform; }
 };
 }

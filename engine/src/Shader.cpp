@@ -18,13 +18,14 @@ Shader::Shader()
     version = 1;
     type = "SHADER";
     ///*
-    *vertex = R"(
+    vertex = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
 
 out vec2 TexCoords;
+out vec4 vertexColor;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -34,6 +35,7 @@ void main()
 {
     TexCoords = aTexCoords;    
     gl_Position = projection * view * model * vec4(aPos, 1.0);
+    vertexColor = vec4(aNormal,1.0f);
 }
 )";
     /*fragment = R"(
@@ -51,24 +53,23 @@ void main()
 
 )";*/
     // Solid color fragment shader
-    fragment = new std::string(R"(
+    fragment = R"(
 #version 330 core
 out vec4 FragColor;
 
+in vec4 vertexColor;
+
 void main()
 {    
-    FragColor = vec4(0.6f,0.6f,0.6f,1.0f);
+    FragColor = vertexColor;
 }
 
-)");
-    *geometry = "";
+)";
+    geometry = "";
     //*/
 }
 Shader::~Shader()
 {
-    delete vertex;
-    delete fragment;
-    delete geometry;
 };
 
 /*void Shader::deserialize(std::string data)
@@ -123,7 +124,23 @@ std::string Shader::serialize()
 template <class Archive>
 void Shader::serialize(Archive &ar)
 {
-    ar(cereal::base_class<ck::Asset>(this), type, version, *vertex, *fragment, *geometry);
+    ar(cereal::base_class<ck::Asset>(this), vertex, fragment, geometry);
+}
+
+void Shader::setCode(std::string v, std::string f, std::string g)
+{
+    if (v != "")
+    {
+        vertex = v;
+    }
+    if (f != "")
+    {
+        fragment = f;
+    }
+    if (g != "")
+    {
+        geometry = g;
+    }
 }
 
 void Shader::init()
@@ -132,9 +149,9 @@ void Shader::init()
     unsigned int vid, fid;
     int success;
     char infoLog[512];
-    const char *vs = vertex->c_str();
-    const char *fs = fragment->c_str();
-    const char *gs = geometry->c_str();
+    const char *vs = vertex.c_str();
+    const char *fs = fragment.c_str();
+    const char *gs = geometry.c_str();
     // vertex shader
     vid = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vid, 1, &vs, NULL);
@@ -147,7 +164,7 @@ void Shader::init()
     checkCompileErrors(fid, "FRAGMENT");
     // if geometry shader is given, compile geometry shader
     unsigned int gid;
-    if (*geometry != "")
+    if (geometry != "")
     {
         gid = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(gid, 1, &gs, NULL);
@@ -158,14 +175,14 @@ void Shader::init()
     ID = glCreateProgram();
     glAttachShader(ID, vid);
     glAttachShader(ID, fid);
-    if (*geometry != "")
+    if (geometry != "")
         glAttachShader(ID, gid);
     glLinkProgram(ID);
     checkCompileErrors(ID, "PROGRAM");
     // delete the shaders as they're linked into our program now and no longer necessery
     glDeleteShader(vid);
     glDeleteShader(fid);
-    if (*geometry != "")
+    if (geometry != "")
         glDeleteShader(gid);
 };
 

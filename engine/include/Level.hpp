@@ -13,15 +13,13 @@ namespace ck
 class Level : public Asset
 {
 private:
-  std::vector<Actor> contents;
-
 public:
+  std::vector<std::shared_ptr<Actor>> contents;
   Level();
   virtual ~Level();
   void init();
-  virtual std::string getType();
   template <class Archive>
-  void serialize( Archive & ar );
-  virtual int getVersion();
+  void serialize(Archive &ar);
+  void tick(float dt);
 };
 }

@@ -8,9 +8,9 @@ namespace ck
 class Shader : public Asset
 {
 private:
-  std::string *vertex = new std::string();
-  std::string *fragment = new std::string();
-  std::string *geometry = new std::string();
+  std::string vertex;
+  std::string fragment;
+  std::string geometry;
   // utility function for checking shader compilation/linking errors.
   // ------------------------------------------------------------------------
   void checkCompileErrors(unsigned int shader, std::string type);
@@ -21,9 +21,10 @@ public:
   ~Shader();
   void init();
   template <class Archive>
-  void serialize( Archive & ar );
+  void serialize(Archive &ar);
   virtual std::string getType();
   virtual int getVersion();
+  void setCode(std::string v, std::string f, std::string g = "");
 
   // activate the shader
   // ------------------------------------------------------------------------

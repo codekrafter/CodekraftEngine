@@ -16,7 +16,7 @@ wxIMPLEMENT_WX_THEME_SUPPORT;
 int main(int argc, char *argv[])
 {
     std::cout << "Starting Editor Version: " << EDITOR_VERSION << std::endl;
-    initEngine();
+    initEngine(false);
     wxEntryStart(argc, argv);
     wxTheApp->CallOnInit();
     wxTheApp->OnRun();

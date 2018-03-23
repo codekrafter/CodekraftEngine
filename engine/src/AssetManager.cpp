@@ -133,43 +133,25 @@ AssetManager::~AssetManager(){};
     asset->deserialize(data);
     return asset;
 };*/
-
-AssetFile AssetManager::loadAsset(std::string name)
+/*template <class A>
+A *AssetManager::loadAsset(std::string name)
 {
-    return map[name];
-}
+    static_assert(std::is_base_of<Asset, A>::value, "A must be an asset");
+    AssetFile af = map[name];
+    return dynamic_cast<A *>(af.asset.get());
+}*/
 
 void AssetManager::open(std::string fname)
 {
-    if(!map.empty())
+    if (!map.empty())
     {
         reset();
     }
-    std::ifstream is(name, std::ios::binary);
+    std::ifstream is(fname, std::ios::binary);
     cereal::BinaryInputArchive archive(is);
     AssetFile file;
     archive(map);
 }
-
-template <typename T>
-struct empty_delete
-{
-    empty_delete() /* noexcept */
-    {
-    }
-
-    template <typename U>
-    empty_delete(const empty_delete<U> &,
-                 typename std::enable_if<
-                     std::is_convertible<U *, T *>::value>::type * = nullptr) /* noexcept */
-    {
-    }
-
-    void operator()(T *const) const /* noexcept */
-    {
-        // do nothing
-    }
-};
 
 bool AssetManager::saveAsset(std::string name, Asset *asset)
 {
@@ -177,31 +159,37 @@ bool AssetManager::saveAsset(std::string name, Asset *asset)
     std::shared_ptr<Asset> sptr(asset, ed);
     std::cout << "saving asset of type: " << asset->getType() << std::endl;
     AssetFile file(asset->getType(), sptr);
-    if (map.count(name))
-    {
-        std::cout << "Could not save asset " << name << "because it already exists" << std::endl;
-        return false;
-    }
-    else
-    {
-        map[name] = file;
-    }
+    map[name] = file;
     //sptr.reset();
+}
+
+std::vector<std::string> AssetManager::getKeys()
+{
+    std::vector<std::string> out;
+    for (std::pair<std::string, AssetFile> pair : map)
+    {
+        out.push_back(pair.first);
+    }
+    return out;
 }
 
 void AssetManager::reset()
 {
     map.clear();
 }
-
-AssetManager::close()
+void AssetManager::close()
 {
-    if (fileExists(name))
+    close(cname);
+}
+void AssetManager::close(std::string fname)
+{
+    if (fileExists(fname))
     {
-        std::cout << "File '" << name << "' already exits, removing it" << std::endl;
-        std::remove(name.c_str());
+        std::cout << "File '" << fname << "' already exits, removing it" << std::endl;
+        std::remove(fname.c_str());
     }
-    std::ofstream os(name, std::ios::binary);
+    std::cout << "saving and closing..." << std::endl;
+    std::ofstream os(fname, std::ios::binary);
 
     {
         cereal::BinaryOutputArchive archive(os);

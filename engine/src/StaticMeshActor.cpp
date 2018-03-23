@@ -9,5 +9,7 @@ StaticMeshActor::StaticMeshActor(StaticMesh *m){
     mesh = m;
 };
 StaticMeshActor::~StaticMeshActor(){};
-void StaticMeshActor::onTick(float dt){};
+void StaticMeshActor::onTick(float dt){
+    mesh->draw();
+};
 }

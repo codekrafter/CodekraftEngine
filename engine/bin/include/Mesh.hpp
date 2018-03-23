@@ -4,6 +4,7 @@
 #include "Asset.hpp"
 #include "TP/OBJ_Loader.h"
 #include "TP/cereal/types/vector.hpp"
+#include "Material.hpp"
 
 namespace glm
 {
@@ -50,8 +51,9 @@ class Mesh : public Asset
     std::vector<unsigned int> indices;
 
   public:
+    Material *mat;
     Mesh();
-    Mesh(objl::Mesh m);
+    Mesh(objl::Mesh m, std::string directory);
     ~Mesh();
     template <class Archive>
     void serialize(Archive &archive);

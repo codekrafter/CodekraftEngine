@@ -9,57 +9,34 @@ Level::Level()
     version = 1;
     type = "LEVEL";
 };
-Level::~Level(){
-
-};
-void Level::init(){};
-/*void Level::deserialize(std::string data)
+Level::~Level()
 {
-    std::vector<std::string> lines = AssetManager::split_string(data, "\n");
-    std::string sel = "";
-    for (std::string line : lines)
+    for (std::shared_ptr<Actor> sp : contents)
     {
-        if (line.substr(0, 2) == "!!")
-        {
-            sel = line.substr(2, line.length());
-        }
-        else
-        {
-            if (sel == "")
-            {
-                if (line != "")
-                {
-                    throw std::runtime_error("Level Error: Content '" + line + "'appeared before section selector");
-                }
-            }
-            else if (sel == "VERTEX")
-            {
-                *vertex = *vertex + line + "\n";
-            }
-            else if (sel == "FRAGMENT")
-            {
-                *fragment = *fragment + line + "\n";
-            }
-            else if (sel == "GEOMETRY")
-            {
-                *geometry = *geometry + line + "\n";
-            }
-            else
-            {
-                throw std::runtime_error("Level Error: Invalid section type: '" + sel + "'");
-            }
-        }
-    };
+        sp->onDestroyed();
+        delete sp.get();
+        sp = nullptr;
+    }
 };
-std::string Level::serialize(){
 
-};*/
-std::string Level::getType()
+void Level::init()
 {
-    return type;
+    for (std::shared_ptr<Actor> a : contents)
+    {
+        a->onBeginPlay();
+    }
 };
-int Level::getVersion()
+template <class Archive>
+void Level::serialize(Archive &ar)
 {
-    return version;
+    ar(contents);
 };
+
+void Level::tick(float dt)
+{
+    for (std::shared_ptr<Actor> a : contents)
+    {
+        a->onTick(dt);
+    }
+}
 }

@@ -17,7 +17,7 @@ StaticMesh::StaticMesh(std::string path)
 
     // Load .obj File
     bool loaded = Loader.LoadFile(path);
-
+    std::cout << "loaded" << std::endl;
     // Check to see if it loaded
 
     if (!loaded)
@@ -29,7 +29,18 @@ StaticMesh::StaticMesh(std::string path)
     // Go through each loaded mesh and add it to render pool
     for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
     {
-        meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i])));
+        std::string dir = path.substr(0, path.find_last_of('/'));
+        dir = dir + "/";
+        //std::cout << "dir: " << dir << std::endl;
+        meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i], dir)));
+    }
+    std::cout << "# of materials: " << Loader.LoadedMaterials.size() << std::endl;
+
+    for (int i = 0; i < Loader.LoadedMaterials.size(); i++)
+    {
+        objl::Material m = Loader.LoadedMaterials[i];
+        //std::cout << "name: " << m.name << std::endl;
+        //<< m.Ka << std::endl;
     }
 };
 

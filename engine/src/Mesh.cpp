@@ -7,9 +7,9 @@
 namespace ck
 {
 Mesh::Mesh(){};
-Mesh::Mesh(objl::Mesh m)
+Mesh::Mesh(objl::Mesh m, std::string directory)
 {
-    //std::cout << "Mesh " << i << ": " << m.MeshName << std::endl;
+    //std::cout << "Mesh: " << m.MeshName << std::endl;
     for (int j = 0; j < m.Vertices.size(); j++)
     {
         ck::Vertex v;
@@ -18,10 +18,13 @@ Mesh::Mesh(objl::Mesh m)
         v.TexCoords = glm::vec2(m.Vertices[j].TextureCoordinate.X, m.Vertices[j].TextureCoordinate.Y);
         vertices.push_back(v);
     }
-
+    //std::cout << "mesh material name: " << m.MeshMaterial.name << std::endl;
+    objl::Material mmat = m.MeshMaterial;
+    //std::cout << "mesh material maps: (diffuse,speclar)" << mmat.map_Kd << "," << mmat.map_Ks << std::endl;
+    mat = new Material(mmat.map_Kd, mmat.map_Ks, directory);
     indices = m.Indices;
 };
-Mesh::~Mesh(){};
+Mesh::~Mesh() { delete mat; };
 template <class Archive>
 void Mesh::serialize(Archive &archive)
 {
@@ -29,8 +32,8 @@ void Mesh::serialize(Archive &archive)
 };
 void Mesh::init()
 {
-    std::cout << "# of vertices: " << vertices.size() << std::endl;
-    std::cout << "# of indices: " << indices.size() << std::endl;
+    //std::cout << "# of vertices: " << vertices.size() << std::endl;
+    //std::cout << "# of indices: " << indices.size() << std::endl;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -55,9 +58,11 @@ void Mesh::init()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, TexCoords));
 
     glBindVertexArray(0);
+    mat->init();
 };
 void Mesh::draw()
 {
+    mat->draw();
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
