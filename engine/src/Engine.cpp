@@ -5,6 +5,10 @@
 
 #include "TP/glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "TP/easylogging/easylogging++.h"
+
+INITIALIZE_EASYLOGGINGPP
+
 namespace ckg
 {
 ck::CKEngine *g_engine = nullptr;

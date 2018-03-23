@@ -1,4 +1,5 @@
 #include "StaticMesh.hpp"
+#include "AssetManager.hpp"
 
 namespace ck
 {
@@ -17,7 +18,7 @@ StaticMesh::StaticMesh(std::string path)
 
     // Load .obj File
     bool loaded = Loader.LoadFile(path);
-    std::cout << "loaded" << std::endl;
+    //std::cout << "loaded" << std::endl;
     // Check to see if it loaded
 
     if (!loaded)
@@ -26,13 +27,16 @@ StaticMesh::StaticMesh(std::string path)
         return;
     };
 
+    empty_delete<Mesh> ed;
     // Go through each loaded mesh and add it to render pool
     for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
     {
         std::string dir = path.substr(0, path.find_last_of('/'));
         dir = dir + "/";
         //std::cout << "dir: " << dir << std::endl;
-        meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i], dir)));
+        std::cout << "pushing back mesh " << i << "/" << Loader.LoadedMeshes.size() << std::endl;
+        meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i], dir), ed));
+        std::cout << "finished pushing back mesh" << std::endl;
     }
     std::cout << "# of materials: " << Loader.LoadedMaterials.size() << std::endl;
 

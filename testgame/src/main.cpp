@@ -193,27 +193,27 @@ void main()
 int main(int argc, char *argv[])
 {
     ck::CKEngine *engine = initEngine(true);
-    ck::AssetManager *am = new ck::AssetManager();
+    //ck::AssetManager *am = new ck::AssetManager();
     //am->open("test.ckd");
-    ck::Shader *shader = new ck::Shader();
-    shader->setCode(vv, ff);
+    //ck::Shader *shader = new ck::Shader();
+    //shader->setCode(vv, ff);
     //am->saveAsset("phong", shader);
     //ck::Shader *shader = am->loadAsset<ck::Shader>("white-shader");
-    ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
+    //ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
     //am->saveAsset("nanosuit", smesh);
     //ck::StaticMesh *smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
 
-    ck::Level *level = new ck::Level();
-    ck::StaticMeshActor *sma = new ck::StaticMeshActor(smesh);
-    level->contents.push_back(std::shared_ptr<ck::StaticMeshActor>(sma));
+    //ck::Level *level = new ck::Level();
+    //ck::StaticMeshActor *sma = new ck::StaticMeshActor(smesh);
+    //level->contents.push_back(std::shared_ptr<ck::StaticMeshActor>(sma));
     //am->saveAsset("test-level", level);
     //am->close("test.ckd");
 
-    smesh->init();
-    shader->init();
+    //smesh->init();
+    //shader->init();
     //engine->getDisplay()->shader = shader;
     //engine->getDisplay()->smesh = smesh;
-    engine->getDisplay()->level = level;
+    //engine->getDisplay()->level = level;
     run(engine);
     //delete shader;
     //delete model;

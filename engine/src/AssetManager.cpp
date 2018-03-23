@@ -16,6 +16,8 @@
 #include "Shader.hpp"
 #include "StaticMesh.hpp"
 
+#include "TP/easylogging/easylogging++.h"
+
 namespace ck
 {
 
@@ -143,14 +145,16 @@ A *AssetManager::loadAsset(std::string name)
 
 void AssetManager::open(std::string fname)
 {
-    if (!map.empty())
-    {
-        reset();
-    }
+    reset();
     std::ifstream is(fname, std::ios::binary);
-    cereal::BinaryInputArchive archive(is);
-    AssetFile file;
-    archive(map);
+    is.open(fname);
+    //AssetFile file;
+    {
+        cereal::BinaryInputArchive archive(is);
+        archive(map);
+        LOG(DEBUG) << "archived map";
+    }
+    is.close();
 }
 
 bool AssetManager::saveAsset(std::string name, Asset *asset)
@@ -159,6 +163,7 @@ bool AssetManager::saveAsset(std::string name, Asset *asset)
     std::shared_ptr<Asset> sptr(asset, ed);
     std::cout << "saving asset of type: " << asset->getType() << std::endl;
     AssetFile file(asset->getType(), sptr);
+    std::cout << "made file" << std::endl;
     map[name] = file;
     //sptr.reset();
 }
@@ -176,6 +181,7 @@ std::vector<std::string> AssetManager::getKeys()
 void AssetManager::reset()
 {
     map.clear();
+    map = std::map<std::string,AssetFile>();
 }
 void AssetManager::close()
 {

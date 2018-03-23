@@ -66,8 +66,8 @@ public:
   void update();
   ~Display();
   GLFWwindow *getWindow();
-  ck::Shader *shader;
-  ck::StaticMesh *smesh;
-  Level *level;
+  ck::Shader *shader = nullptr;
+  ck::StaticMesh *smesh = nullptr;
+  Level *level = nullptr;
 };
 }

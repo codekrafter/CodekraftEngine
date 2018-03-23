@@ -28,7 +28,9 @@ Material::Material(std::string d_name, std::string s_name, std::string prefix)
         specular = new Texture();
     }
     AssetManager *am = new AssetManager();
+    std::cout << "made asset manager" << std::endl;
     am->open("test.ckd");
+    std::cout << "opened data file" << std::endl;
     shader = am->loadAsset<Shader>("phong");
     am->reset();
     delete am;

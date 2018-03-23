@@ -157,21 +157,21 @@ void Display::update()
     }
 
     // positions of the point lights
-    glm::vec3 pointLightPositions[] = {
+    /*glm::vec3 pointLightPositions[] = {
         glm::vec3(0.7f, 0.2f, 2.0f),
         glm::vec3(2.3f, -3.3f, -4.0f),
         glm::vec3(-4.0f, 2.0f, -12.0f),
         glm::vec3(0.0f, 0.0f, -3.0f)};
     shader->use();
     shader->setInt("material.diffuse", 0);
-    shader->setInt("material.specular", 1);
+    shader->setInt("material.specular", 1);*/
 
     // render
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ImGui::Render();
-
+    /*
     shader->setVec3("viewPos", camera.Position);
     shader->setFloat("material.shininess", 32.0f);
 
@@ -233,14 +233,17 @@ void Display::update()
     // world transformation
     glm::mat4 model;
     //model = glm::translate(model,glm::vec3(0.0,0.0,0.3));
-    shader->setMat4("model", model);
+    shader->setMat4("model", model);*/
 
     // draw mesh
     /*if (smesh != nullptr)
     {
         smesh->draw();
     }*/
-    level->tick(1.0f);
+    if (level != nullptr)
+    {
+        level->tick(1.0f);
+    }
     ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
     //std::cout << "finished model drawing" << std::endl;
