@@ -20,6 +20,7 @@ find_package(GLUT REQUIRED)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(CMAKE_BUILD_TYPE Debug)
 
 file(GLOB_RECURSE SRC "src/*.cpp")
 file(GLOB_RECURSE TP_SRC "include/*.c" "include/*.cpp" "include/*.inl")

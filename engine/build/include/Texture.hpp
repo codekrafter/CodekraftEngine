@@ -17,7 +17,7 @@ public:
   ~Texture();
   template <class Archive>
   void serialize(Archive &ar);
-  void init();
+  virtual void init();
   void draw(int i);
 };
 }
@@ -30,6 +30,6 @@ public:
 CEREAL_REGISTER_TYPE(ck::Texture);
 
 // Note that there is no need to register the base class, only derived classes
-//  However, since we did not use cereal::base_class, we need to clarify
+//  However, since we did not use cereal::virtual_base_class, we need to clarify
 //  the relationship (more on this later)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(ck::Asset, ck::Texture)

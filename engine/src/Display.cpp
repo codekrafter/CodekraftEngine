@@ -12,10 +12,13 @@
 #include <TP/glm/gtc/type_ptr.hpp>
 #include "Camera.hpp"
 #include "Engine.hpp"
+#include "Editor.hpp"
+#include "WorldManager.hpp"
 
 #include "TP/OBJ_Loader.h"
 #include "TP/IMGUI/imgui.h"
 #include "TP/IMGUI/imgui_impl_glfw_gl3.h"
+#include "TP/easylogging/easylogging++.h"
 namespace ck
 {
 void Display::glfw_error_callback(int error, const char *description)
@@ -108,13 +111,25 @@ void Display::processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(RIGHT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS)
+        editorKeyPressed = true;
+    if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_RELEASE)
+        if (editorKeyPressed)
+        {
+            Editor::getInstance()->toggleEditor();
+            editorKeyPressed = false;
+        }
+        else
+        {
+            editorKeyPressed = false;
+        }
 }
 
 void Display::update()
@@ -138,6 +153,18 @@ void Display::update()
     //ImGui::Begin("Debug", &showDebug)
     //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     //ImGui::End();
+    if (glfw)
+    {
+        if (Editor::getInstance()->showCursor())
+        {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+        else
+        {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+    }
+    Editor::getInstance()->Draw();
 
     // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
     if (show_another_window)
@@ -164,17 +191,14 @@ void Display::update()
         glm::vec3(0.0f, 0.0f, -3.0f)};
     shader->use();
     shader->setInt("material.diffuse", 0);
-    shader->setInt("material.specular", 1);*/
-
+    shader->setInt("material.specular", 1);
+    */
     // render
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    ImGui::Render();
+    //shader->use();
     /*
-    shader->setVec3("viewPos", camera.Position);
-    shader->setFloat("material.shininess", 32.0f);
-
     // directional light
     shader->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
     shader->setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
@@ -223,27 +247,37 @@ void Display::update()
     shader->setFloat("spotLight.quadratic", 0.032);
     shader->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
     shader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
-
+    */ /*
     // view/projection transformations
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    glm::mat4 view = camera.GetViewMatrix();
+    glm::mat4 projection = glm::perspective(glm::radians(WorldManager::getInstance()->getLevel()->getCamera()->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    glm::mat4 view = WorldManager::getInstance()->getLevel()->getCamera()->GetViewMatrix();
     shader->setMat4("projection", projection);
     shader->setMat4("view", view);
 
     // world transformation
     glm::mat4 model;
-    //model = glm::translate(model,glm::vec3(0.0,0.0,0.3));
+    //model = glm::translate(model, glm::vec3(0.0, 0.0, 0.3 * currentFrame));
     shader->setMat4("model", model);*/
 
     // draw mesh
+    //shader->use();
     /*if (smesh != nullptr)
     {
         smesh->draw();
-    }*/
-    if (level != nullptr)
-    {
-        level->tick(1.0f);
     }
+    else
+    {
+        LOG(INFO) << "smesh null";
+    }*/
+    if (WorldManager::getInstance()->getLevel() != nullptr)
+    {
+        WorldManager::getInstance()->getLevel()->tick(1.0f);
+    }
+    else
+    {
+        LOG(INFO) << "level null";
+    }
+    ImGui::Render();
     ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
     //std::cout << "finished model drawing" << std::endl;
@@ -286,7 +320,7 @@ void Display::mouse_callback(GLFWwindow *window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    camera.ProcessMouseMovement(xoffset, yoffset);
+    WorldManager::getInstance()->getLevel()->getCamera()->ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called

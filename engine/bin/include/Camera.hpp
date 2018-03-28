@@ -18,6 +18,10 @@ enum Camera_Movement
   RIGHT
 };
 
+// settings
+static const unsigned int SCR_WIDTH = 800;
+static const unsigned int SCR_HEIGHT = 600;
+
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;

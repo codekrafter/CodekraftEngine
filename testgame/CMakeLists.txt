@@ -6,7 +6,8 @@ set (CMAKE_CXX_STANDARD 11)
 
 find_package(glfw3 3.2 REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
+
+set(CMAKE_BUILD_TYPE Debug)
 
 file(GLOB SRC "src/*.cpp")
 
@@ -16,6 +17,6 @@ include_directories(../engine/bin/include)
 link_directories(../engine/bin/)
 
 add_executable(TestGame ${SRC})
-target_link_libraries(TestGame CKEngine.a glfw3 GL assimp ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
+target_link_libraries(TestGame CKEngine.a glfw3 GL assimp ${OPENGL_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
 
 install(TARGETS TestGame DESTINATION bin)

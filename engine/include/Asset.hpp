@@ -2,6 +2,8 @@
 
 #include <string>
 #include <TP/cereal/types/memory.hpp>
+#include <TP/cereal/types/polymorphic.hpp>
+
 namespace ck
 {
 class Asset
@@ -13,15 +15,18 @@ protected:
 public:
   Asset()
   {
-    version = 1;
+    version = 0;
     type = "GENERIC";
   };
+
   Asset(const Asset &a)
   {
     version = a.version;
     type = a.type;
-  }
+  };
+
   virtual ~Asset(){};
+  virtual void init() = 0;
   template <class Archive>
   void serialize(Archive &ar) { ar(version, type); };
   virtual std::string getType() { return type; };

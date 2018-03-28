@@ -1,15 +1,17 @@
 #include "Mesh.hpp"
+#include "Material.hpp"
 #include "TP/glm/glm.hpp"
 #include "Asset.hpp"
 #include "TP/OBJ_Loader.h"
 #include "TP/glad/glad.h"
+#include "Transform.hpp"
+#include "TP/cereal/types/vector.hpp"
 
 namespace ck
 {
 Mesh::Mesh(){};
 Mesh::Mesh(objl::Mesh m, std::string directory)
 {
-    //std::cout << "Mesh: " << m.MeshName << std::endl;
     for (int j = 0; j < m.Vertices.size(); j++)
     {
         ck::Vertex v;
@@ -18,17 +20,17 @@ Mesh::Mesh(objl::Mesh m, std::string directory)
         v.TexCoords = glm::vec2(m.Vertices[j].TextureCoordinate.X, m.Vertices[j].TextureCoordinate.Y);
         vertices.push_back(v);
     }
-    //std::cout << "mesh material name: " << m.MeshMaterial.name << std::endl;
     objl::Material mmat = m.MeshMaterial;
-    //std::cout << "mesh material maps: (diffuse,speclar)" << mmat.map_Kd << "," << mmat.map_Ks << std::endl;
     mat = new Material(mmat.map_Kd, mmat.map_Ks, directory);
     indices = m.Indices;
 };
-Mesh::~Mesh() { delete mat; };
+Mesh::~Mesh(){
+    //delete mat;
+};
 template <class Archive>
 void Mesh::serialize(Archive &archive)
 {
-    archive(vertices, indices);
+    archive(/*cereal::base_class<ck::Asset>(this),*/ vertices, indices);
 };
 void Mesh::init()
 {

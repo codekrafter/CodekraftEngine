@@ -1,7 +1,8 @@
-#include <iostream>
-#include <typeinfo>
 #include "Engine.hpp"
 #include "StaticMeshActor.hpp"
+#include "WorldManager.hpp"
+#include "AssetManager.hpp"
+#include "TP/easylogging/easylogging++.h"
 
 std::string vv = R"(
 #version 330 core
@@ -193,26 +194,33 @@ void main()
 int main(int argc, char *argv[])
 {
     ck::CKEngine *engine = initEngine(true);
-    //ck::AssetManager *am = new ck::AssetManager();
+    ck::AssetManager *am = new ck::AssetManager();
+    //am->open("shaders.ckd");
+    ck::Shader *shader = new ck::Shader();
+    shader->setCode(vv, fff);
+    am->saveAsset("phong", shader);
+    am->close("shaders.ckd");
+    am->reset();
     //am->open("test.ckd");
-    //ck::Shader *shader = new ck::Shader();
-    //shader->setCode(vv, ff);
-    //am->saveAsset("phong", shader);
     //ck::Shader *shader = am->loadAsset<ck::Shader>("white-shader");
-    //ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
-    //am->saveAsset("nanosuit", smesh);
+    ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
+    am->saveAsset("nanosuit", smesh);
     //ck::StaticMesh *smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
-
-    //ck::Level *level = new ck::Level();
-    //ck::StaticMeshActor *sma = new ck::StaticMeshActor(smesh);
-    //level->contents.push_back(std::shared_ptr<ck::StaticMeshActor>(sma));
+    am->close("test.ckd");
+    am->reset();
+    ck::Level *level = new ck::Level();
+    ck::StaticMeshActor *sma = new ck::StaticMeshActor(smesh);
+    std::shared_ptr<ck::StaticMeshActor> ptr = std::shared_ptr<ck::StaticMeshActor>(sma);
+    level->contents.push_back(std::shared_ptr<ck::StaticMeshActor>(sma));
     //am->saveAsset("test-level", level);
     //am->close("test.ckd");
 
     //smesh->init();
     //shader->init();
+    //level->init();
     //engine->getDisplay()->shader = shader;
     //engine->getDisplay()->smesh = smesh;
+    ck::WorldManager::getInstance()->loadLevel(level);
     //engine->getDisplay()->level = level;
     run(engine);
     //delete shader;

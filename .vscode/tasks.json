@@ -4,40 +4,46 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build everything",
-            "type": "shell",
-            "command": "./start editor && ./start game",
-            "group": "build",
-            "problemMatcher": [
-                "$gcc"
-            ]
-        },
-        {
-            "label": "run editor",
-            "type": "shell",
-            "command": "./start editor run",
-            "group": "build"
-        },
-        {
-            "label": "run testgame",
+            "label": "build and run test game",
             "type": "shell",
             "command": "./start game run",
-            "group": "build"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$gcc"
         },
         {
-            "label": "clean editor",
+            "label": "build test game",
             "type": "shell",
-            "command": "./start clean editor",
+            "command": "./start game",
             "group": "build",
-            "problemMatcher": [
-                "$gcc"
-            ]
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$gcc"
         },
         {
             "label": "clean testgame",
             "type": "shell",
             "command": "./start clean game",
-            "group": "build"
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$gcc"
         }
     ]
 }

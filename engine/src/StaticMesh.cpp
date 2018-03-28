@@ -1,5 +1,6 @@
 #include "StaticMesh.hpp"
 #include "AssetManager.hpp"
+#include "TP/easylogging/easylogging++.h"
 
 namespace ck
 {
@@ -8,17 +9,20 @@ StaticMesh::StaticMesh()
 {
     version = 1;
     type = "STATICMESH";
+    LOG(DEBUG) << "making static mesh from thin air";
 };
 StaticMesh::StaticMesh(std::string path)
 {
+    LOG(DEBUG) << "making static mesh";
     version = 1;
     type = "STATICMESH";
     // Initialize Loader
     objl::Loader Loader;
 
     // Load .obj File
+    LOG(DEBUG) << "loading file...";
     bool loaded = Loader.LoadFile(path);
-    //std::cout << "loaded" << std::endl;
+    std::cout << "loaded" << std::endl;
     // Check to see if it loaded
 
     if (!loaded)
@@ -33,18 +37,7 @@ StaticMesh::StaticMesh(std::string path)
     {
         std::string dir = path.substr(0, path.find_last_of('/'));
         dir = dir + "/";
-        //std::cout << "dir: " << dir << std::endl;
-        std::cout << "pushing back mesh " << i << "/" << Loader.LoadedMeshes.size() << std::endl;
         meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i], dir), ed));
-        std::cout << "finished pushing back mesh" << std::endl;
-    }
-    std::cout << "# of materials: " << Loader.LoadedMaterials.size() << std::endl;
-
-    for (int i = 0; i < Loader.LoadedMaterials.size(); i++)
-    {
-        objl::Material m = Loader.LoadedMaterials[i];
-        //std::cout << "name: " << m.name << std::endl;
-        //<< m.Ka << std::endl;
     }
 };
 
@@ -68,7 +61,7 @@ StaticMesh::~StaticMesh()
 template <class Archive>
 void StaticMesh::serialize(Archive &ar)
 {
-    ar(cereal::base_class<ck::Asset>(this), meshes);
+    ar(/*cereal::base_class<ck::Asset>(this),*/ meshes);
 };
 std::vector<Mesh *> StaticMesh::getMeshes()
 {

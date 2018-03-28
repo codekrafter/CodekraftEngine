@@ -27,7 +27,7 @@ Texture::~Texture()
 template <class Archive>
 void Texture::serialize(Archive &ar)
 {
-    ar(*data, width, height, n);
+    ar(/*cereal::base_class<ck::Asset>(this),*/ *data, width, height, n);
 };
 void Texture::init()
 {

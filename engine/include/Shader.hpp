@@ -8,9 +8,6 @@ namespace ck
 class Shader : public Asset
 {
 private:
-  std::string vertex;
-  std::string fragment;
-  std::string geometry;
   // utility function for checking shader compilation/linking errors.
   // ------------------------------------------------------------------------
   void checkCompileErrors(unsigned int shader, std::string type);
@@ -19,11 +16,14 @@ public:
   unsigned int ID;
   Shader();
   ~Shader();
-  void init();
+  virtual void init();
   template <class Archive>
   void serialize(Archive &ar);
   virtual std::string getType();
   virtual int getVersion();
+  std::string vertex = "";
+  std::string fragment = "";
+  std::string geometry = "";
   void setCode(std::string v, std::string f, std::string g = "");
 
   // activate the shader
@@ -65,6 +65,6 @@ public:
 CEREAL_REGISTER_TYPE(ck::Shader);
 
 // Note that there is no need to register the base class, only derived classes
-//  However, since we did not use cereal::base_class, we need to clarify
+//  However, since we did not use cereal::virtual_base_class, we need to clarify
 //  the relationship (more on this later)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(ck::Asset, ck::Shader)

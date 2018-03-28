@@ -44,6 +44,9 @@
         "mutex": "cpp",
         "ratio": "cpp",
         "thread": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "codecvt": "cpp",
+        "csignal": "cpp",
+        "string": "cpp"
     }
 }

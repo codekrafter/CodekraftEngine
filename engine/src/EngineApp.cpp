@@ -13,8 +13,8 @@ CKEngine::CKEngine(bool mw)
     el::Configurations conf;
     conf.setToDefault();
     conf.set(el::Level::Global,
-             el::ConfigurationType::Format, "%datetime %level %msg");
-    conf.set(el::Level::Global, el::ConfigurationType::Filename, "./ckengine.log");
+             el::ConfigurationType::Format, "[%datetime] [%level] %msg");
+    conf.set(el::Level::Global, el::ConfigurationType::Filename, "./logs/ckengine.log");
     conf.set(el::Level::Global, el::ConfigurationType::ToFile, "true");
     conf.set(el::Level::Global, el::ConfigurationType::ToStandardOutput, "true");
     el::Loggers::reconfigureLogger("default", conf);

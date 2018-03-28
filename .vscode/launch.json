@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/testgame/bin/TestGame",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/testgame/bin",
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",

@@ -5,22 +5,8 @@
 #include "TP/OBJ_Loader.h"
 #include "TP/cereal/types/vector.hpp"
 #include "Material.hpp"
+#include "GLMSavers.hpp"
 
-namespace glm
-{
-template <class Archive>
-void serialize(Archive &archive,
-               vec2 &m)
-{
-    archive(m[0], m[1]);
-}
-template <class Archive>
-void serialize(Archive &archive,
-               vec3 &m)
-{
-    archive(m[0], m[1], m[2]);
-}
-}
 namespace ck
 {
 struct Vertex
@@ -54,10 +40,10 @@ class Mesh : public Asset
     Material *mat;
     Mesh();
     Mesh(objl::Mesh m, std::string directory);
-    ~Mesh();
+    virtual ~Mesh();
     template <class Archive>
     void serialize(Archive &archive);
-    void init();
+    virtual void init();
     void draw();
 };
 }
@@ -70,6 +56,6 @@ class Mesh : public Asset
 CEREAL_REGISTER_TYPE(ck::Mesh);
 
 // Note that there is no need to register the base class, only derived classes
-//  However, since we did not use cereal::base_class, we need to clarify
+//  However, since we did not use cereal::virtual_base_class, we need to clarify
 //  the relationship (more on this later)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(ck::Asset, ck::Mesh)

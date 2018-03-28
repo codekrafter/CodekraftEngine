@@ -3,8 +3,11 @@
 #include "Asset.hpp"
 #include <vector>
 #include <string>
+#include "Assets.hpp"
+
 #include "TP/cereal/types/vector.hpp"
 #include "TP/cereal/types/memory.hpp"
+#include "TP/cereal/types/polymorphic.hpp"
 
 namespace ck
 {
@@ -29,17 +32,25 @@ struct empty_delete
 };
 struct AssetFile
 {
+private:
+  std::shared_ptr<Asset> a;
+
+public:
+  Asset *asset();
   std::string type;
-  std::shared_ptr<Asset> asset;
   AssetFile();
-  AssetFile(std::string t, std::shared_ptr<Asset> &a);
+  AssetFile(std::string t, Asset *asset);
   template <class Archive>
   void serialize(Archive &ar);
+  bool operator==(const AssetFile &other)
+  {
+    return a.get() == other.a.get();
+  }
 };
 class AssetManager
 {
 private:
-  bool fileExists(std::string fileName);
+  static bool fileExists(std::string fileName);
   std::map<std::string, AssetFile> map;
   std::string cname;
 
@@ -57,10 +68,15 @@ public:
   {
     static_assert(std::is_base_of<Asset, A>::value, "A must be an asset");
     AssetFile af = map[name];
-    return dynamic_cast<A *>(af.asset.get());
+    //A *out = reinterpret_cast<A *>(map[name].asset());
+    A *out = dynamic_cast<A *>(map[name].asset());
+    std::cout << "TYPE: " << out->getType() << std::endl;
+    std::cout << "RTYPE: " << typeid(*out).name() << std::endl;
+    return out;
   }
   bool saveAsset(std::string name, Asset *asset);
   std::vector<std::string> getKeys();
+  std::map<std::string, AssetFile> getMap();
   /// Save map to file
   void close(std::string fname);
   void close();

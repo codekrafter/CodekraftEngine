@@ -30,10 +30,6 @@ private:
   static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
   void processInput(GLFWwindow *window);
 
-  // settings
-  static const unsigned int SCR_WIDTH = 800;
-  static const unsigned int SCR_HEIGHT = 600;
-
   // camera
   Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
   float lastX = SCR_WIDTH / 2.0f;
@@ -54,7 +50,8 @@ private:
 
   bool show_demo_window = false;
   bool show_another_window = false;
-  ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+  bool editorKeyPressed;
 
 public:
   Display() : Display(false){};
