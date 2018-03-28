@@ -24,7 +24,7 @@ fi
 
 cd engine
 cd build
-#cmake .. >/dev/null
+cmake .. >/dev/null
 if [ $CLEAN -eq 1 ]; then
 make clean
 fi
@@ -35,7 +35,7 @@ cd ../..
 if [ $TARGET == "editor" ]; then
 	cd editor
 	cd build
-	#cmake .. >/dev/null
+	cmake .. >/dev/null
 	if [ $CLEAN -eq 1 ]; then
 	make clean
 	fi
@@ -49,10 +49,10 @@ fi
 elif [ $TARGET = "game" ]; then
 	cd testgame
 	cd build
-	#cmake -DCMAKE_BUILD_TYPE=DEBUG .. >/dev/null
-	if [ $CLEAN -eq 1 ]; then
-	make clean
-	fi
+	cmake -DCMAKE_BUILD_TYPE=DEBUG .. >/dev/null
+	#if [ $CLEAN -eq 1 ]; then
+	#make clean
+	#fi
 	make clean
 	make all
 	make install > /dev/null
