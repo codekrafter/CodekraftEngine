@@ -29,7 +29,7 @@ branches:
 
 #before_install:
 
-script: ./start editor && ./start game
+script: ./start game
 
 after_success:
     # Creating report
