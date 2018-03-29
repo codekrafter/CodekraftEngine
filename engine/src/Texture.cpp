@@ -47,20 +47,12 @@ template <class Archive>
 void Texture::save(Archive &ar) const
 {
     ar(width, height, n);
-
-    int len;
-    unsigned char *data_binary = stbi_write_png_to_mem(data, width*4, width, height, n, &len);
-    ar(cereal::binary_data(data_binary,len));
 }
 
 template <class Archive>
 void Texture::load(Archive &ar)
 {
     ar(width, height, n);
-    int len;
-    unsigned char *data_binary;
-    ar(cereal::binary_data(data_binary,len));
-    data = stbi_load_from_memory(data_binary,len,&width,&height,&n,0);
 }
 void Texture::init()
 {

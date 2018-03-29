@@ -12,8 +12,8 @@ set(CMAKE_BUILD_TYPE Debug)
 file(GLOB SRC "src/*.cpp")
 
 include_directories(include/)
-include_directories(../build/include)
-link_directories(../engine/bin/)
+include_directories(${CMAKE_BINARY_DIR}/engine/include)
+link_directories(${CMAKE_BINARY_DIR}/engine/)
 
 add_executable(TestGame ${SRC})
 target_link_libraries(TestGame CKEngine.a glfw3 GL ${OPENGL_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
