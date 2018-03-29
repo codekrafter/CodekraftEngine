@@ -11,15 +11,15 @@ ADD_DEFINITIONS(
 #set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(ENGINE_VERSION 0.0.1)
-set(CMAKE_INSTALL_PREFIX ..)
+#set(CMAKE_INSTALL_PREFIX ..)
 
 find_package(glfw3 3.2 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+#set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+#set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+#set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(CMAKE_BUILD_TYPE Debug)
 
 file(GLOB_RECURSE SRC "src/*.cpp")
@@ -34,17 +34,13 @@ configure_file (
   "include/EngineConfig.hpp"
 )
 
-include_directories(build/include/)
-include_directories(/usr/local/GLFW/include)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/)
+#include_directories(/usr/local/GLFW/include)
 
 
 add_library(CKEngine STATIC ${SRC} ${TP_SRC})
 target_link_libraries(CKEngine glfw3 GL assimp ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
 
-foreach(hname ${INSTALL_HEADERS})
-    message(${hname})
-endforeach(hname)
-
-install(TARGETS CKEngine DESTINATION bin)
-install (DIRECTORY "build/include/"        
-         DESTINATION "bin/include")
+#install(TARGETS CKEngine DESTINATION bin)
+#install (DIRECTORY "build/include/"        
+#         DESTINATION "bin/include")

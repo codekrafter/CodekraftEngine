@@ -12,11 +12,10 @@ set(CMAKE_BUILD_TYPE Debug)
 file(GLOB SRC "src/*.cpp")
 
 include_directories(include/)
-include_directories(build/include/)
-include_directories(../engine/bin/include)
+include_directories(../build/include)
 link_directories(../engine/bin/)
 
 add_executable(TestGame ${SRC})
-target_link_libraries(TestGame CKEngine.a glfw3 GL assimp ${OPENGL_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
+target_link_libraries(TestGame CKEngine.a glfw3 GL ${OPENGL_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
 
 install(TARGETS TestGame DESTINATION bin)
