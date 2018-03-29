@@ -30,7 +30,7 @@ Mesh::~Mesh(){
 template <class Archive>
 void Mesh::serialize(Archive &archive)
 {
-    archive(/*cereal::base_class<ck::Asset>(this),*/ vertices, indices);
+    archive(cereal::base_class<ck::Asset>(this), vertices, indices, *mat);
 };
 void Mesh::init()
 {
@@ -62,9 +62,9 @@ void Mesh::init()
     glBindVertexArray(0);
     mat->init();
 };
-void Mesh::draw()
+void Mesh::draw(Transform trans)
 {
-    mat->draw();
+    mat->draw(trans);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

@@ -5167,3 +5167,223 @@ void main()
 [2018-03-28 13:59:23,463] [DEBUG] got cstring
 [2018-03-28 13:59:23,463] [DEBUG] printed
 [2018-03-28 13:59:23,472] [INFO] Done Init Shader
+[2018-03-29 08:41:01,712] [INFO] started logging
+[2018-03-29 08:41:01,713] [DEBUG] making static mesh
+[2018-03-29 08:41:01,713] [DEBUG] loading file...
+[2018-03-29 08:41:03,873] [INFO] Init Shader
+[2018-03-29 08:41:03,873] [DEBUG] started shader init
+[2018-03-29 08:41:03,873] [DEBUG] got cstring
+[2018-03-29 08:41:03,873] [DEBUG] printed
+[2018-03-29 08:41:03,884] [INFO] Done Init Shader
+[2018-03-29 08:41:03,902] [INFO] Init Shader
+[2018-03-29 08:41:03,902] [DEBUG] started shader init
+[2018-03-29 08:41:03,902] [DEBUG] got cstring
+[2018-03-29 08:41:03,902] [DEBUG] printed
+[2018-03-29 08:41:03,911] [INFO] Done Init Shader
+[2018-03-29 08:41:03,922] [INFO] Init Shader
+[2018-03-29 08:41:03,922] [DEBUG] started shader init
+[2018-03-29 08:41:03,922] [DEBUG] got cstring
+[2018-03-29 08:41:03,922] [DEBUG] printed
+[2018-03-29 08:41:03,932] [INFO] Done Init Shader
+[2018-03-29 08:41:03,933] [INFO] Init Shader
+[2018-03-29 08:41:03,933] [DEBUG] started shader init
+[2018-03-29 08:41:03,933] [DEBUG] got cstring
+[2018-03-29 08:41:03,933] [DEBUG] printed
+[2018-03-29 08:41:03,942] [INFO] Done Init Shader
+[2018-03-29 08:41:03,952] [INFO] Init Shader
+[2018-03-29 08:41:03,952] [DEBUG] started shader init
+[2018-03-29 08:41:03,952] [DEBUG] got cstring
+[2018-03-29 08:41:03,952] [DEBUG] printed
+[2018-03-29 08:41:03,961] [INFO] Done Init Shader
+[2018-03-29 08:41:03,973] [INFO] Init Shader
+[2018-03-29 08:41:03,974] [DEBUG] started shader init
+[2018-03-29 08:41:03,974] [DEBUG] got cstring
+[2018-03-29 08:41:03,974] [DEBUG] printed
+[2018-03-29 08:41:03,983] [INFO] Done Init Shader
+[2018-03-29 08:41:03,996] [INFO] Init Shader
+[2018-03-29 08:41:03,996] [DEBUG] started shader init
+[2018-03-29 08:41:03,996] [DEBUG] got cstring
+[2018-03-29 08:41:03,996] [DEBUG] printed
+[2018-03-29 08:41:04,005] [INFO] Done Init Shader
+[2018-03-29 08:42:11,068] [INFO] started logging
+[2018-03-29 08:42:11,069] [DEBUG] making static mesh
+[2018-03-29 08:42:11,069] [DEBUG] loading file...
+[2018-03-29 08:42:13,352] [INFO] Init Shader
+[2018-03-29 08:42:13,352] [DEBUG] started shader init
+[2018-03-29 08:42:13,352] [DEBUG] got cstring
+[2018-03-29 08:42:13,352] [DEBUG] printed
+[2018-03-29 08:42:13,361] [INFO] Done Init Shader
+[2018-03-29 08:42:13,378] [INFO] Init Shader
+[2018-03-29 08:42:13,378] [DEBUG] started shader init
+[2018-03-29 08:42:13,378] [DEBUG] got cstring
+[2018-03-29 08:42:13,378] [DEBUG] printed
+[2018-03-29 08:42:13,387] [INFO] Done Init Shader
+[2018-03-29 08:42:13,398] [INFO] Init Shader
+[2018-03-29 08:42:13,398] [DEBUG] started shader init
+[2018-03-29 08:42:13,398] [DEBUG] got cstring
+[2018-03-29 08:42:13,398] [DEBUG] printed
+[2018-03-29 08:42:13,407] [INFO] Done Init Shader
+[2018-03-29 08:42:13,407] [INFO] Init Shader
+[2018-03-29 08:42:13,408] [DEBUG] started shader init
+[2018-03-29 08:42:13,408] [DEBUG] got cstring
+[2018-03-29 08:42:13,408] [DEBUG] printed
+[2018-03-29 08:42:13,416] [INFO] Done Init Shader
+[2018-03-29 08:42:13,426] [INFO] Init Shader
+[2018-03-29 08:42:13,426] [DEBUG] started shader init
+[2018-03-29 08:42:13,426] [DEBUG] got cstring
+[2018-03-29 08:42:13,427] [DEBUG] printed
+[2018-03-29 08:42:13,435] [INFO] Done Init Shader
+[2018-03-29 08:42:13,446] [INFO] Init Shader
+[2018-03-29 08:42:13,446] [DEBUG] started shader init
+[2018-03-29 08:42:13,446] [DEBUG] got cstring
+[2018-03-29 08:42:13,446] [DEBUG] printed
+[2018-03-29 08:42:13,454] [INFO] Done Init Shader
+[2018-03-29 08:42:13,464] [INFO] Init Shader
+[2018-03-29 08:42:13,464] [DEBUG] started shader init
+[2018-03-29 08:42:13,464] [DEBUG] got cstring
+[2018-03-29 08:42:13,464] [DEBUG] printed
+[2018-03-29 08:42:13,473] [INFO] Done Init Shader
+[2018-03-29 08:42:59,117] [INFO] started logging
+[2018-03-29 08:42:59,117] [DEBUG] making static mesh
+[2018-03-29 08:42:59,117] [DEBUG] loading file...
+[2018-03-29 08:43:01,266] [INFO] Init Shader
+[2018-03-29 08:43:01,266] [DEBUG] started shader init
+[2018-03-29 08:43:01,266] [DEBUG] got cstring
+[2018-03-29 08:43:01,266] [DEBUG] printed
+[2018-03-29 08:43:01,276] [INFO] Done Init Shader
+[2018-03-29 08:43:01,294] [INFO] Init Shader
+[2018-03-29 08:43:01,294] [DEBUG] started shader init
+[2018-03-29 08:43:01,294] [DEBUG] got cstring
+[2018-03-29 08:43:01,294] [DEBUG] printed
+[2018-03-29 08:43:01,302] [INFO] Done Init Shader
+[2018-03-29 08:43:01,314] [INFO] Init Shader
+[2018-03-29 08:43:01,314] [DEBUG] started shader init
+[2018-03-29 08:43:01,314] [DEBUG] got cstring
+[2018-03-29 08:43:01,314] [DEBUG] printed
+[2018-03-29 08:43:01,322] [INFO] Done Init Shader
+[2018-03-29 08:43:01,323] [INFO] Init Shader
+[2018-03-29 08:43:01,323] [DEBUG] started shader init
+[2018-03-29 08:43:01,323] [DEBUG] got cstring
+[2018-03-29 08:43:01,323] [DEBUG] printed
+[2018-03-29 08:43:01,332] [INFO] Done Init Shader
+[2018-03-29 08:43:01,343] [INFO] Init Shader
+[2018-03-29 08:43:01,343] [DEBUG] started shader init
+[2018-03-29 08:43:01,343] [DEBUG] got cstring
+[2018-03-29 08:43:01,343] [DEBUG] printed
+[2018-03-29 08:43:01,351] [INFO] Done Init Shader
+[2018-03-29 08:43:01,364] [INFO] Init Shader
+[2018-03-29 08:43:01,364] [DEBUG] started shader init
+[2018-03-29 08:43:01,364] [DEBUG] got cstring
+[2018-03-29 08:43:01,364] [DEBUG] printed
+[2018-03-29 08:43:01,373] [INFO] Done Init Shader
+[2018-03-29 08:43:01,383] [INFO] Init Shader
+[2018-03-29 08:43:01,383] [DEBUG] started shader init
+[2018-03-29 08:43:01,383] [DEBUG] got cstring
+[2018-03-29 08:43:01,383] [DEBUG] printed
+[2018-03-29 08:43:01,393] [INFO] Done Init Shader
+[2018-03-29 08:49:30,301] [INFO] started logging
+[2018-03-29 08:49:30,302] [DEBUG] making static mesh
+[2018-03-29 08:49:30,302] [DEBUG] loading file...
+[2018-03-29 08:49:49,860] [INFO] started logging
+[2018-03-29 08:49:49,862] [DEBUG] making static mesh
+[2018-03-29 08:49:49,862] [DEBUG] loading file...
+[2018-03-29 08:50:34,448] [INFO] started logging
+[2018-03-29 08:50:34,449] [DEBUG] making static mesh
+[2018-03-29 08:50:34,449] [DEBUG] loading file...
+[2018-03-29 08:50:51,266] [INFO] started logging
+[2018-03-29 08:50:51,266] [DEBUG] making static mesh
+[2018-03-29 08:50:51,266] [DEBUG] loading file...
+[2018-03-29 08:51:42,812] [INFO] started logging
+[2018-03-29 08:51:42,813] [DEBUG] making static mesh
+[2018-03-29 08:51:42,813] [DEBUG] loading file...
+[2018-03-29 08:52:22,399] [INFO] started logging
+[2018-03-29 08:52:22,399] [DEBUG] making static mesh
+[2018-03-29 08:52:22,399] [DEBUG] loading file...
+[2018-03-29 08:53:11,790] [INFO] started logging
+[2018-03-29 08:53:11,790] [DEBUG] making static mesh
+[2018-03-29 08:53:11,790] [DEBUG] loading file...
+[2018-03-29 10:06:22,271] [INFO] started logging
+[2018-03-29 10:06:22,272] [DEBUG] making static mesh
+[2018-03-29 10:06:22,272] [DEBUG] loading file...
+[2018-03-29 10:07:20,860] [INFO] started logging
+[2018-03-29 10:07:49,156] [INFO] started logging
+[2018-03-29 10:07:49,156] [DEBUG] making static mesh from thin air
+[2018-03-29 10:08:00,111] [INFO] started logging
+[2018-03-29 10:08:00,112] [DEBUG] making static mesh from thin air
+[2018-03-29 10:09:24,689] [INFO] started logging
+[2018-03-29 10:09:24,690] [DEBUG] making static mesh
+[2018-03-29 10:09:24,690] [DEBUG] loading file...
+[2018-03-29 10:10:44,272] [INFO] started logging
+[2018-03-29 10:10:44,273] [DEBUG] making static mesh
+[2018-03-29 10:10:44,273] [DEBUG] loading file...
+[2018-03-29 10:11:27,134] [INFO] started logging
+[2018-03-29 10:11:27,134] [DEBUG] making static mesh
+[2018-03-29 10:11:27,134] [DEBUG] loading file...
+[2018-03-29 10:12:12,870] [INFO] started logging
+[2018-03-29 10:12:12,871] [DEBUG] making static mesh from thin air
+[2018-03-29 10:13:16,291] [INFO] started logging
+[2018-03-29 10:13:16,292] [DEBUG] making static mesh from thin air
+[2018-03-29 10:15:51,469] [INFO] started logging
+[2018-03-29 10:15:51,470] [DEBUG] making static mesh from thin air
+[2018-03-29 10:16:22,005] [INFO] started logging
+[2018-03-29 10:16:22,006] [DEBUG] making static mesh from thin air
+[2018-03-29 10:16:37,871] [INFO] started logging
+[2018-03-29 10:16:37,872] [DEBUG] making static mesh from thin air
+[2018-03-29 10:19:24,546] [INFO] started logging
+[2018-03-29 10:19:24,546] [DEBUG] making static mesh
+[2018-03-29 10:19:24,546] [DEBUG] loading file...
+[2018-03-29 10:20:08,209] [INFO] started logging
+[2018-03-29 10:20:08,211] [DEBUG] making static mesh
+[2018-03-29 10:20:08,211] [DEBUG] loading file...
+[2018-03-29 10:20:38,930] [INFO] started logging
+[2018-03-29 10:20:38,931] [DEBUG] making static mesh
+[2018-03-29 10:20:38,931] [DEBUG] loading file...
+[2018-03-29 10:20:53,002] [INFO] started logging
+[2018-03-29 10:20:53,002] [DEBUG] making static mesh
+[2018-03-29 10:20:53,002] [DEBUG] loading file...
+[2018-03-29 10:22:44,019] [INFO] started logging
+[2018-03-29 10:22:44,020] [DEBUG] making static mesh
+[2018-03-29 10:22:44,020] [DEBUG] loading file...
+[2018-03-29 10:22:44,526] [DEBUG] making texure from thin air
+[2018-03-29 10:22:45,171] [DEBUG] making texure from thin air
+[2018-03-29 10:36:41,443] [INFO] started logging
+[2018-03-29 10:36:41,446] [DEBUG] making static mesh
+[2018-03-29 10:36:41,446] [DEBUG] loading file...
+[2018-03-29 10:37:14,807] [INFO] started logging
+[2018-03-29 10:37:14,807] [DEBUG] making static mesh from thin air
+[2018-03-29 10:37:35,512] [INFO] started logging
+[2018-03-29 10:37:35,513] [DEBUG] making static mesh from thin air
+[2018-03-29 10:41:21,223] [INFO] started logging
+[2018-03-29 10:41:21,223] [DEBUG] making static mesh from thin air
+[2018-03-29 11:00:50,893] [INFO] started logging
+[2018-03-29 11:00:50,894] [DEBUG] making static mesh
+[2018-03-29 11:00:50,894] [DEBUG] loading file...
+[2018-03-29 11:01:40,310] [INFO] started logging
+[2018-03-29 11:01:40,311] [DEBUG] making static mesh
+[2018-03-29 11:01:40,311] [DEBUG] loading file...
+[2018-03-29 11:02:18,784] [INFO] started logging
+[2018-03-29 11:02:18,784] [DEBUG] making static mesh
+[2018-03-29 11:02:18,784] [DEBUG] loading file...
+[2018-03-29 11:03:28,876] [INFO] started logging
+[2018-03-29 11:03:28,877] [DEBUG] making static mesh from thin air
+[2018-03-29 12:32:27,532] [INFO] started logging
+[2018-03-29 12:32:27,532] [DEBUG] making static mesh from thin air
+[2018-03-29 12:36:22,570] [INFO] started logging
+[2018-03-29 12:36:22,571] [DEBUG] making static mesh from thin air
+[2018-03-29 12:36:51,270] [INFO] started logging
+[2018-03-29 12:36:51,270] [DEBUG] making static mesh
+[2018-03-29 12:36:51,270] [DEBUG] loading file...
+[2018-03-29 12:37:31,646] [INFO] started logging
+[2018-03-29 12:37:31,646] [DEBUG] making static mesh from thin air
+[2018-03-29 12:37:44,290] [INFO] started logging
+[2018-03-29 12:37:44,290] [DEBUG] making static mesh from thin air
+[2018-03-29 12:43:41,508] [INFO] started logging
+[2018-03-29 12:43:41,508] [DEBUG] making static mesh
+[2018-03-29 12:43:41,508] [DEBUG] loading file...
+[2018-03-29 12:44:18,128] [INFO] started logging
+[2018-03-29 12:44:18,128] [DEBUG] making static mesh from thin air
+[2018-03-29 12:44:30,643] [INFO] started logging
+[2018-03-29 12:44:30,643] [DEBUG] making static mesh from thin air
+[2018-03-29 14:19:12,994] [INFO] started logging
+[2018-03-29 14:19:12,995] [DEBUG] making static mesh
+[2018-03-29 14:19:12,995] [DEBUG] loading file...

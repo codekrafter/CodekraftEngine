@@ -1,6 +1,7 @@
 #include "StaticMesh.hpp"
 #include "AssetManager.hpp"
 #include "TP/easylogging/easylogging++.h"
+#include "TP/cereal/types/vector.hpp"
 
 namespace ck
 {
@@ -61,7 +62,7 @@ StaticMesh::~StaticMesh()
 template <class Archive>
 void StaticMesh::serialize(Archive &ar)
 {
-    ar(/*cereal::base_class<ck::Asset>(this),*/ meshes);
+    ar(cereal::base_class<ck::Asset>(this), meshes);
 };
 std::vector<Mesh *> StaticMesh::getMeshes()
 {
@@ -80,11 +81,11 @@ void StaticMesh::init()
         mesh->init();
     }
 };
-void StaticMesh::draw()
+void StaticMesh::draw(Transform trans)
 {
     for (std::shared_ptr<Mesh> mesh : meshes)
     {
-        mesh->draw();
+        mesh->draw(trans);
     }
 };
 }

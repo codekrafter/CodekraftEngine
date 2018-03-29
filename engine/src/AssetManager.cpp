@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "TP/cereal/types/map.hpp"
+#include "TP/cereal/types/vector.hpp"
 #include "TP/cereal/types/memory.hpp"
 #include "TP/cereal/archives/binary.hpp"
 

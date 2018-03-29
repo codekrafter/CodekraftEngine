@@ -48,5 +48,6 @@
         "codecvt": "cpp",
         "csignal": "cpp",
         "string": "cpp"
-    }
+    },
+    "workbench.colorTheme": "Default Dark+"
 }

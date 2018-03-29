@@ -1,6 +1,8 @@
 #include "Texture.hpp"
 #include "TP/glad/glad.h"
 #include "TP/stb_image.h"
+#include "TP/easylogging/easylogging++.h"
+#include "TP/stb_image_write.h"
 
 namespace ck
 {
@@ -8,15 +10,27 @@ Texture::Texture()
 {
     version = 1;
     type = "TEXTURE";
+    LOG(DEBUG) << "making texure from thin air";
 };
-Texture::Texture(std::string fname)
+
+/*Texture::Texture(std::string fname)
+{
+    this->Texture(fname, 0);
+};*/
+
+// Create texture with specified number of components, 0 for max number in file.
+Texture::Texture(std::string fname, int nn)
 {
     version = 1;
     type = "TEXTURE";
-    data = stbi_load(fname.c_str(), &width, &height, &n, 0);
+    data = stbi_load(fname.c_str(), &width, &height, &n, nn);
     if (!data)
     {
         std::cerr << "failed to load image '" << fname << "'" << std::endl;
+    }
+    if (nn != 0)
+    {
+        n = nn;
     }
 };
 Texture::~Texture()
@@ -24,11 +38,30 @@ Texture::~Texture()
     stbi_image_free(data);
 };
 
+//template <class Archive>
+//void Texture::serialize(Archive &ar)
+//{
+//    ar(/*cereal::base_class<ck::Asset>(this),*/ cereal::binary_data(data, (sizeof(data) * width)), width, height, n);
+//};
 template <class Archive>
-void Texture::serialize(Archive &ar)
+void Texture::save(Archive &ar) const
 {
-    ar(/*cereal::base_class<ck::Asset>(this),*/ *data, width, height, n);
-};
+    ar(width, height, n);
+
+    int len;
+    unsigned char *data_binary = stbi_write_png_to_mem(data, width*4, width, height, n, &len);
+    ar(cereal::binary_data(data_binary,len));
+}
+
+template <class Archive>
+void Texture::load(Archive &ar)
+{
+    ar(width, height, n);
+    int len;
+    unsigned char *data_binary;
+    ar(cereal::binary_data(data_binary,len));
+    data = stbi_load_from_memory(data_binary,len,&width,&height,&n,0);
+}
 void Texture::init()
 {
     glGenTextures(1, &ID);

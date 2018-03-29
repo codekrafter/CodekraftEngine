@@ -21,7 +21,7 @@ public:
   template <class Archive>
   void serialize(Archive &ar);
   virtual void init();
-  void draw();
+  void draw(Transform trans);
   std::vector<Mesh *> getMeshes();
   virtual std::string getType();
   virtual int getVersion();

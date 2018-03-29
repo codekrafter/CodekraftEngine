@@ -13,7 +13,9 @@ public:
   unsigned int ID;
   int width, height, n;
   Texture();
-  Texture(std::string fname);
+  Texture(std::string fname) : Texture(fname, 0) {};
+  // Create texture with specified number of components, 0 for max number in file.
+  Texture(std::string fname, int nn);
   ~Texture();
   template <class Archive>
   void serialize(Archive &ar);
