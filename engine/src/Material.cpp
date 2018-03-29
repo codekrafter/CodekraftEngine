@@ -203,14 +203,11 @@ Material::Material()
 {
     version = 1;
     type = "MATERIAL";
-    LOG(DEBUG) << "making asset from thin air";
     AssetManager *am = new AssetManager();
-    std::cout << "made asset manager" << std::endl;
     am->open("shaders.ckd");
-    std::cout << "opened data file" << std::endl;
-    //shader = am->loadAsset<Shader>("phong");
-    shader = new Shader();
-    shader->setCode(vv, fff);
+    shader = am->loadAsset<Shader>("phong");
+    //shader = new Shader();
+    //shader->setCode(vv, fff);
     am->reset();
     delete am;
     am = nullptr;
@@ -231,7 +228,7 @@ Material::Material(std::string d_name, std::string s_name, std::string prefix)
     }
     else
     {
-        specular = new Texture();
+        specular = new Texture(dpath, 2);
     }
     AssetManager *am = new AssetManager();
 
@@ -252,24 +249,22 @@ Material::~Material()
 template <class Archive>
 void Material::serialize(Archive &ar)
 {
-    ar(/*cereal::base_class<ck::Asset>(this),*/ *shader, *diffuse, *specular);
+    ar(cereal::base_class<ck::Asset>(this), *shader, *diffuse, *specular);
 }
 
 void Material::init()
 {
     diffuse->init();
     specular->init();
-    LOG(INFO) << "Init Shader";
     if (shader == nullptr)
     {
         LOG(ERROR) << "Shader in material is nullptr";
         return;
     }
     shader->init();
-    LOG(INFO) << "Done Init Shader";
 }
 
-void Material::draw() //Transform trans)
+void Material::draw(Transform trans)
 {
     shader->use();
     shader->setVec3("viewPos", WorldManager::getInstance()->getLevel()->getCamera()->Position);
@@ -282,7 +277,14 @@ void Material::draw() //Transform trans)
 
     // world transformation
     glm::mat4 model;
-    //model = glm::translate(model, trans.location);
+    model = glm::translate(model, trans.location);
+
+    model = glm::rotate(model, trans.rotation.x, glm::vec3(1.0, 0.0, 0.0));
+    model = glm::rotate(model, trans.rotation.y, glm::vec3(0.0, 1.0, 0.0));
+    model = glm::rotate(model, trans.rotation.z, glm::vec3(0.0, 0.0, 1.0));
+
+    model = glm::scale(model, trans.scale);
+
     shader->setMat4("model", model);
     diffuse->draw(0);
     specular->draw(1);

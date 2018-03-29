@@ -5,7 +5,6 @@
 #include "TP/glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Mesh.hpp"
-#define STB_IMAGE_IMPLEMENTATION
 #include <TP/stb_image.h>
 #include <TP/glm/glm.hpp>
 #include <TP/glm/gtc/matrix_transform.hpp>

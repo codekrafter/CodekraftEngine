@@ -44,7 +44,7 @@ class Mesh : public Asset
     template <class Archive>
     void serialize(Archive &archive);
     virtual void init();
-    void draw();
+    void draw(Transform trans);
 };
 }
 

@@ -144,7 +144,6 @@ void Shader::setCode(std::string v, std::string f, std::string g)
 
 void Shader::init()
 {
-    LOG(DEBUG) << "started shader init";
     // 2. compile shaders
     unsigned int vid, fid;
     int success;
@@ -152,9 +151,6 @@ void Shader::init()
     const char *vs = vertex.c_str();
     const char *fs = fragment.c_str();
     const char *gs = geometry.c_str();
-    LOG(DEBUG) << "got cstring";
-    //LOG(DEBUG) << "fs: " << fs;
-    LOG(DEBUG) << "printed";
     // vertex shader
     vid = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vid, 1, &vs, NULL);

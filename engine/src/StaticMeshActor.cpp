@@ -16,7 +16,7 @@ StaticMeshActor::~StaticMeshActor(){
 
 void StaticMeshActor::onTick(float dt)
 {
-    mesh->draw();
+    mesh->draw(transform);
 };
 
 template <class Archive>

@@ -20,7 +20,7 @@ public:
   ~Material();
   template <class Archive>
   void serialize(Archive &ar);
-  void draw(); //Transform trans);
+  void draw(Transform trans);
   virtual void init();
 };
 }
