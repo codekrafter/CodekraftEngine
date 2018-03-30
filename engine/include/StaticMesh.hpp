@@ -30,6 +30,7 @@ public:
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior
 // to this file being included
+#include <ThirdParty/cereal/types/polymorphic.hpp>
 #include <ThirdParty/cereal/archives/binary.hpp>
 
 CEREAL_REGISTER_TYPE(ck::StaticMesh);

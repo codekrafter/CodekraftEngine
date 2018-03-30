@@ -6,13 +6,11 @@ namespace ck
 {
 class GameApp
 {
-  protected:
-    EngineApp *engine;
-
-  public:
-    GameApp();
-    virtual ~GameApp() = 0;
-    virtual void onInit() = 0;
-    virtual void onShutdown() = 0;
+protected:
+public:
+  GameApp();
+  virtual ~GameApp() = 0;
+  virtual void onInit() = 0;
+  virtual void onShutdown() = 0;
 };
 }

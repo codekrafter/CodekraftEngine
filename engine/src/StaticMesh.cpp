@@ -10,20 +10,16 @@ StaticMesh::StaticMesh()
 {
     version = 1;
     type = "STATICMESH";
-    LOG(DEBUG) << "making static mesh from thin air";
 };
 StaticMesh::StaticMesh(std::string path)
 {
-    LOG(DEBUG) << "making static mesh";
     version = 1;
     type = "STATICMESH";
     // Initialize Loader
     objl::Loader Loader;
 
     // Load .obj File
-    LOG(DEBUG) << "loading file...";
     bool loaded = Loader.LoadFile(path);
-    std::cout << "loaded" << std::endl;
     // Check to see if it loaded
 
     if (!loaded)
@@ -32,13 +28,13 @@ StaticMesh::StaticMesh(std::string path)
         return;
     };
 
-    empty_delete<Mesh> ed;
+    //empty_delete<Mesh> ed;
     // Go through each loaded mesh and add it to render pool
     for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
     {
         std::string dir = path.substr(0, path.find_last_of('/'));
         dir = dir + "/";
-        meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i], dir), ed));
+        meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i], dir)));
     }
 };
 
@@ -55,8 +51,8 @@ StaticMesh::~StaticMesh()
 {
     for (std::shared_ptr<Mesh> mesh : meshes)
     {
-        delete mesh.get();
-        mesh = nullptr;
+        mesh.reset();
+        //mesh = nullptr;
     }
 };
 template <class Archive>

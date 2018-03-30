@@ -10,11 +10,11 @@ namespace ck
 class Material : public Asset
 {
 private:
-  Shader *shader;
-  Texture *specular;
+  std::shared_ptr<Shader> shader;
+  std::shared_ptr<Texture> specular;
+  std::shared_ptr<Texture> diffuse;
 
 public:
-  Texture *diffuse;
   Material();
   Material(std::string d_name, std::string s_name, std::string prefix = "");
   ~Material();
@@ -28,6 +28,7 @@ public:
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior
 // to this file being included
+#include <ThirdParty/cereal/types/polymorphic.hpp>
 #include <ThirdParty/cereal/archives/binary.hpp>
 
 CEREAL_REGISTER_TYPE(ck::Material);

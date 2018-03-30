@@ -2,68 +2,34 @@
 
 #include <iostream>
 
-#include "ThirdParty/glad/glad.h"
-#include "GLFW/glfw3.h"
 //#include "Shader.hpp"
 //#include "StaticMesh.hpp"
-#include <ThirdParty/glm/glm.hpp>
 //#include "ThirdParty/IMGUI/imgui.h"
 //#include "Camera.hpp"
 //#include <ThirdParty/glm/gtc/matrix_transform.hpp>
 //#include <ThirdParty/glm/gtc/type_ptr.hpp>
 #include "Level.hpp"
+#include "Engine.hpp"
 
 namespace ck
 {
 class Display
 {
-private:
-  GLFWwindow *window;
-  /// Is this a glfw display?
-  bool glfw;
+protected:
+  DisplayType config;
 
-  // Callback
-  void glfw_error_callback(int error, const char *description);
-  static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-  static void smouse_callback(GLFWwindow *window, double xpos, double ypos);
-  static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
-  void processInput(GLFWwindow *window);
-
-  // camera
-  Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-  float lastX = SCR_WIDTH / 2.0f;
-  float lastY = SCR_HEIGHT / 2.0f;
-  bool firstMouse = true;
-
+  Camera camera;
   // timing
   float deltaTime = 0.0f;
-  float lastFrame = 0.0f;
-
-  // Used to render basic cube, not in final version
-  unsigned int VBO, VAO, EBO;
-  glm::mat4 model;
-  glm::mat4 view;
-  glm::mat4 projection;
-  //std::vector<ck::Vertex> vertices;
-  //std::vector<unsigned int> indices;
-
-  bool show_demo_window = false;
-  bool show_another_window = false;
 
   bool editorKeyPressed;
 
 public:
-  Display() : Display(false){};
-  /// Use other display context (like in the editor)
-  Display(bool econtext);
-  /// Callbacks
-  void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+  Display();
+  Display(DisplayType c);
 
   void update();
-  ~Display();
-  GLFWwindow *getWindow();
-  //ck::Shader *shader = nullptr;
-  //ck::StaticMesh *smesh = nullptr;
-  Level *level = nullptr;
+  virtual ~Display() = 0;
+  virtual bool shouldClose() = 0;
 };
 }

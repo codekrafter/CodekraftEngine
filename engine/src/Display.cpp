@@ -24,9 +24,9 @@ void Display::glfw_error_callback(int error, const char *description)
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-Display::Display(bool econtext)
+Display::Display(DisplayType c)
 {
-    if (!econtext)
+    if (c == DisplayType::OPENGL)
     {
         // glfw: initialize and configure
         // ------------------------------
@@ -107,18 +107,10 @@ void Display::processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(RIGHT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS)
         editorKeyPressed = true;
     if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_RELEASE)
+    {
         if (editorKeyPressed)
         {
             Editor::getInstance()->toggleEditor();
@@ -128,6 +120,17 @@ void Display::processInput(GLFWwindow *window)
         {
             editorKeyPressed = false;
         }
+    }
+    if (Editor::getInstance()->showCursor())
+        return;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(RIGHT, deltaTime);
 }
 
 void Display::update()
@@ -144,9 +147,6 @@ void Display::update()
     ImGui_ImplGlfwGL3_NewFrame();
 
     bool showDebug = true;
-    // 1. Show a simple window.
-    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
-    //ImGui::Image(ImTextureID(smesh->getMeshes()[0]->mat->diffuse->ID), ImVec2(smesh->getMeshes()[0]->mat->diffuse->width, smesh->getMeshes()[0]->mat->diffuse->height));
     //ImGui::Begin("Debug", &showDebug)
     //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     //ImGui::End();
@@ -162,23 +162,6 @@ void Display::update()
         }
     }
     Editor::getInstance()->Draw();
-
-    // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-    if (show_another_window)
-    {
-        ImGui::Begin("Another Window", &show_another_window);
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-            show_another_window = false;
-        ImGui::End();
-    }
-
-    // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-    if (show_demo_window)
-    {
-        ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-        ImGui::ShowDemoWindow(&show_demo_window);
-    }
 
     // positions of the point lights
     /*glm::vec3 pointLighThirdPartyositions[] = {
@@ -313,6 +296,8 @@ void Display::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 
     lastX = xpos;
     lastY = ypos;
+    if (Editor::getInstance()->showCursor())
+        return;
 
     WorldManager::getInstance()->getLevel()->getCamera()->ProcessMouseMovement(xoffset, yoffset);
 }

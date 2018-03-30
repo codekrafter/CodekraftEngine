@@ -37,6 +37,7 @@ private:
 
 public:
   Asset *asset();
+  std::shared_ptr<Asset> getAsset() { return a; };
   std::string type;
   AssetFile();
   AssetFile(std::string t, Asset *asset);
@@ -70,9 +71,15 @@ public:
     AssetFile af = map[name];
     //A *out = reinterpret_cast<A *>(map[name].asset());
     A *out = dynamic_cast<A *>(map[name].asset());
-    std::cout << "TYPE: " << out->getType() << std::endl;
-    std::cout << "RTYPE: " << typeid(*out).name() << std::endl;
     return out;
+  }
+
+  template <class A>
+  std::shared_ptr<A> loadAssetSPTR(std::string name)
+  {
+    static_assert(std::is_base_of<Asset, A>::value, "A must be an asset");
+    AssetFile af = map[name];
+    return std::dynamic_pointer_cast<A>(af.getAsset());
   }
   bool saveAsset(std::string name, Asset *asset);
   std::vector<std::string> getKeys();

@@ -1,12 +1,26 @@
 #pragma once
 
-#include "EngineApp.hpp"
-namespace ckg
+//#include "EngineApp.hpp"
+
+namespace ck
 {
-extern ck::CKEngine *g_engine;
-}
-ck::CKEngine *initEngine(bool makeWindow);
+
+class CKEngine;
+
+enum class DisplayType
+{
+    OPENGL
+};
+struct EngineConfig
+{
+    DisplayType display;
+};
+
+extern CKEngine *engine;
+
+ck::CKEngine *initEngine(EngineConfig config);
 
 int run(ck::CKEngine *engine);
 
 ck::CKEngine *getEngine();
+}

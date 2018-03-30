@@ -1,16 +1,21 @@
 #pragma once
 
-#include "Display.hpp"
+//#include "Display.hpp"
+#include "Engine.hpp"
+
 namespace ck
 {
+class GameApp;
+class Display;
 class CKEngine
 {
 private:
   Display *display;
-  bool makeWindow;
+  EngineConfig config;
+  GameApp *game;
 
 public:
-  CKEngine(bool md);
+  CKEngine(EngineConfig c);
   ~CKEngine();
   Display *getDisplay();
   void update();
