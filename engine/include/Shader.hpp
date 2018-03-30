@@ -1,6 +1,6 @@
 #pragma once
 
-#include <TP/glm/glm.hpp>
+#include <ThirdParty/glm/glm.hpp>
 
 #include "Asset.hpp"
 namespace ck
@@ -60,7 +60,7 @@ public:
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior
 // to this file being included
-#include <TP/cereal/archives/binary.hpp>
+#include <ThirdParty/cereal/archives/binary.hpp>
 
 CEREAL_REGISTER_TYPE(ck::Shader);
 

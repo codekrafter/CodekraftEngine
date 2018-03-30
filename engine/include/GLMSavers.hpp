@@ -1,7 +1,7 @@
 #pragma once
 
-#include <TP/glm/glm.hpp>
-#include <TP/cereal/types/memory.hpp>
+#include <ThirdParty/glm/glm.hpp>
+#include <ThirdParty/cereal/types/memory.hpp>
 
 namespace glm
 {

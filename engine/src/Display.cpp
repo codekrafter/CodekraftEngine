@@ -1,23 +1,22 @@
-#include <iostream>
 #include <stdexcept>
 
 #include "Display.hpp"
-#include "TP/glad/glad.h"
+#include "ThirdParty/glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Mesh.hpp"
-#include <TP/stb_image.h>
-#include <TP/glm/glm.hpp>
-#include <TP/glm/gtc/matrix_transform.hpp>
-#include <TP/glm/gtc/type_ptr.hpp>
+#include <ThirdParty/stb_image.h>
+#include <ThirdParty/glm/glm.hpp>
+#include <ThirdParty/glm/gtc/matrix_transform.hpp>
+#include <ThirdParty/glm/gtc/type_ptr.hpp>
 #include "Camera.hpp"
 #include "Engine.hpp"
 #include "Editor.hpp"
 #include "WorldManager.hpp"
 
-#include "TP/OBJ_Loader.h"
-#include "TP/IMGUI/imgui.h"
-#include "TP/IMGUI/imgui_impl_glfw_gl3.h"
-#include "TP/easylogging/easylogging++.h"
+#include "ThirdParty/OBJ_Loader.h"
+#include "ThirdParty/IMGUI/imgui.h"
+#include "ThirdParty/IMGUI/imgui_impl_glfw_gl3.h"
+#include "ThirdParty/easylogging/easylogging++.h"
 namespace ck
 {
 void Display::glfw_error_callback(int error, const char *description)
@@ -47,9 +46,9 @@ Display::Display(bool econtext)
         window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
         if (window == NULL)
         {
-            std::cerr << "Failed to create GLFW window" << std::endl;
+            LOG(FATAL) << "Failed to create GLFW window";
             glfwTerminate();
-            throw std::runtime_error("Error: Failed to create GLFW window");
+            throw std::exception();
         }
         glfwMakeContextCurrent(window);
         glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -81,8 +80,8 @@ Display::Display(bool econtext)
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        throw std::runtime_error("Error: Failed to initialize GLAD");
+        LOG(FATAL) << "Failed to initialize GLAD";
+        throw std::exception();
     }
 
     glEnable(GL_DEPTH_TEST);
@@ -133,7 +132,6 @@ void Display::processInput(GLFWwindow *window)
 
 void Display::update()
 {
-    //std::cout << "started frame" << std::endl;
     // per-frame time logic
     // --------------------
     float currentFrame = glfwGetTime();
@@ -183,7 +181,7 @@ void Display::update()
     }
 
     // positions of the point lights
-    /*glm::vec3 pointLightPositions[] = {
+    /*glm::vec3 pointLighThirdPartyositions[] = {
         glm::vec3(0.7f, 0.2f, 2.0f),
         glm::vec3(2.3f, -3.3f, -4.0f),
         glm::vec3(-4.0f, 2.0f, -12.0f),
@@ -204,7 +202,7 @@ void Display::update()
     shader->setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
     shader->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
     // point light 1
-    shader->setVec3("pointLights[0].position", pointLightPositions[0]);
+    shader->setVec3("pointLights[0].position", pointLighThirdPartyositions[0]);
     shader->setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
     shader->setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
     shader->setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
@@ -212,7 +210,7 @@ void Display::update()
     shader->setFloat("pointLights[0].linear", 0.09);
     shader->setFloat("pointLights[0].quadratic", 0.032);
     // point light 2
-    shader->setVec3("pointLights[1].position", pointLightPositions[1]);
+    shader->setVec3("pointLights[1].position", pointLighThirdPartyositions[1]);
     shader->setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
     shader->setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
     shader->setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
@@ -220,7 +218,7 @@ void Display::update()
     shader->setFloat("pointLights[1].linear", 0.09);
     shader->setFloat("pointLights[1].quadratic", 0.032);
     // point light 3
-    shader->setVec3("pointLights[2].position", pointLightPositions[2]);
+    shader->setVec3("pointLights[2].position", pointLighThirdPartyositions[2]);
     shader->setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
     shader->setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
     shader->setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
@@ -228,7 +226,7 @@ void Display::update()
     shader->setFloat("pointLights[2].linear", 0.09);
     shader->setFloat("pointLights[2].quadratic", 0.032);
     // point light 4
-    shader->setVec3("pointLights[3].position", pointLightPositions[3]);
+    shader->setVec3("pointLights[3].position", pointLighThirdPartyositions[3]);
     shader->setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
     shader->setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
     shader->setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
@@ -279,13 +277,10 @@ void Display::update()
     ImGui::Render();
     ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
-    //std::cout << "finished model drawing" << std::endl;
-
     // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
     // -------------------------------------------------------------------------------
     glfwSwapBuffers(window);
     glfwPollEvents();
-    //std::cout << "polled events" << std::endl;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

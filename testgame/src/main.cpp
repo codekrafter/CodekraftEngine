@@ -2,7 +2,7 @@
 #include "StaticMeshActor.hpp"
 #include "WorldManager.hpp"
 #include "AssetManager.hpp"
-#include "TP/easylogging/easylogging++.h"
+#include "ThirdParty/easylogging/easylogging++.h"
 
 std::string vv = R"(
 #version 330 core

@@ -1,11 +1,11 @@
 #include "Mesh.hpp"
 #include "Material.hpp"
-#include "TP/glm/glm.hpp"
+#include "ThirdParty/glm/glm.hpp"
 #include "Asset.hpp"
-#include "TP/OBJ_Loader.h"
-#include "TP/glad/glad.h"
+#include "ThirdParty/OBJ_Loader.h"
+#include "ThirdParty/glad/glad.h"
 #include "Transform.hpp"
-#include "TP/cereal/types/vector.hpp"
+#include "ThirdParty/cereal/types/vector.hpp"
 
 namespace ck
 {

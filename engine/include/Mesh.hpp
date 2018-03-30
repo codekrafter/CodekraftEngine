@@ -1,9 +1,9 @@
 #pragma once
 
-#include "TP/glm/glm.hpp"
+#include "ThirdParty/glm/glm.hpp"
 #include "Asset.hpp"
-#include "TP/OBJ_Loader.h"
-#include "TP/cereal/types/vector.hpp"
+#include "ThirdParty/OBJ_Loader.h"
+#include "ThirdParty/cereal/types/vector.hpp"
 #include "Material.hpp"
 #include "GLMSavers.hpp"
 
@@ -51,7 +51,7 @@ class Mesh : public Asset
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior
 // to this file being included
-#include <TP/cereal/archives/binary.hpp>
+#include <ThirdParty/cereal/archives/binary.hpp>
 
 CEREAL_REGISTER_TYPE(ck::Mesh);
 

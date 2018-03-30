@@ -5,10 +5,10 @@
 #include "WorldManager.hpp"
 
 #include <string>
-#include <TP/glm/glm.hpp>
-#include <TP/glm/gtc/matrix_transform.hpp>
-#include <TP/glm/gtc/type_ptr.hpp>
-#include "TP/easylogging/easylogging++.h"
+#include <ThirdParty/glm/glm.hpp>
+#include <ThirdParty/glm/gtc/matrix_transform.hpp>
+#include <ThirdParty/glm/gtc/type_ptr.hpp>
+#include "ThirdParty/easylogging/easylogging++.h"
 
 namespace ck
 {

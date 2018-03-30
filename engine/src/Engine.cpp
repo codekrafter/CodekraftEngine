@@ -3,9 +3,9 @@
 #include "Engine.hpp"
 #include "EngineApp.hpp"
 
-//#include "TP/glad/glad.h"
+//#include "ThirdParty/glad/glad.h"
 //#include "GLFW/glfw3.h"
-#include "TP/easylogging/easylogging++.h"
+#include "ThirdParty/easylogging/easylogging++.h"
 
 INITIALIZE_EASYLOGGINGPP
 

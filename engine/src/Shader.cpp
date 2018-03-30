@@ -1,11 +1,11 @@
-#include <TP/glad/glad.h>
-#include <TP/glm/glm.hpp>
+#include <ThirdParty/glad/glad.h>
+#include <ThirdParty/glm/glm.hpp>
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <stdexcept>
-#include "TP/easylogging/easylogging++.h"
+#include "ThirdParty/easylogging/easylogging++.h"
 
 #include "Shader.hpp"
 #include "AssetFactory.hpp"

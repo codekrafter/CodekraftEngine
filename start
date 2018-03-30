@@ -1,67 +1,30 @@
 #!/bin/bash
 
-TARGET=""
 CLEAN=0
 RUN="no"
 
 if [ $1 == "clean" ]; then
-	CLEAN=1
-	TARGET=$2
-	if [ $# -lt 3 ]; then
-		RUN="no"
-	else
-		RUN=$3
-	fi
+    CLEAN=1
+    if [ $# -lt 2 ]; then
+        RUN="no"
+    else
+        RUN=$2
+    fi
 else
-	CLEAN=0
-	TARGET=$1
-	if [ $# -lt 2 ]; then
-		RUN="no"
-	else
-		RUN=$2
-	fi
+    CLEAN=0
+    if [ $# -lt 1 ]; then
+        RUN="no"
+    else
+        RUN=$1
+    fi
 fi
 
-cd engine
 cd build
-cmake .. >/dev/null
 if [ $CLEAN -eq 1 ]; then
-make clean
+    make clean
 fi
 make all
-make install >/dev/null
-cd ../..
-
-if [ $TARGET == "editor" ]; then
-	cd editor
-	cd build
-	cmake .. >/dev/null
-	if [ $CLEAN -eq 1 ]; then
-	make clean
-	fi
-	make all
-	make install > /dev/null
-	cd ..
-	cd bin
 if [ $RUN == "run" ]; then
-	./Editor
-fi
-elif [ $TARGET = "game" ]; then
-	cd testgame
-	cd build
-	cmake -DCMAKE_BUILD_TYPE=DEBUG .. >/dev/null
-	#if [ $CLEAN -eq 1 ]; then
-	#make clean
-	#fi
-	make clean
-	make all
-	make install > /dev/null
-	cd ..
-	cd bin
-if [ $RUN == "run" ]; then
-	./TestGame
-fi
-else
-	echo "Please provide a valid target"
-	echo 'A valid target is "editor" or "game"'
+    cd testgame
+    ./TestGame
 fi

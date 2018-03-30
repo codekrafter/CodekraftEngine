@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Asset.hpp"
-#include <TP/cereal/access.hpp>
+#include <ThirdParty/cereal/access.hpp>
 
 namespace ck
 {
@@ -39,7 +39,7 @@ struct specialize<Archive, ck::Texture, cereal::specialization::member_load_save
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior
 // to this file being included
-#include <TP/cereal/archives/binary.hpp>
+#include <ThirdParty/cereal/archives/binary.hpp>
 
 CEREAL_REGISTER_TYPE(ck::Texture);
 

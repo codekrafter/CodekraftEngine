@@ -23,7 +23,7 @@ find_package(GLUT REQUIRED)
 set(CMAKE_BUILD_TYPE Debug)
 
 file(GLOB_RECURSE SRC "src/*.cpp")
-file(GLOB_RECURSE TP_SRC "include/*.c" "include/*.cpp" "include/*.inl")
+file(GLOB_RECURSE ThirdParty_SRC "include/*.c" "include/*.cpp" "include/*.inl")
 file(GLOB_RECURSE HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/*.hpp" "include/*.h" "include/*.c" "include/*.inl")
 foreach(hname ${HEADERS})
     configure_file(${hname} ${hname} COPYONLY)
@@ -38,7 +38,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/)
 #include_directories(/usr/local/GLFW/include)
 
 
-add_library(CKEngine STATIC ${SRC} ${TP_SRC})
+add_library(CKEngine STATIC ${SRC} ${ThirdParty_SRC})
 target_link_libraries(CKEngine glfw3 GL assimp ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
 
 #install(TARGETS CKEngine DESTINATION bin)

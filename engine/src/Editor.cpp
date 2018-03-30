@@ -1,7 +1,7 @@
-#include "TP/IMGUI/imgui.h"
+#include "ThirdParty/IMGUI/imgui.h"
 #include "Editor.hpp"
 #include "AssetManager.hpp"
-#include "TP/easylogging/easylogging++.h"
+#include "ThirdParty/easylogging/easylogging++.h"
 #include "Shader.hpp"
 #include <algorithm>
 

@@ -2,15 +2,15 @@
 
 #include <iostream>
 
-#include "TP/glad/glad.h"
+#include "ThirdParty/glad/glad.h"
 #include "GLFW/glfw3.h"
 //#include "Shader.hpp"
 //#include "StaticMesh.hpp"
-#include <TP/glm/glm.hpp>
-//#include "TP/IMGUI/imgui.h"
+#include <ThirdParty/glm/glm.hpp>
+//#include "ThirdParty/IMGUI/imgui.h"
 //#include "Camera.hpp"
-//#include <TP/glm/gtc/matrix_transform.hpp>
-//#include <TP/glm/gtc/type_ptr.hpp>
+//#include <ThirdParty/glm/gtc/matrix_transform.hpp>
+//#include <ThirdParty/glm/gtc/type_ptr.hpp>
 #include "Level.hpp"
 
 namespace ck

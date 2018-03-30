@@ -6,10 +6,10 @@
 #include <type_traits>
 #include <memory>
 
-#include "TP/cereal/types/map.hpp"
-#include "TP/cereal/types/vector.hpp"
-#include "TP/cereal/types/memory.hpp"
-#include "TP/cereal/archives/binary.hpp"
+#include "ThirdParty/cereal/types/map.hpp"
+#include "ThirdParty/cereal/types/vector.hpp"
+#include "ThirdParty/cereal/types/memory.hpp"
+#include "ThirdParty/cereal/archives/binary.hpp"
 
 #include "AssetManager.hpp"
 #include "Asset.hpp"
@@ -17,7 +17,7 @@
 #include "base64.hpp"
 #include "Assets.hpp"
 
-#include "TP/easylogging/easylogging++.h"
+#include "ThirdParty/easylogging/easylogging++.h"
 
 namespace ck
 {

@@ -5,9 +5,9 @@
 #include <string>
 #include "Assets.hpp"
 
-#include "TP/cereal/types/vector.hpp"
-#include "TP/cereal/types/memory.hpp"
-#include "TP/cereal/types/polymorphic.hpp"
+#include "ThirdParty/cereal/types/vector.hpp"
+#include "ThirdParty/cereal/types/memory.hpp"
+#include "ThirdParty/cereal/types/polymorphic.hpp"
 
 namespace ck
 {

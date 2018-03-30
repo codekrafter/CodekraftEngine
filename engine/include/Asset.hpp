@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <TP/cereal/types/memory.hpp>
-#include <TP/cereal/types/polymorphic.hpp>
+#include <ThirdParty/cereal/types/memory.hpp>
+#include <ThirdParty/cereal/types/polymorphic.hpp>
 
 namespace ck
 {

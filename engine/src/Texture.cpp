@@ -1,8 +1,8 @@
 #include "Texture.hpp"
-#include "TP/glad/glad.h"
-#include "TP/stb_image.h"
-#include "TP/easylogging/easylogging++.h"
-#include "TP/stb_image_write.h"
+#include "ThirdParty/glad/glad.h"
+#include "ThirdParty/stb_image.h"
+#include "ThirdParty/easylogging/easylogging++.h"
+#include "ThirdParty/stb_image_write.h"
 
 namespace ck
 {
@@ -46,12 +46,16 @@ Texture::~Texture()
 template <class Archive>
 void Texture::save(Archive &ar) const
 {
+    LOG(ERROR) << "Texture serialization is broken, doing nothing";
+    return;
     ar(width, height, n);
 }
 
 template <class Archive>
 void Texture::load(Archive &ar)
 {
+    LOG(ERROR) << "Texture serialization is broken, doing nothing";
+    return;
     ar(width, height, n);
 }
 void Texture::init()

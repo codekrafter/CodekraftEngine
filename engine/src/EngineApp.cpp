@@ -2,7 +2,7 @@
 
 #include "EngineApp.hpp"
 #include "Display.hpp"
-#include "TP/easylogging/easylogging++.h"
+#include "ThirdParty/easylogging/easylogging++.h"
 
 namespace ck
 {
