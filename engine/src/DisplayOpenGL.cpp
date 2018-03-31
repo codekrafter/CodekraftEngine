@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "Display.hpp"
+#include "DisplayOpenGL.hpp"
 #include "ThirdParty/glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Mesh.hpp"
@@ -19,63 +19,55 @@
 #include "ThirdParty/easylogging/easylogging++.h"
 namespace ck
 {
-void Display::glfw_error_callback(int error, const char *description)
+void DisplayOpenGL::glfw_error_callback(int error, const char *description)
 {
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-Display::Display(DisplayType c)
+DisplayOpenGL::Display(DisplayType c)
 {
-    if (c == DisplayType::OPENGL)
-    {
-        // glfw: initialize and configure
-        // ------------------------------
-        glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfw: initialize and configure
+    // ------------------------------
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
 #ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-        // glfw window creation
-        // --------------------
-        window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-        if (window == NULL)
-        {
-            LOG(FATAL) << "Failed to create GLFW window";
-            glfwTerminate();
-            throw std::exception();
-        }
-        glfwMakeContextCurrent(window);
-        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-        glfwSetCursorPosCallback(window, smouse_callback);
-        glfwSetScrollCallback(window, scroll_callback);
-
-        // tell GLFW to capture our mouse
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        glfw = true;
-
-        // Setup ImGui binding
-        ImGui::CreateContext();
-        ImGuiIO &io = ImGui::GetIO();
-        (void)io;
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-        ImGui_ImplGlfwGL3_Init(window, true);
-
-        // Setup style
-        ImGui::StyleColorsDark();
-        //ImGui::StyleColorsClassic();
-    }
-    else
+    // glfw window creation
+    // --------------------
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
     {
-        window = NULL;
-        glfw = false;
+        LOG(FATAL) << "Failed to create GLFW window";
+        glfwTerminate();
+        throw std::exception();
     }
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, smouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
+    // tell GLFW to capture our mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfw = true;
+
+    // Setup ImGui binding
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    ImGui_ImplGlfwGL3_Init(window, true);
+
+    // Setup style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -89,21 +81,21 @@ Display::Display(DisplayType c)
     glfwHideWindow(window);
 };
 
-Display::~Display()
+DisplayOpenGL::~Display()
 {
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();
     glfwTerminate();
 };
 
-GLFWwindow *Display::getWindow()
+GLFWwindow *DisplayOpenGL::getWindow()
 {
     return window;
 };
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void Display::processInput(GLFWwindow *window)
+void DisplayOpenGL::processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -133,7 +125,7 @@ void Display::processInput(GLFWwindow *window)
         WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(RIGHT, deltaTime);
 }
 
-void Display::update()
+void DisplayOpenGL::update()
 {
     // per-frame time logic
     // --------------------
@@ -268,21 +260,21 @@ void Display::update()
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void Display::framebuffer_size_callback(GLFWwindow *window, int width, int height)
+void DisplayOpenGL::framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
-void Display::smouse_callback(GLFWwindow *window, double xpos, double ypos)
+void DisplayOpenGL::smouse_callback(GLFWwindow *window, double xpos, double ypos)
 {
     getEngine()->getDisplay()->mouse_callback(window, xpos, ypos);
 }
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
-void Display::mouse_callback(GLFWwindow *window, double xpos, double ypos)
+void DisplayOpenGL::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 {
     if (firstMouse)
     {
@@ -304,7 +296,7 @@ void Display::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
-void Display::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+void DisplayOpenGL::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
     //camera.ProcessMouseScroll(yoffset);
 }

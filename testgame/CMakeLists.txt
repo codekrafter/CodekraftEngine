@@ -16,7 +16,16 @@ include_directories(${CMAKE_BINARY_DIR}/engine/include)
 #link_directories()
 
 add_executable(TestGame ${SRC})
-target_link_libraries(TestGame ${CMAKE_BINARY_DIR}/engine/libCKEngine.a glfw3 GL ${OPENGL_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
+target_link_libraries(TestGame glfw3 GL ${OPENGL_LIBRARIES} pthread dl)
+if(${UNIX} AND NOT ${APPLE})
+target_link_libraries(TestGame X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
+endif()
+if(${APPLE})
+FIND_LIBRARY(Cocoa Cocoa)
+FIND_LIBRARY(IOKit IOKit)
+FIND_LIBRARY(CoreDisplay CoreDisplay)
+target_link_libraries(TestGame ${Cocoa} ${IOKit} ${CoreDisplay})
+endif()
 
 #install(TARGETS TestGame DESTINATION bin)
 

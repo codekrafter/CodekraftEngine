@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(CKEngine)
 
 ADD_DEFINITIONS(
-    -std=c++17 # Or -std=c++0x
+    -std=c++1z
     # Other flags
 )
 
@@ -39,7 +39,16 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/)
 
 
 add_library(CKEngine STATIC ${SRC} ${ThirdParty_SRC})
-target_link_libraries(CKEngine glfw3 GL assimp ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} X11 Xrandr Xinerama Xi Xxf86vm Xcursor pthread dl)
+target_link_libraries(CKEngine glfw3 GL ${OPENGL_LIBRARIES} pthread dl)
+if(${UNIX} AND NOT ${APPLE})
+target_link_libraries(CKEngine X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
+endif()
+if(${APPLE})
+FIND_LIBRARY(Cocoa Cocoa)
+FIND_LIBRARY(IOKit IOKit)
+FIND_LIBRARY(CoreDisplay CoreDisplay)
+target_link_libraries(CKEngine ${Cocoa} ${IOKit} ${CoreDisplay})
+endif()
 
 #install(TARGETS CKEngine DESTINATION bin)
 #install (DIRECTORY "build/include/"        
