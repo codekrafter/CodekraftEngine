@@ -19,12 +19,14 @@
 #include "ThirdParty/easylogging/easylogging++.h"
 namespace ck
 {
+namespace opengl
+{
 void DisplayOpenGL::glfw_error_callback(int error, const char *description)
 {
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-DisplayOpenGL::Display(DisplayType c)
+DisplayOpenGL::DisplayOpenGL(DisplayConfig c) : Display(c)
 {
     // glfw: initialize and configure
     // ------------------------------
@@ -49,13 +51,12 @@ DisplayOpenGL::Display(DisplayType c)
         throw std::exception();
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, smouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetFramebufferSizeCallback(window, static_framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, static_mouse_callback);
+    glfwSetScrollCallback(window, static_scroll_callback);
 
     // tell GLFW to capture our mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfw = true;
 
     // Setup ImGui binding
     ImGui::CreateContext();
@@ -81,16 +82,16 @@ DisplayOpenGL::Display(DisplayType c)
     glfwHideWindow(window);
 };
 
-DisplayOpenGL::~Display()
+DisplayOpenGL::~DisplayOpenGL()
 {
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();
     glfwTerminate();
 };
 
-GLFWwindow *DisplayOpenGL::getWindow()
+bool DisplayOpenGL::shouldClose()
 {
-    return window;
+    return glfwWindowShouldClose();
 };
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
@@ -142,8 +143,6 @@ void DisplayOpenGL::update()
     //ImGui::Begin("Debug", &showDebug)
     //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     //ImGui::End();
-    if (glfw)
-    {
         if (Editor::getInstance()->showCursor())
         {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -152,7 +151,6 @@ void DisplayOpenGL::update()
         {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
-    }
     Editor::getInstance()->Draw();
 
     // positions of the point lights
@@ -299,5 +297,6 @@ void DisplayOpenGL::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 void DisplayOpenGL::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
     //camera.ProcessMouseScroll(yoffset);
+}
 }
 }

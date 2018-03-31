@@ -11,9 +11,14 @@ enum class DisplayType
 {
     OPENGL
 };
+struct DisplayConfig
+{
+    DisplayType type;
+    DisplayConfig(DisplayType type) : type(type) {};
+};
 struct EngineConfig
 {
-    DisplayType display;
+    DisplayConfig display;
 };
 
 extern CKEngine *engine;

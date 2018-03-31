@@ -16,7 +16,7 @@ namespace ck
 class Display
 {
 protected:
-  DisplayType config;
+  DisplayConfig config;
 
   Camera camera;
   // timing
@@ -25,11 +25,11 @@ protected:
   bool editorKeyPressed;
 
 public:
-  Display();
-  Display(DisplayType c);
+  Display() : Display(DisplayConfig(DisplayType::OPENGL)){};
+  Display(DisplayConfig c) : config(c){};
+  virtual ~Display() = 0;
 
   void update();
-  virtual ~Display() = 0;
   virtual bool shouldClose() = 0;
 };
 }
