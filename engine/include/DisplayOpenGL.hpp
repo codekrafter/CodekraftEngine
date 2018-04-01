@@ -2,8 +2,8 @@
 
 #include "Display.hpp"
 
-#include "ThirdParty/glad/glad.h"
-#include "GLFW/glfw3.h"
+#include <ThirdParty/glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <ThirdParty/glm/glm.hpp>
 
 namespace ck
@@ -15,6 +15,10 @@ class DisplayOpenGL : public Display
 public:
   DisplayOpenGL(DisplayConfig c);
   virtual ~DisplayOpenGL();
+  virtual bool shouldClose();
+  virtual void update();
+  virtual void showWindow();
+  virtual void hideWindow();
 
 private:
   GLFWwindow *window;

@@ -1,12 +1,12 @@
 #pragma once
 
-//#include "Display.hpp"
-#include "Engine.hpp"
+#include "Display.hpp"
+//#include "Engine.hpp"
+#include "GameApp.hpp"
+#include "Config.hpp"
 
 namespace ck
 {
-class GameApp;
-class Display;
 class CKEngine
 {
 private:

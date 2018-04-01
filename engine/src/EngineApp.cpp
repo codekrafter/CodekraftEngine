@@ -2,6 +2,7 @@
 
 #include "EngineApp.hpp"
 #include "Display.hpp"
+#include "DisplayOpenGL.hpp"
 #include "ThirdParty/easylogging/easylogging++.h"
 
 namespace ck
@@ -9,7 +10,11 @@ namespace ck
 CKEngine::CKEngine(EngineConfig c)
 {
     config = c;
-    display = new Display(c.display);
+    switch (c.display.type)
+    {
+    case DisplayType::OPENGL:
+        display = new opengl::DisplayOpenGL(c.display);
+    }
 };
 CKEngine::~CKEngine()
 {

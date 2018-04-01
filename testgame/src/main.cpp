@@ -193,7 +193,8 @@ void main()
 
 int main(int argc, char *argv[])
 {
-    ck::CKEngine *engine = initEngine(true);
+    ck::EngineConfig ec = ck::EngineConfig();
+    ck::CKEngine *engine = ck::initEngine(ec);
     ck::AssetManager *am = new ck::AssetManager();
     //am->open("shaders.ckd");
     ck::Shader *shader = new ck::Shader();

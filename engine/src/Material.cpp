@@ -2,6 +2,7 @@
 #include "AssetManager.hpp"
 #include "Texture.hpp"
 //#include "Display.hpp"
+#include "Engine.hpp"
 #include "WorldManager.hpp"
 
 #include <string>
@@ -9,6 +10,8 @@
 #include <ThirdParty/glm/gtc/matrix_transform.hpp>
 #include <ThirdParty/glm/gtc/type_ptr.hpp>
 
+namespace ck
+{
 Material::Material()
 {
     version = 1;

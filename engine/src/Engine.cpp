@@ -1,19 +1,18 @@
-#include <iostream>
 #include "EngineConfig.hpp"
 #include "Engine.hpp"
 #include "EngineApp.hpp"
 #include "colormod.h"
+#include "Display.hpp"
 
 //#include "ThirdParty/glad/glad.h"
 //#include "GLFW/glfw3.h"
-#include "ThirdParty/easylogging/easylogging++.h"
+//#include "ThirdParty/easylogging/easylogging++.h"
 
 INITIALIZE_EASYLOGGINGPP
 
-namespace ckg
+namespace ck
 {
 ck::CKEngine *engine = nullptr;
-}
 
 ck::CKEngine *initEngine(EngineConfig config)
 {
@@ -45,14 +44,16 @@ ck::CKEngine *initEngine(EngineConfig config)
 
 int run(ck::CKEngine *engine)
 {
-    glfwShowWindow(engine->getDisplay()->getWindow());
-    while (!glfwWindowShouldClose(engine->getDisplay()->getWindow()))
+    engine->getDisplay()->showWindow();
+    while (!engine->getDisplay()->shouldClose())
     {
         engine->update();
     }
+    return 0;
 }
 
 ck::CKEngine *getEngine()
 {
     return ck::engine;
+}
 }

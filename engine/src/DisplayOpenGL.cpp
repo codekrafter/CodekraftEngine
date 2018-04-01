@@ -4,12 +4,13 @@
 #include "ThirdParty/glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Mesh.hpp"
+#include "Engine.hpp"
+#include "EngineApp.hpp"
 #include <ThirdParty/stb_image.h>
 #include <ThirdParty/glm/glm.hpp>
 #include <ThirdParty/glm/gtc/matrix_transform.hpp>
 #include <ThirdParty/glm/gtc/type_ptr.hpp>
 #include "Camera.hpp"
-#include "Engine.hpp"
 #include "Editor.hpp"
 #include "WorldManager.hpp"
 
@@ -91,9 +92,18 @@ DisplayOpenGL::~DisplayOpenGL()
 
 bool DisplayOpenGL::shouldClose()
 {
-    return glfwWindowShouldClose();
+    return glfwWindowShouldClose(window);
 };
 
+void DisplayOpenGL::showWindow()
+{
+    glfwShowWindow(window);
+};
+
+void DisplayOpenGL::hideWindow()
+{
+    glfwHideWindow(window);
+};
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void DisplayOpenGL::processInput(GLFWwindow *window)
@@ -143,14 +153,14 @@ void DisplayOpenGL::update()
     //ImGui::Begin("Debug", &showDebug)
     //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     //ImGui::End();
-        if (Editor::getInstance()->showCursor())
-        {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        }
-        else
-        {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        }
+    if (Editor::getInstance()->showCursor())
+    {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    else
+    {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
     Editor::getInstance()->Draw();
 
     // positions of the point lights
@@ -258,16 +268,18 @@ void DisplayOpenGL::update()
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void DisplayOpenGL::framebuffer_size_callback(GLFWwindow *window, int width, int height)
+void DisplayOpenGL::static_framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
-void DisplayOpenGL::smouse_callback(GLFWwindow *window, double xpos, double ypos)
+void DisplayOpenGL::static_mouse_callback(GLFWwindow *window, double xpos, double ypos)
 {
-    getEngine()->getDisplay()->mouse_callback(window, xpos, ypos);
+    Display *display = getEngine()->getDisplay();
+    DisplayOpenGL *d = dynamic_cast<DisplayOpenGL *>(display);
+    d->mouse_callback(window, xpos, ypos);
 }
 
 // glfw: whenever the mouse moves, this callback is called
@@ -294,7 +306,7 @@ void DisplayOpenGL::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
-void DisplayOpenGL::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+void DisplayOpenGL::static_scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
     //camera.ProcessMouseScroll(yoffset);
 }

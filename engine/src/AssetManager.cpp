@@ -101,6 +101,7 @@ bool AssetManager::saveAsset(std::string name, Asset *asset)
     AssetFile file(asset->getType(), asset);
     map[name] = file;
     //sptr.reset();
+    return true;
 }
 
 std::vector<std::string> AssetManager::getKeys()
