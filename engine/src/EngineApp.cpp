@@ -2,23 +2,19 @@
 
 #include "EngineApp.hpp"
 #include "Display.hpp"
+#include "DisplayOpenGL.hpp"
 #include "ThirdParty/easylogging/easylogging++.h"
 
 namespace ck
 {
-CKEngine::CKEngine(bool mw)
+CKEngine::CKEngine(EngineConfig c)
 {
-    makeWindow = mw;
-    display = new Display(!makeWindow);
-    el::Configurations conf;
-    conf.setToDefault();
-    conf.set(el::Level::Global,
-             el::ConfigurationType::Format, "[%datetime] [%level] %msg");
-    conf.set(el::Level::Global, el::ConfigurationType::Filename, "./logs/ckengine.log");
-    conf.set(el::Level::Global, el::ConfigurationType::ToFile, "true");
-    conf.set(el::Level::Global, el::ConfigurationType::ToStandardOutput, "true");
-    el::Loggers::reconfigureLogger("default", conf);
-    LOG(INFO) << "started logging";
+    config = c;
+    switch (c.display.type)
+    {
+    case DisplayType::OPENGL:
+        display = new opengl::DisplayOpenGL(c.display);
+    }
 };
 CKEngine::~CKEngine()
 {

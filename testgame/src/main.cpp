@@ -193,20 +193,21 @@ void main()
 
 int main(int argc, char *argv[])
 {
-    ck::CKEngine *engine = initEngine(true);
+    ck::EngineConfig ec = ck::EngineConfig();
+    ck::CKEngine *engine = ck::initEngine(ec);
     ck::AssetManager *am = new ck::AssetManager();
     //am->open("shaders.ckd");
-    //ck::Shader *shader = new ck::Shader();
-    //shader->setCode(vv, fff);
-    //am->saveAsset("phong", shader);
-    //am->close("shaders.ckd");
+    ck::Shader *shader = new ck::Shader();
+    shader->setCode(vv, fff);
+    am->saveAsset("phong", shader);
+    am->close("shaders.ckd");
     //am->reset();
-    //am->open("test.ckd");
     //ck::Shader *shader = am->loadAsset<ck::Shader>("white-shader");
     ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
-    am->saveAsset("nanosuit", smesh);
-    //ck::StaticMesh *smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
-    am->close("test.ckd");
+    //am->saveAsset("nanosuit", smesh);
+    //am->close("test.ckd");
+    //am->open("test.ckd");
+    //ck::StaticMesh smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
     //am->reset();
     ck::Level *level = new ck::Level();
     ck::StaticMeshActor *sma = new ck::StaticMeshActor(smesh);

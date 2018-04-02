@@ -98,11 +98,10 @@ bool AssetManager::saveAsset(std::string name, Asset *asset)
 {
     empty_delete<Asset> ed;
     //std::shared_ptr<Asset> sptr(asset, ed);
-    std::cout << "saving asset of type: " << asset->getType() << std::endl;
     AssetFile file(asset->getType(), asset);
-    std::cout << "made file" << std::endl;
     map[name] = file;
     //sptr.reset();
+    return true;
 }
 
 std::vector<std::string> AssetManager::getKeys()
@@ -128,10 +127,8 @@ void AssetManager::close(std::string fname)
 {
     if (fileExists(fname))
     {
-        std::cout << "File '" << fname << "' already exits, removing it" << std::endl;
         std::remove(fname.c_str());
     }
-    std::cout << "saving and closing..." << std::endl;
     std::ofstream os(fname, std::ios::binary);
     os.open(fname);
     {

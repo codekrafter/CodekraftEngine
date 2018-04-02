@@ -1,15 +1,16 @@
 #include <stdexcept>
 
-#include "Display.hpp"
+#include "DisplayOpenGL.hpp"
 #include "ThirdParty/glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Mesh.hpp"
+#include "Engine.hpp"
+#include "EngineApp.hpp"
 #include <ThirdParty/stb_image.h>
 #include <ThirdParty/glm/glm.hpp>
 #include <ThirdParty/glm/gtc/matrix_transform.hpp>
 #include <ThirdParty/glm/gtc/type_ptr.hpp>
 #include "Camera.hpp"
-#include "Engine.hpp"
 #include "Editor.hpp"
 #include "WorldManager.hpp"
 
@@ -19,63 +20,56 @@
 #include "ThirdParty/easylogging/easylogging++.h"
 namespace ck
 {
-void Display::glfw_error_callback(int error, const char *description)
+namespace opengl
+{
+void DisplayOpenGL::glfw_error_callback(int error, const char *description)
 {
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-Display::Display(bool econtext)
+DisplayOpenGL::DisplayOpenGL(DisplayConfig c) : Display(c)
 {
-    if (!econtext)
-    {
-        // glfw: initialize and configure
-        // ------------------------------
-        glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfw: initialize and configure
+    // ------------------------------
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
 #ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-        // glfw window creation
-        // --------------------
-        window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-        if (window == NULL)
-        {
-            LOG(FATAL) << "Failed to create GLFW window";
-            glfwTerminate();
-            throw std::exception();
-        }
-        glfwMakeContextCurrent(window);
-        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-        glfwSetCursorPosCallback(window, smouse_callback);
-        glfwSetScrollCallback(window, scroll_callback);
-
-        // tell GLFW to capture our mouse
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        glfw = true;
-
-        // Setup ImGui binding
-        ImGui::CreateContext();
-        ImGuiIO &io = ImGui::GetIO();
-        (void)io;
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-        ImGui_ImplGlfwGL3_Init(window, true);
-
-        // Setup style
-        ImGui::StyleColorsDark();
-        //ImGui::StyleColorsClassic();
-    }
-    else
+    // glfw window creation
+    // --------------------
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
     {
-        window = NULL;
-        glfw = false;
+        LOG(FATAL) << "Failed to create GLFW window";
+        glfwTerminate();
+        throw std::exception();
     }
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, static_framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, static_mouse_callback);
+    glfwSetScrollCallback(window, static_scroll_callback);
+
+    // tell GLFW to capture our mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    // Setup ImGui binding
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    ImGui_ImplGlfwGL3_Init(window, true);
+
+    // Setup style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -89,36 +83,37 @@ Display::Display(bool econtext)
     glfwHideWindow(window);
 };
 
-Display::~Display()
+DisplayOpenGL::~DisplayOpenGL()
 {
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();
     glfwTerminate();
 };
 
-GLFWwindow *Display::getWindow()
+bool DisplayOpenGL::shouldClose()
 {
-    return window;
+    return glfwWindowShouldClose(window);
 };
 
+void DisplayOpenGL::showWindow()
+{
+    glfwShowWindow(window);
+};
+
+void DisplayOpenGL::hideWindow()
+{
+    glfwHideWindow(window);
+};
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void Display::processInput(GLFWwindow *window)
+void DisplayOpenGL::processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(RIGHT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS)
         editorKeyPressed = true;
     if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_RELEASE)
+    {
         if (editorKeyPressed)
         {
             Editor::getInstance()->toggleEditor();
@@ -128,9 +123,20 @@ void Display::processInput(GLFWwindow *window)
         {
             editorKeyPressed = false;
         }
+    }
+    if (Editor::getInstance()->showCursor())
+        return;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        WorldManager::getInstance()->getLevel()->getCamera()->ProcessKeyboard(RIGHT, deltaTime);
 }
 
-void Display::update()
+void DisplayOpenGL::update()
 {
     // per-frame time logic
     // --------------------
@@ -144,41 +150,18 @@ void Display::update()
     ImGui_ImplGlfwGL3_NewFrame();
 
     bool showDebug = true;
-    // 1. Show a simple window.
-    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
-    //ImGui::Image(ImTextureID(smesh->getMeshes()[0]->mat->diffuse->ID), ImVec2(smesh->getMeshes()[0]->mat->diffuse->width, smesh->getMeshes()[0]->mat->diffuse->height));
     //ImGui::Begin("Debug", &showDebug)
     //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     //ImGui::End();
-    if (glfw)
+    if (Editor::getInstance()->showCursor())
     {
-        if (Editor::getInstance()->showCursor())
-        {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        }
-        else
-        {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        }
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    else
+    {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     Editor::getInstance()->Draw();
-
-    // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-    if (show_another_window)
-    {
-        ImGui::Begin("Another Window", &show_another_window);
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-            show_another_window = false;
-        ImGui::End();
-    }
-
-    // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-    if (show_demo_window)
-    {
-        ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-        ImGui::ShowDemoWindow(&show_demo_window);
-    }
 
     // positions of the point lights
     /*glm::vec3 pointLighThirdPartyositions[] = {
@@ -285,21 +268,23 @@ void Display::update()
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void Display::framebuffer_size_callback(GLFWwindow *window, int width, int height)
+void DisplayOpenGL::static_framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
-void Display::smouse_callback(GLFWwindow *window, double xpos, double ypos)
+void DisplayOpenGL::static_mouse_callback(GLFWwindow *window, double xpos, double ypos)
 {
-    getEngine()->getDisplay()->mouse_callback(window, xpos, ypos);
+    Display *display = getEngine()->getDisplay();
+    DisplayOpenGL *d = dynamic_cast<DisplayOpenGL *>(display);
+    d->mouse_callback(window, xpos, ypos);
 }
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
-void Display::mouse_callback(GLFWwindow *window, double xpos, double ypos)
+void DisplayOpenGL::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 {
     if (firstMouse)
     {
@@ -313,14 +298,17 @@ void Display::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 
     lastX = xpos;
     lastY = ypos;
+    if (Editor::getInstance()->showCursor())
+        return;
 
     WorldManager::getInstance()->getLevel()->getCamera()->ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
-void Display::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+void DisplayOpenGL::static_scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
     //camera.ProcessMouseScroll(yoffset);
+}
 }
 }

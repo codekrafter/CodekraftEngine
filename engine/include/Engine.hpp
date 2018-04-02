@@ -1,12 +1,16 @@
 #pragma once
 
 #include "EngineApp.hpp"
-namespace ckg
+#include "ThirdParty/easylogging/easylogging++.h"
+#include "Config.hpp"
+
+namespace ck
 {
-extern ck::CKEngine *g_engine;
-}
-ck::CKEngine *initEngine(bool makeWindow);
+extern CKEngine *engine;
+
+CKEngine *initEngine(EngineConfig config);
 
 int run(ck::CKEngine *engine);
 
-ck::CKEngine *getEngine();
+CKEngine *getEngine();
+}

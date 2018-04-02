@@ -26,6 +26,10 @@ Editor *Editor::getInstance()
     if (inst == nullptr)
     {
         inst = new Editor();
+        inst->assetMenu = false;
+        inst->assetLoader = false;
+        inst->assetSaver = false;
+        inst->showEditor = false;
     }
     return inst;
 };
@@ -153,7 +157,7 @@ void Editor::Draw()
             ImGui::SameLine();
             ImGui::Text("(");
             ImGui::SameLine();
-            ImGui::Text(pair.second.type.c_str(),"NULL");
+            ImGui::Text(pair.second.type.c_str(), "NULL");
             ImGui::SameLine();
             ImGui::Text(")");
             ImGui::SameLine();

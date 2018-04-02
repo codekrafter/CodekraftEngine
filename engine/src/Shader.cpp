@@ -8,8 +8,9 @@
 #include "ThirdParty/easylogging/easylogging++.h"
 
 #include "Shader.hpp"
-#include "AssetFactory.hpp"
-#include "AssetManager.hpp"
+#include "Asset.hpp"
+#include "DefaultShaderCode.hpp"
+//#include "AssetManager.hpp"
 
 namespace ck
 {
@@ -18,112 +19,17 @@ Shader::Shader()
 {
     version = 1;
     type = "SHADER";
-    ///*
-    vertex = R"(
-#version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aNormal;
-layout (location = 2) in vec2 aTexCoords;
-
-out vec2 TexCoords;
-out vec4 vertexColor;
-
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-
-void main()
-{
-    TexCoords = aTexCoords;    
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
-    vertexColor = vec4(aNormal,1.0f);
-}
-)";
-    /*fragment = R"(
-#version 330 core
-out vec4 FragColor;
-
-in vec2 TexCoords;
-
-uniform sampler2D texture_diffuse1;
-
-void main()
-{    
-    FragColor = texture(texture_diffuse1, TexCoords);
-}
-
-)";*/
-    // Solid color fragment shader
-    fragment = R"(
-#version 330 core
-out vec4 FragColor;
-
-in vec4 vertexColor;
-
-void main()
-{    
-    FragColor = vertexColor;
-}
-
-)";
+    vertex = v;
+    vertex = f;
     geometry = "";
-    //*/
 }
+
 Shader::~Shader(){};
 
-/*void Shader::deserialize(std::string data)
-{
-    std::vector<std::string> lines = AssetManager::split_string(data, "\n");
-    std::string sel = "";
-    for (std::string line : lines)
-    {
-        if (line.substr(0, 2) == "!!")
-        {
-            sel = line.substr(2, line.length());
-        }
-        else
-        {
-            if (sel == "")
-            {
-                if (line != "")
-                {
-                    throw std::runtime_error("Shader Error: Code text '" + line + "'appeared before section selector");
-                }
-            }
-            else if (sel == "VERTEX")
-            {
-                *vertex = *vertex + line + "\n";
-            }
-            else if (sel == "FRAGMENT")
-            {
-                *fragment = *fragment + line + "\n";
-            }
-            else if (sel == "GEOMETRY")
-            {
-                *geometry = *geometry + line + "\n";
-            }
-            else
-            {
-                throw std::runtime_error("Shader Error: Invalid Shader type: '" + sel + "'");
-            }
-        }
-    };
-}
-std::string Shader::serialize()
-{
-    std::ostringstream s;
-    s << "!!VERTEX" << std::endl
-      << vertex << std::endl
-      << "!!FRAGMENT" << std::endl
-      << fragment << std::endl
-      << "!!GEOMETRY" << std::endl
-      << geometry << std::endl;
-    return s.str();
-}*/
 template <class Archive>
 void Shader::serialize(Archive &ar)
 {
-    ar(cereal::base_class<ck::Asset>(this), vertex, fragment, geometry);
+    ar(/*cereal::base_class<ck::Asset>(this),*/ vertex, fragment, geometry);
 }
 
 void Shader::setCode(std::string v, std::string f, std::string g)
@@ -270,8 +176,8 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-            std::cerr << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
-                      << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            LOG(ERROR) << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
+                       << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     }
     else
@@ -280,8 +186,8 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-            std::cerr << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
-                      << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            LOG(ERROR) << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
+                       << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     }
 }
