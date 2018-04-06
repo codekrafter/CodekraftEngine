@@ -42,6 +42,24 @@ Texture::~Texture()
     stbi_image_free(data);
 };
 
+<<<<<<< HEAD
+=======
+/*template <class Archive>
+void Texture::serialize(Archive &ar)
+{
+    LOG(INFO) << "serializing base class";
+    ar(cereal::base_class<ck::Asset>(this));
+    LOG(INFO) << "serialized base class";
+    ar(width, height, n);
+    LOG(INFO) << "(width,height,n)";
+    LOG(INFO) << width;
+    LOG(INFO) << height;
+    LOG(INFO) << n;
+    LOG(INFO) << "last element: " << data[0];
+    ar(cereal::binary_data(data, width * height * n));
+    LOG(INFO) << "finished serializing texture";
+};*/
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 template <class Archive>
 void Texture::serialize(Archive &ar)
 {
@@ -81,6 +99,10 @@ void Texture::save(Archive &ar) const
     //ar(cereal::make_size_tag(static_cast<cereal::size_type>(width * height * n))); // number of elements
     //ar(cereal::binary_data(data, width * height * n));
     ar(width, height, n);
+    //std::vector<unsigned char> vec(data, data + (width * height * n));
+    //ar(vec);
+    ar(cereal::make_size_tag(static_cast<cereal::size_type>(width * height * n))); // number of elements
+    ar(cereal::binary_data(data, width * height * n));
 }
 
 template <class Archive>
@@ -90,6 +112,7 @@ void Texture::load(Archive &ar)
     //return;
     ar(width, height, n);
 
+<<<<<<< HEAD
     ///std::vector<unsigned char> vec;
     //vec.resize(width * height * n);
     //ar(vec);
@@ -100,6 +123,15 @@ void Texture::load(Archive &ar)
 
     //ar(cereal::binary_data(data, dSize));
 }*/
+=======
+    //std::vector<unsigned char> vec(); //data, data + (width * height * n));
+    //ar(vec);
+    cereal::size_type dSize;
+    ar(cereal::make_size_tag(dSize));
+
+    ar(cereal::binary_data(data, width * height * n));
+}
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 
 void Texture::init()
 {

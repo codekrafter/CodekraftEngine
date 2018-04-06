@@ -201,6 +201,7 @@ int main(int argc, char *argv[])
     shader->setCode(vv, fff);
     am->saveAsset("phong", shader);
     am->close("shaders.ckd");
+<<<<<<< HEAD
     am->reset();
     ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
     am->saveAsset("nanosuit", smesh);
@@ -208,6 +209,15 @@ int main(int argc, char *argv[])
     am->reset();
     am->open("test.ckd");
     /*ck::StaticMesh */smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
+=======
+    //am->reset();
+    //ck::Shader *shader = am->loadAsset<ck::Shader>("white-shader");
+    ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
+    //am->saveAsset("nanosuit", smesh);
+    //am->close("test.ckd");
+    //am->open("test.ckd");
+    //ck::StaticMesh smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
     //am->reset();
     ck::Level *level = new ck::Level();
     ck::StaticMeshActor *sma = new ck::StaticMeshActor(smesh);

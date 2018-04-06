@@ -47,7 +47,8 @@
         "typeindex": "cpp",
         "codecvt": "cpp",
         "csignal": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "vector": "cpp"
     },
     "workbench.colorTheme": "Default Dark+",
     "files.exclude": {

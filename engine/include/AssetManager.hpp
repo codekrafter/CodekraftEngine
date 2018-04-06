@@ -37,6 +37,7 @@ private:
 
 public:
   Asset *asset();
+  std::shared_ptr<Asset> getAsset() { return a; };
   std::string type;
   std::shared_ptr<Asset> getAsset() { return a; };
   AssetFile();

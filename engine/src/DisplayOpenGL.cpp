@@ -91,6 +91,7 @@ DisplayOpenGL::~DisplayOpenGL()
 };
 
 bool DisplayOpenGL::shouldClose()
+<<<<<<< HEAD:engine/src/DisplayOpenGL.cpp
 {
     return glfwWindowShouldClose(window);
 };
@@ -98,6 +99,10 @@ bool DisplayOpenGL::shouldClose()
 void DisplayOpenGL::showWindow()
 {
     glfwShowWindow(window);
+=======
+{
+    return glfwWindowShouldClose();
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba:engine/src/DisplayOpenGL.cpp
 };
 
 void DisplayOpenGL::hideWindow()
@@ -153,6 +158,7 @@ void DisplayOpenGL::update()
     //ImGui::Begin("Debug", &showDebug)
     //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     //ImGui::End();
+<<<<<<< HEAD:engine/src/DisplayOpenGL.cpp
     if (Editor::getInstance()->showCursor())
     {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -161,6 +167,16 @@ void DisplayOpenGL::update()
     {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
+=======
+        if (Editor::getInstance()->showCursor())
+        {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+        else
+        {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba:engine/src/DisplayOpenGL.cpp
     Editor::getInstance()->Draw();
 
     // positions of the point lights
@@ -268,14 +284,22 @@ void DisplayOpenGL::update()
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
+<<<<<<< HEAD:engine/src/DisplayOpenGL.cpp
 void DisplayOpenGL::static_framebuffer_size_callback(GLFWwindow *window, int width, int height)
+=======
+void DisplayOpenGL::framebuffer_size_callback(GLFWwindow *window, int width, int height)
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba:engine/src/DisplayOpenGL.cpp
 {
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
+<<<<<<< HEAD:engine/src/DisplayOpenGL.cpp
 void DisplayOpenGL::static_mouse_callback(GLFWwindow *window, double xpos, double ypos)
+=======
+void DisplayOpenGL::smouse_callback(GLFWwindow *window, double xpos, double ypos)
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba:engine/src/DisplayOpenGL.cpp
 {
     Display *display = getEngine()->getDisplay();
     DisplayOpenGL *d = dynamic_cast<DisplayOpenGL *>(display);
@@ -306,7 +330,11 @@ void DisplayOpenGL::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
+<<<<<<< HEAD:engine/src/DisplayOpenGL.cpp
 void DisplayOpenGL::static_scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+=======
+void DisplayOpenGL::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba:engine/src/DisplayOpenGL.cpp
 {
     //camera.ProcessMouseScroll(yoffset);
 }

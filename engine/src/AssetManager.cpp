@@ -130,8 +130,13 @@ std::map<std::string, AssetFile> AssetManager::getMap()
 bool AssetManager::saveAsset(std::string name, Asset *asset)
 {
     empty_delete<Asset> ed;
+<<<<<<< HEAD
     std::shared_ptr<Asset> sptr(asset, ed);
     AssetFile file(asset->getType(), sptr); //asset);
+=======
+    //std::shared_ptr<Asset> sptr(asset, ed);
+    AssetFile file(asset->getType(), asset);
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
     map[name] = file;
     //sptr.reset();
     return true;

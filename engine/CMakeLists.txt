@@ -2,8 +2,13 @@ cmake_minimum_required(VERSION 3.5)
 project(CKEngine)
 
 ADD_DEFINITIONS(
+<<<<<<< HEAD
 #    -std=c++1z
     -frtti
+=======
+    -std=c++1z
+    # Other flags
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 )
 
 set(CMAKE_CXX_STANDARD 11)
@@ -39,7 +44,11 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/)
 
 
 add_library(CKEngine STATIC ${SRC} ${ThirdParty_SRC})
+<<<<<<< HEAD
 target_link_libraries(CKEngine glfw ${OPENGL_LIBRARIES} pthread dl)
+=======
+target_link_libraries(CKEngine glfw3 GL ${OPENGL_LIBRARIES} pthread dl)
+>>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 if(${UNIX} AND NOT ${APPLE})
 target_link_libraries(CKEngine X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
 endif()
