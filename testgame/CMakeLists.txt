@@ -13,6 +13,7 @@ ADD_DEFINITIONS(
 find_package(OpenGL REQUIRED)
 
 set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -D_GLIBCXX_DEBUG")
 
 file(GLOB SRC "src/*.cpp")
 

@@ -7,14 +7,16 @@
 #include <memory>
 
 #include "ThirdParty/cereal/types/map.hpp"
+#include "ThirdParty/cereal/types/string.hpp"
 #include "ThirdParty/cereal/types/vector.hpp"
 #include "ThirdParty/cereal/types/memory.hpp"
-#include "ThirdParty/cereal/archives/binary.hpp"
+#include "ThirdParty/cereal/archives/portable_binary.hpp"
 
 #include "AssetManager.hpp"
 #include "Asset.hpp"
 #include "AssetFactory.hpp"
 #include "base64.hpp"
+#include "GenericAsset.hpp"
 #include "Assets.hpp"
 
 #include "ThirdParty/easylogging/easylogging++.h"
@@ -24,17 +26,40 @@ namespace ck
 
 AssetFile::AssetFile()
 {
+    empty_delete<Asset> ed;
+    a = std::shared_ptr<Asset>(new GenericAsset(), ed);
     type = "NULL";
-    a = nullptr;
+    LOG(ERROR) << "";
+    LOG(ERROR) << "---------------------Asset nullptr: " << a << "THIS: " << this;
 }
-
-void null_del(Asset *a){};
 
 AssetFile::AssetFile(std::string t, Asset *asset)
 {
+    if (asset == nullptr)
+    {
+        LOG(ERROR) << "!!!!!!!!!!!!!!!!!!Creating AssetFile with ptr == nullptr";
+    }
+    else
+    {
+        LOG(DEBUG) << "!!!!!!!!!!!!!!!!!!Asset ptr: " << asset << "THIS: " << this;
+    }
     type = t;
     empty_delete<Asset> ed;
     a = std::shared_ptr<Asset>(asset, ed);
+}
+
+AssetFile::AssetFile(std::string t, std::shared_ptr<Asset> asset)
+{
+    if (asset == nullptr)
+    {
+        LOG(ERROR) << "!!!!!!!!!!!!!!!!!!Creating AssetFile with sptr == nullptr";
+    }
+    else
+    {
+        LOG(DEBUG) << "!!!!!!!!!!!!!!!!!!!Asset sptr: " << asset << "THIS: " << this;
+    }
+    type = t;
+    a = asset;
 }
 
 Asset *AssetFile::asset()
@@ -45,6 +70,13 @@ Asset *AssetFile::asset()
 template <class Archive>
 void AssetFile::serialize(Archive &ar)
 {
+    if (a == nullptr)
+    {
+        LOG(ERROR) << "Tried to serialize AssetFile when asset sptr is nullptr";
+        LOG(ERROR) << "THIS: " << this;
+        LOG(ERROR) << "TYPE: " << type;
+        LOG(ERROR) << "Asset(a): " << a;
+    }
     ar(type, a);
 }
 
@@ -79,12 +111,13 @@ void AssetManager::open(std::string fname)
     if (!fileExists(fname))
     {
         LOG(ERROR) << "tried to open file '" << fname << "' that does not exist";
+        return;
     }
     reset();
     std::ifstream is(fname, std::ios::binary);
     //is.open(fname);
     {
-        cereal::BinaryInputArchive archive(is);
+        cereal::PortableBinaryInputArchive archive(is);
         archive(map);
     }
 }
@@ -97,8 +130,8 @@ std::map<std::string, AssetFile> AssetManager::getMap()
 bool AssetManager::saveAsset(std::string name, Asset *asset)
 {
     empty_delete<Asset> ed;
-    //std::shared_ptr<Asset> sptr(asset, ed);
-    AssetFile file(asset->getType(), asset);
+    std::shared_ptr<Asset> sptr(asset, ed);
+    AssetFile file(asset->getType(), sptr); //asset);
     map[name] = file;
     //sptr.reset();
     return true;
@@ -132,7 +165,7 @@ void AssetManager::close(std::string fname)
     std::ofstream os(fname, std::ios::binary);
     os.open(fname);
     {
-        cereal::BinaryOutputArchive archive(os);
+        cereal::PortableBinaryOutputArchive archive(os);
         archive(map);
     }
     os.close();

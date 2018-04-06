@@ -63,9 +63,14 @@ Material::~Material(){
 template <class Archive>
 void Material::serialize(Archive &ar)
 {
-    ar(cereal::base_class<ck::Asset>(this));
+    LOG(INFO) << "M: Type of ar: " << typeid(ar).name();
+    LOG(INFO) << "M: Base Class";
+    //ar(/*cereal::base_class<ck::Asset>(this)*/);
+    LOG(INFO) << "M: Shader";
     ar(shader);
+    LOG(INFO) << "M: Diffuse";
     ar(diffuse);
+    LOG(INFO) << "M: Specular";
     ar(specular);
 }
 

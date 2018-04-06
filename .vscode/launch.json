@@ -12,6 +12,7 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build/testgame",
+            "preLaunchTask": "build",
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",

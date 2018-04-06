@@ -58,7 +58,7 @@ StaticMesh::~StaticMesh()
 template <class Archive>
 void StaticMesh::serialize(Archive &ar)
 {
-    ar(cereal::base_class<ck::Asset>(this), meshes);
+    ar(/*cereal::base_class<ck::Asset>(this),*/ meshes);
 };
 std::vector<Mesh *> StaticMesh::getMeshes()
 {

@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
+#include "Engine.hpp"
 #include <ThirdParty/cereal/types/memory.hpp>
+#include <ThirdParty/cereal/types/string.hpp>
 #include <ThirdParty/cereal/types/polymorphic.hpp>
 
 namespace ck
@@ -15,12 +17,13 @@ protected:
 public:
   Asset()
   {
-    version = 0;
+    version = 1;
     type = "GENERIC";
   };
 
   Asset(const Asset &a)
   {
+    LOG(DEBUG) << "Calling Copy Constructor for asset of type: " << typeid(a).name() << " && " << a.type;
     version = a.version;
     type = a.type;
   };
@@ -30,7 +33,6 @@ public:
   template <class Archive>
   void serialize(Archive &ar) { ar(version, type); };
   virtual std::string getType() { return type; };
-  /// Get version, should be an integer. Used in header
   virtual int getVersion() { return version; };
 };
 }

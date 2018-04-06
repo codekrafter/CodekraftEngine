@@ -1,3 +1,7 @@
+#include <sstream>
+#include <iomanip>
+#include <string>
+
 #include "Texture.hpp"
 #include "ThirdParty/glad/glad.h"
 #include "ThirdParty/stb_image.h"
@@ -38,47 +42,64 @@ Texture::~Texture()
     stbi_image_free(data);
 };
 
-/*template <class Archive>
+template <class Archive>
 void Texture::serialize(Archive &ar)
 {
-    LOG(INFO) << "serializing base class";
-    ar(cereal::base_class<ck::Asset>(this));
-    LOG(INFO) << "serialized base class";
+    if (!data)
+    {
+        LOG(ERROR) << "Tried to serialize image with no data";
+    }
+    std::cout << typeid(ar).name() << std::endl;
+    //ar(cereal::base_class<ck::Asset>(this));
     ar(width, height, n);
-    LOG(INFO) << "(width,height,n)";
-    LOG(INFO) << width;
-    LOG(INFO) << height;
-    LOG(INFO) << n;
-    LOG(INFO) << "last element: " << data[0];
-    ar(cereal::binary_data(data, width * height * n));
-    LOG(INFO) << "finished serializing texture";
-};*/
-template <class Archive>
+    std::cout << width << std::endl;
+    std::cout << height << std::endl;
+    std::cout << n << std::endl;
+    std::cout << width * height * n << std::endl;
+    //ar(cereal::binary_data(data, width * height * n));
+};
+/*template <class Archive>
 void Texture::save(Archive &ar) const
 {
-    LOG(ERROR) << "Texture serialization is broken, doing nothing";
-    return;
-    ar(width, height, n);
-    //std::vector<unsigned char> vec(data, data + (width * height * n));
+    LOG(ERROR) << "Texture saving is broken, doing nothing";
+    //return;
+    std::ostringstream ss;
+    for (int i = 0; i < (width * height * n); ++i)
+    {
+        ss << std::hex << std::setw(2) << std::setfill('0') << data[i] << ";";
+    }
+    std::string s = ss.str();
+    //std::cout << s << std::endl;
+    ar(s);
+    ///std::vector<unsigned char> vec;
+    //vec.resize(width*height*n);
+    for (int i = 0; i < (width * height * n); ++i)
+    {
+        vec.push_back(data[i]);
+    }
     //ar(vec);
-    ar(cereal::make_size_tag(static_cast<cereal::size_type>(width * height * n))); // number of elements
-    ar(cereal::binary_data(data, width * height * n));
+    //ar(cereal::make_size_tag(static_cast<cereal::size_type>(width * height * n))); // number of elements
+    //ar(cereal::binary_data(data, width * height * n));
+    ar(width, height, n);
 }
 
 template <class Archive>
 void Texture::load(Archive &ar)
 {
-    LOG(ERROR) << "Texture serialization is broken, doing nothing";
-    return;
+    LOG(ERROR) << "Texture loading is broken, doing nothing";
+    //return;
     ar(width, height, n);
 
+    ///std::vector<unsigned char> vec;
+    //vec.resize(width * height * n);
+    //ar(vec);
     //std::vector<unsigned char> vec(); //data, data + (width * height * n));
     //ar(vec);
-    cereal::size_type dSize;
-    ar(cereal::make_size_tag(dSize));
+    //cereal::size_type dSize;
+    //ar(cereal::make_size_tag(dSize));
 
-    ar(cereal::binary_data(data, width * height * n));
-}
+    //ar(cereal::binary_data(data, dSize));
+}*/
 
 void Texture::init()
 {

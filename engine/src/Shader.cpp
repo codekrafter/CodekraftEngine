@@ -1,11 +1,12 @@
-#include <ThirdParty/glad/glad.h>
-#include <ThirdParty/glm/glm.hpp>
+#include "ThirdParty/glad/glad.h"
+#include "ThirdParty/glm/glm.hpp"
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <stdexcept>
 #include "ThirdParty/easylogging/easylogging++.h"
+#include "ThirdParty/cereal/types/string.hpp"
 
 #include "Shader.hpp"
 #include "Asset.hpp"
@@ -29,7 +30,7 @@ Shader::~Shader(){};
 template <class Archive>
 void Shader::serialize(Archive &ar)
 {
-    ar(/*cereal::base_class<ck::Asset>(this),*/ vertex, fragment, geometry);
+    ar(cereal::base_class<ck::Asset>(this), vertex, fragment, geometry);
 }
 
 void Shader::setCode(std::string v, std::string f, std::string g)

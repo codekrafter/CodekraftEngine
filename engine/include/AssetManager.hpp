@@ -27,7 +27,7 @@ struct empty_delete
 
   void operator()(T *const) const /* noexcept */
   {
-    // do nothing
+    LOG(ERROR) << "\\\\\\\\\\\\\\\\\\ Operator () on ed of type: " << typeid(T).name();
   }
 };
 struct AssetFile
@@ -37,10 +37,12 @@ private:
 
 public:
   Asset *asset();
-  std::shared_ptr<Asset> getAsset() { return a; };
   std::string type;
+  std::shared_ptr<Asset> getAsset() { return a; };
   AssetFile();
   AssetFile(std::string t, Asset *asset);
+  AssetFile(std::string t, std::shared_ptr<Asset> asset);
+  ~AssetFile(){};
   template <class Archive>
   void serialize(Archive &ar);
   bool operator==(const AssetFile &other)

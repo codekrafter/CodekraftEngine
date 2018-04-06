@@ -52,7 +52,7 @@ class Mesh : public Asset
 // Note that this could be done in any other location so long as it was prior
 // to this file being included
 #include <ThirdParty/cereal/types/polymorphic.hpp>
-#include <ThirdParty/cereal/archives/binary.hpp>
+#include <ThirdParty/cereal/archives/portable_binary.hpp>
 
 CEREAL_REGISTER_TYPE(ck::Mesh);
 

@@ -2,7 +2,7 @@
 
 #include <string>
 
-std::string v = R"(
+const std::string v = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
@@ -22,7 +22,7 @@ void main()
     vertexColor = vec4(aNormal,1.0f);
 }
 )";
-/*std::string f = R"(
+/*const std::string f = R"(
 #version 330 core
 out vec4 FragColor;
 
@@ -37,7 +37,7 @@ void main()
 
 )";*/
 // Solid color fragment shader
-std::string f = R"(
+const std::string f = R"(
 #version 330 core
 out vec4 FragColor;
 
