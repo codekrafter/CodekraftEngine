@@ -2,10 +2,7 @@
 #include "AssetManager.hpp"
 #include "Texture.hpp"
 //#include "Display.hpp"
-<<<<<<< HEAD
 #include "Engine.hpp"
-=======
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 #include "WorldManager.hpp"
 
 #include <string>
@@ -13,11 +10,8 @@
 #include <ThirdParty/glm/gtc/matrix_transform.hpp>
 #include <ThirdParty/glm/gtc/type_ptr.hpp>
 
-<<<<<<< HEAD
 namespace ck
 {
-=======
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 Material::Material()
 {
     version = 1;
@@ -49,7 +43,6 @@ Material::Material(std::string d_name, std::string s_name, std::string prefix)
     AssetManager *am = new AssetManager();
 
     am->open("shaders.ckd");
-    empty_delete<Shader> ed;
     shader = am->loadAssetSPTR<Shader>("phong");
     //shader = std::shared_ptr<Shader>(am->loadAsset<Shader>("phong"), ed);
     //shader = std::shared_ptr<Shader>(new Shader());
@@ -69,7 +62,6 @@ Material::~Material(){
 template <class Archive>
 void Material::serialize(Archive &ar)
 {
-<<<<<<< HEAD
     LOG(INFO) << "M: Type of ar: " << typeid(ar).name();
     LOG(INFO) << "M: Base Class";
     //ar(/*cereal::base_class<ck::Asset>(this)*/);
@@ -78,11 +70,6 @@ void Material::serialize(Archive &ar)
     LOG(INFO) << "M: Diffuse";
     ar(diffuse);
     LOG(INFO) << "M: Specular";
-=======
-    ar(cereal::base_class<ck::Asset>(this));
-    ar(shader);
-    ar(diffuse);
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
     ar(specular);
 }
 

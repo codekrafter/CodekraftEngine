@@ -5,8 +5,8 @@ set(CMAKE_INSTALL_PREFIX ..)
 set (CMAKE_CXX_STANDARD 11)
 
 ADD_DEFINITIONS(
-#    -std=c++1z
-    -frtti
+    -std=c++1z
+#    -frtti
 )
 
 #find_package(glfw3 REQUIRED)
@@ -22,11 +22,7 @@ include_directories(${CMAKE_BINARY_DIR}/engine/include)
 #link_directories()
 
 add_executable(TestGame ${SRC})
-<<<<<<< HEAD
 target_link_libraries(TestGame ${CMAKE_BINARY_DIR}/engine/libCKEngine.a glfw ${OPENGL_LIBRARIES} pthread dl)
-=======
-target_link_libraries(TestGame glfw3 GL ${OPENGL_LIBRARIES} pthread dl)
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 if(${UNIX} AND NOT ${APPLE})
 target_link_libraries(TestGame X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
 endif()

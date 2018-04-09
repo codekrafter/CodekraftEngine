@@ -11,25 +11,28 @@
 
 namespace ck
 {
-template <typename T>
-struct empty_delete
-{
-  empty_delete() /* noexcept */
-  {
-  }
+//template <typename T>
+//struct empty_delete
+//{
+//  empty_delete() /* noexcept */
+//  {
+//  }
+//
+//  template <typename U>
+//  empty_delete(const empty_delete<U> &,
+//               typename std::enable_if<
+//                   std::is_convertible<U *, T *>::value>::type * = nullptr) /* noexcept */
+//  {
+//  }
+//
+//  void operator()(T *const) const /* noexcept */
+//  {
+//    LOG(ERROR) << "\\\\\\\\\\\\\\\\\\ Operator () on ed of type: " << typeid(T).name();
+//  }
+//};
 
-  template <typename U>
-  empty_delete(const empty_delete<U> &,
-               typename std::enable_if<
-                   std::is_convertible<U *, T *>::value>::type * = nullptr) /* noexcept */
-  {
-  }
+void empty_delete(Asset *);
 
-  void operator()(T *const) const /* noexcept */
-  {
-    LOG(ERROR) << "\\\\\\\\\\\\\\\\\\ Operator () on ed of type: " << typeid(T).name();
-  }
-};
 struct AssetFile
 {
 private:
@@ -39,7 +42,6 @@ public:
   Asset *asset();
   std::shared_ptr<Asset> getAsset() { return a; };
   std::string type;
-  std::shared_ptr<Asset> getAsset() { return a; };
   AssetFile();
   AssetFile(std::string t, Asset *asset);
   AssetFile(std::string t, std::shared_ptr<Asset> asset);

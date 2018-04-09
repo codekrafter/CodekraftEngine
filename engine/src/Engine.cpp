@@ -2,10 +2,7 @@
 #include "Engine.hpp"
 #include "EngineApp.hpp"
 #include "colormod.h"
-<<<<<<< HEAD
 #include "Display.hpp"
-=======
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 
 //#include "ThirdParty/glad/glad.h"
 //#include "GLFW/glfw3.h"
@@ -16,10 +13,6 @@ INITIALIZE_EASYLOGGINGPP
 namespace ck
 {
 ck::CKEngine *engine = nullptr;
-<<<<<<< HEAD
-=======
-}
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 
 ck::CKEngine *initEngine(EngineConfig config)
 {
@@ -62,8 +55,5 @@ int run(ck::CKEngine *engine)
 ck::CKEngine *getEngine()
 {
     return ck::engine;
-<<<<<<< HEAD
 }
-=======
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 }

@@ -10,15 +10,11 @@ namespace ck
 CKEngine::CKEngine(EngineConfig c)
 {
     config = c;
-<<<<<<< HEAD
     switch (c.display.type)
     {
     case DisplayType::OPENGL:
         display = new opengl::DisplayOpenGL(c.display);
     }
-=======
-    display = new Display(c.display);
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
 };
 CKEngine::~CKEngine()
 {

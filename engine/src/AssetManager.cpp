@@ -24,13 +24,12 @@
 namespace ck
 {
 
+void empty_delete(Asset *){};
+
 AssetFile::AssetFile()
 {
-    empty_delete<Asset> ed;
-    a = std::shared_ptr<Asset>(new GenericAsset(), ed);
+    a = nullptr;
     type = "NULL";
-    LOG(ERROR) << "";
-    LOG(ERROR) << "---------------------Asset nullptr: " << a << "THIS: " << this;
 }
 
 AssetFile::AssetFile(std::string t, Asset *asset)
@@ -39,13 +38,8 @@ AssetFile::AssetFile(std::string t, Asset *asset)
     {
         LOG(ERROR) << "!!!!!!!!!!!!!!!!!!Creating AssetFile with ptr == nullptr";
     }
-    else
-    {
-        LOG(DEBUG) << "!!!!!!!!!!!!!!!!!!Asset ptr: " << asset << "THIS: " << this;
-    }
     type = t;
-    empty_delete<Asset> ed;
-    a = std::shared_ptr<Asset>(asset, ed);
+    a = std::shared_ptr<Asset>(asset, empty_delete);
 }
 
 AssetFile::AssetFile(std::string t, std::shared_ptr<Asset> asset)
@@ -53,10 +47,6 @@ AssetFile::AssetFile(std::string t, std::shared_ptr<Asset> asset)
     if (asset == nullptr)
     {
         LOG(ERROR) << "!!!!!!!!!!!!!!!!!!Creating AssetFile with sptr == nullptr";
-    }
-    else
-    {
-        LOG(DEBUG) << "!!!!!!!!!!!!!!!!!!!Asset sptr: " << asset << "THIS: " << this;
     }
     type = t;
     a = asset;
@@ -129,14 +119,8 @@ std::map<std::string, AssetFile> AssetManager::getMap()
 
 bool AssetManager::saveAsset(std::string name, Asset *asset)
 {
-    empty_delete<Asset> ed;
-<<<<<<< HEAD
-    std::shared_ptr<Asset> sptr(asset, ed);
+    std::shared_ptr<Asset> sptr(asset, empty_delete);
     AssetFile file(asset->getType(), sptr); //asset);
-=======
-    //std::shared_ptr<Asset> sptr(asset, ed);
-    AssetFile file(asset->getType(), asset);
->>>>>>> 0cff946d6a15aadde52d8a42fbca0e1d803b90ba
     map[name] = file;
     //sptr.reset();
     return true;
