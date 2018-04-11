@@ -48,7 +48,11 @@
         "codecvt": "cpp",
         "csignal": "cpp",
         "string": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "slist": "cpp",
+        "algorithm": "cpp",
+        "map": "cpp",
+        "optional": "cpp"
     },
     "workbench.colorTheme": "Default Dark+",
     "files.exclude": {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ThirdParty/glm/glm.hpp>
-#include <ThirdParty/cereal/types/memory.hpp>
+//#include <ThirdParty/cereal/types/memory.hpp>
 #include "GLMSavers.hpp"
 
 namespace ck

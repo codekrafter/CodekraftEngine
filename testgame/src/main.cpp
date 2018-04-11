@@ -2,6 +2,7 @@
 #include "StaticMeshActor.hpp"
 #include "WorldManager.hpp"
 #include "AssetManager.hpp"
+#include "AssetStructures.hpp"
 #include "ThirdParty/easylogging/easylogging++.h"
 
 std::string vv = R"(
@@ -195,19 +196,28 @@ int main(int argc, char *argv[])
 {
     ck::EngineConfig ec = ck::EngineConfig();
     ck::CKEngine *engine = ck::initEngine(ec);
-    ck::AssetManager *am = new ck::AssetManager();
+    ck::ShaderS ss;
+    ss.v = "Test Vertex";
+    ss.f = "Test Fragment";
+    ss.g = "Test Geo";
+
+    ck::DatSize pair = ss.save();
+    ck::ShaderS s;
+    s.load(pair.data,pair.size);
+    //ck::AssetManager::inst()->openDir("dat*");
+    return 0;
     //am->open("shaders.ckd");
     ck::Shader *shader = new ck::Shader();
     shader->setCode(vv, fff);
-    am->saveAsset("phong", shader);
-    am->close("shaders.ckd");
-    am->reset();
+    //am->saveAsset("phong", shader);
+    //am->close("shaders.ckd");
+    //am->reset();
     ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
-    am->saveAsset("nanosuit", smesh);
-    am->close("test.ckd");
-    am->reset();
-    am->open("test.ckd");
-    /*ck::StaticMesh */smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
+    //am->saveAsset("nanosuit", smesh);
+    //am->close("test.ckd");
+    //am->reset();
+    //am->open("test.ckd");
+    ///*ck::StaticMesh */smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
     //am->reset();
     ck::Level *level = new ck::Level();
     ck::StaticMeshActor *sma = new ck::StaticMeshActor(smesh);
@@ -220,9 +230,7 @@ int main(int argc, char *argv[])
     //shader->init();
     //level->init();
     //engine->getDisplay()->shader = shader;
-    //engine->getDisplay()->smesh = smesh;
     ck::WorldManager::getInstance()->loadLevel(level);
-    //engine->getDisplay()->level = level;
     run(engine);
     //delete shader;
     //delete model;

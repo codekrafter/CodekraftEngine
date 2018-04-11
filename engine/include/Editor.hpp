@@ -14,7 +14,7 @@ private:
   AssetManager *am = nullptr;
   bool showEditor = false;
   char fn[128];
-  std::vector<AssetFile> openEditors;
+  std::vector<AssetRef<Asset>> openEditors;
 
   // Data for Asset Editors
   // Shader

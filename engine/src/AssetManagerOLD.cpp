@@ -1,4 +1,4 @@
-#include <iostream>
+/*#include <iostream>
 #include <fstream>
 #include <vector>
 #include <sstream>
@@ -167,7 +167,7 @@ void AssetManager::close(std::string fname)
     file << "[ TYPE " << asset->getType() << " VER " << asset->getVersion() << " ]" << std::endl;
     file << asset->serialize() << std::flush;
     file.close();
-};*/
+};/
 
 bool AssetManager::fileExists(std::string fileName)
 {
@@ -176,4 +176,4 @@ bool AssetManager::fileExists(std::string fileName)
     infile.close();
     return o;
 };
-}
+}*/

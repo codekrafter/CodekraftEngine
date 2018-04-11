@@ -9,12 +9,12 @@ namespace ck
 StaticMesh::StaticMesh()
 {
     version = 1;
-    type = "STATICMESH";
+    type = "STATIC_MESH";
 };
 StaticMesh::StaticMesh(std::string path)
 {
     version = 1;
-    type = "STATICMESH";
+    type = "STATIC_MESH";
     // Initialize Loader
     objl::Loader Loader;
 

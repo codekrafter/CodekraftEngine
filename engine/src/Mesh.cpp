@@ -27,11 +27,11 @@ Mesh::Mesh(objl::Mesh m, std::string directory)
 Mesh::~Mesh(){
     //delete mat;
 };
-template <class Archive>
+/*template <class Archive>
 void Mesh::serialize(Archive &archive)
 {
     archive(cereal::base_class<ck::Asset>(this), vertices, indices, *mat);
-};
+};*/
 void Mesh::init()
 {
     glGenVertexArrays(1, &VAO);

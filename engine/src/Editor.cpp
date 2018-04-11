@@ -12,13 +12,10 @@ Editor *Editor::inst;
 
 Editor::Editor()
 {
-    am = new AssetManager();
 };
 
 Editor::~Editor()
 {
-    delete am;
-    am = nullptr;
 };
 
 Editor *Editor::getInstance()
@@ -55,7 +52,7 @@ bool Editor::showCursor()
 
 void Editor::drawassetMenus()
 {
-    for (AssetFile file : openEditors)
+    /*for (AssetFile file : openEditors)
     {
         bool openEditor = true;
         if (file.type == "SHADER")
@@ -91,7 +88,7 @@ void Editor::drawassetMenus()
         {
             openEditors.erase(std::remove(openEditors.begin(), openEditors.end(), file), openEditors.end());
         }
-    }
+    }*/
 };
 
 void Editor::toggleEditor()
@@ -131,7 +128,7 @@ void Editor::Draw()
                 }
                 if (ImGui::MenuItem("Save"))
                 {
-                    am->close();
+                    //am->close();
                 }
                 if (ImGui::MenuItem("Save As.."))
                 {
@@ -146,13 +143,13 @@ void Editor::Draw()
             ImGui::EndMenuBar();
         }
         //ImGui::ShowDemoWindow();
-        for (std::pair<std::string, AssetFile> pair : am->getMap())
+        /*for (std::pair<std::string, AssetFile> pair : am->getMap())
         {
             /*if (ImGui::BeginMenu(s.c_str()))
         {
             ImGui::Text("Child");
             ImGui::EndMenu();
-        };*/
+        };/
             ImGui::Text(pair.first.c_str(), "NULL");
             ImGui::SameLine();
             ImGui::Text("(");
@@ -165,7 +162,7 @@ void Editor::Draw()
             {
                 openEditors.push_back(pair.second);
             };
-        }
+        }*/
         ImGui::End();
     }
 
@@ -179,7 +176,7 @@ void Editor::Draw()
         ImGui::Text(fn, "NULL");
         if (ImGui::Button("Load"))
         {
-            am->open(fn);
+            //am->open(fn);
             assetLoader = false;
         }
         ImGui::End();
@@ -194,7 +191,7 @@ void Editor::Draw()
         ImGui::Text(fn, "NULL");
         if (ImGui::Button("Save"))
         {
-            am->close(fn);
+            //am->close(fn);
             assetSaver = false;
         }
         ImGui::End();

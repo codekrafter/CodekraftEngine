@@ -18,10 +18,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -D_GLIBCXX_DEBUG")
 file(GLOB SRC "src/*.cpp")
 
 include_directories(include/)
-include_directories(${CMAKE_BINARY_DIR}/engine/include)
+include_directories(${CMAKE_BINARY_DIR}/engine/include/CK)
 #link_directories()
 
 add_executable(TestGame ${SRC})
+#${CMAKE_BINARY_DIR}/engine/lib .a
 target_link_libraries(TestGame ${CMAKE_BINARY_DIR}/engine/libCKEngine.a glfw ${OPENGL_LIBRARIES} pthread dl)
 if(${UNIX} AND NOT ${APPLE})
 target_link_libraries(TestGame X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
@@ -35,7 +36,7 @@ endif()
 
 #install(TARGETS TestGame DESTINATION bin)
 
-add_custom_target(run ALL DEPENDS TestGame)
+add_custom_target(run DEPENDS TestGame)
 add_custom_command(TARGET run
     POST_BUILD
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/TestGame

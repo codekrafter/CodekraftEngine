@@ -2,9 +2,9 @@
 
 #include <string>
 #include "Engine.hpp"
-#include <ThirdParty/cereal/types/memory.hpp>
-#include <ThirdParty/cereal/types/string.hpp>
-#include <ThirdParty/cereal/types/polymorphic.hpp>
+////#include <ThirdParty/cereal/types/memory.hpp>
+////#include <ThirdParty/cereal/types/string.hpp>
+////#include <ThirdParty/cereal/types/polymorphic.hpp>
 
 namespace ck
 {
@@ -30,8 +30,8 @@ public:
 
   virtual ~Asset(){};
   virtual void init() = 0;
-  template <class Archive>
-  void serialize(Archive &ar) { ar(version, type); };
+  /*template <class Archive>
+  void serialize(Archive &ar) { ar(version, type); };*/
   virtual std::string getType() { return type; };
   virtual int getVersion() { return version; };
 };

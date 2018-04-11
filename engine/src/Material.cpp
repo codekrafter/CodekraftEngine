@@ -40,14 +40,14 @@ Material::Material(std::string d_name, std::string s_name, std::string prefix)
     {
         specular = std::shared_ptr<Texture>(new Texture(dpath, 2));
     }
-    AssetManager *am = new AssetManager();
+    //AssetManager *am = new AssetManager();
 
-    am->open("shaders.ckd");
-    shader = am->loadAssetSPTR<Shader>("phong");
+    //am->open("shaders.ckd");
+    //shader = am->loadAssetSPTR<Shader>("phong");
     //shader = std::shared_ptr<Shader>(am->loadAsset<Shader>("phong"), ed);
     //shader = std::shared_ptr<Shader>(new Shader());
     //shader->setCode(vv, fff);
-    delete am;
+    //delete am;
     //am = nullptr;
 };
 Material::~Material(){
@@ -59,19 +59,19 @@ Material::~Material(){
     //diffuse.reset();
     //specular.reset();
 };
-template <class Archive>
+/*template <class Archive>
 void Material::serialize(Archive &ar)
 {
     LOG(INFO) << "M: Type of ar: " << typeid(ar).name();
     LOG(INFO) << "M: Base Class";
-    //ar(/*cereal::base_class<ck::Asset>(this)*/);
+    //ar(cereal::base_class<ck::Asset>(this));
     LOG(INFO) << "M: Shader";
     ar(shader);
     LOG(INFO) << "M: Diffuse";
     ar(diffuse);
     LOG(INFO) << "M: Specular";
     ar(specular);
-}
+}*/
 
 void Material::init()
 {
