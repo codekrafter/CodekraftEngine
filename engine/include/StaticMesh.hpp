@@ -12,7 +12,7 @@ class StaticMesh : public Asset
 {
 private:
   friend struct StaticMeshS;
-  std::vector<std::shared_ptr<Mesh>> meshes;
+  std::vector<Mesh*> meshes;
   //std::vector<Material*> materials;
 
 public:

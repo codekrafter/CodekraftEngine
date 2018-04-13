@@ -201,11 +201,11 @@ int main(int argc, char *argv[])
     ss.f = "Test Fragment";
     ss.g = "Test Geo";
 
-    ck::DatSize pair = ss.save();
-    ck::ShaderS s;
-    s.load(pair.data,pair.size);
+    //ck::DatSize pair = ss.save();
+    //ck::ShaderS s;
+    //s.load(pair.data, pair.size);
     //ck::AssetManager::inst()->openDir("dat*");
-    return 0;
+    //return 0;
     //am->open("shaders.ckd");
     ck::Shader *shader = new ck::Shader();
     shader->setCode(vv, fff);
@@ -213,6 +213,12 @@ int main(int argc, char *argv[])
     //am->close("shaders.ckd");
     //am->reset();
     ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
+    //ck::StaticMeshS sms(smesh);
+    //ck::DatSize ds = sms.save();
+
+    //ck::StaticMeshS smss;
+    //smss.load(ds.data, ds.size);
+    //ck::StaticMesh *sm = smss.asset();
     //am->saveAsset("nanosuit", smesh);
     //am->close("test.ckd");
     //am->reset();

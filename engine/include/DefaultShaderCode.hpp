@@ -36,6 +36,7 @@ void main()
 }
 
 )";*/
+
 // Solid color fragment shader
 const std::string f = R"(
 #version 330 core

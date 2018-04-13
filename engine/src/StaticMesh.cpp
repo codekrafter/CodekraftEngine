@@ -34,7 +34,7 @@ StaticMesh::StaticMesh(std::string path)
     {
         std::string dir = path.substr(0, path.find_last_of('/'));
         dir = dir + "/";
-        meshes.push_back(std::shared_ptr<Mesh>(new ck::Mesh(Loader.LoadedMeshes[i], dir)));
+        meshes.push_back(new ck::Mesh(Loader.LoadedMeshes[i], dir));
     }
 };
 
@@ -49,10 +49,10 @@ int StaticMesh::getVersion()
 
 StaticMesh::~StaticMesh()
 {
-    for (std::shared_ptr<Mesh> mesh : meshes)
+    for (Mesh* mesh : meshes)
     {
-        mesh.reset();
-        //mesh = nullptr;
+        delete mesh;
+        mesh = nullptr;
     }
 };
 template <class Archive>
@@ -63,23 +63,23 @@ void StaticMesh::serialize(Archive &ar)
 std::vector<Mesh *> StaticMesh::getMeshes()
 {
     std::vector<Mesh *> ms;
-    for (std::shared_ptr<Mesh> m : meshes)
+    for (Mesh* m : meshes)
     {
-        ms.push_back(m.get());
+        ms.push_back(m);
     }
     return ms;
 }
 
 void StaticMesh::init()
 {
-    for (std::shared_ptr<Mesh> mesh : meshes)
+    for (Mesh* mesh : meshes)
     {
         mesh->init();
     }
 };
 void StaticMesh::draw(Transform trans)
 {
-    for (std::shared_ptr<Mesh> mesh : meshes)
+    for (Mesh *mesh : meshes)
     {
         mesh->draw(trans);
     }

@@ -20,7 +20,7 @@ Material::Material()
     //AssetManager *am = new AssetManager();
     //am->open("shaders.ckd");
     //shader = std::shared_ptr<Texture>(am->loadAsset<Shader>("phong"));
-    //shader = new Shader();
+    shader = std::shared_ptr<Shader>(new Shader());
     //shader->setCode(vv, fff);
     //am->reset();
     //delete am;
@@ -46,6 +46,7 @@ Material::Material(std::string d_name, std::string s_name, std::string prefix)
     //shader = am->loadAssetSPTR<Shader>("phong");
     //shader = std::shared_ptr<Shader>(am->loadAsset<Shader>("phong"), ed);
     //shader = std::shared_ptr<Shader>(new Shader());
+    shader = std::shared_ptr<Shader>(new Shader());
     //shader->setCode(vv, fff);
     //delete am;
     //am = nullptr;
