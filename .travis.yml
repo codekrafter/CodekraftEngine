@@ -16,6 +16,8 @@ addons:
 #            - libglfw3
 #            - libglfw3-dev
             - ninja-build
+            - xorg-dev
+            - libglu1-mesa-dev
 
 branches:
   only:
