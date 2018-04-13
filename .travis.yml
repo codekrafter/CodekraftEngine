@@ -25,8 +25,8 @@ branches:
 script:
    - mkdir build
    - cd build
-   - cmake ..
-   - make -j$(nproc)
+   - cmake .. -G "ninja"
+   - ninja all
 
 after_success:
     # Creating report
