@@ -21,7 +21,7 @@ Shader::Shader()
     version = 1;
     type = "SHADER";
     vertex = v;
-    vertex = f;
+    fragment = f;
     geometry = "";
 }
 

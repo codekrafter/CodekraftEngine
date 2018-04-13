@@ -48,7 +48,6 @@ foreach(hname ${HEADERS})
   endif(${PRE} STREQUAL "/")
   configure_file(${hname} ${HOUT} COPYONLY)
 endforeach(hname)
-
 configure_file (
   "include/EngineConfig.hpp.in"
   "include/CK/EngineConfig.hpp"
@@ -57,7 +56,7 @@ configure_file (
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/CK/)
 #include_directories(/usr/local/GLFW/include)
 
-add_library(CKEngine STATIC ${SRC}) #${ThirdParty_SRC})
+add_library(CKEngine STATIC ${SRC} ${ThirdParty_SRC})
 target_link_libraries(CKEngine glfw ${OPENGL_LIBRARIES} pthread dl)
 if(${UNIX} AND NOT ${APPLE})
   target_link_libraries(CKEngine X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
@@ -68,7 +67,7 @@ if(${APPLE})
   Find_Library(CoreDisplay CoreDisplay)
   target_link_libraries(CKEngine ${Cocoa} ${IOKit} ${CoreDisplay})
 endif(${APPLE})
-cotire(CKEngine)
+#cotire(CKEngine)
 
 add_executable(CKTests test.cpp)
 target_link_libraries(CKTests CKEngine)

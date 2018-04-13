@@ -209,22 +209,13 @@ int main(int argc, char *argv[])
     //am->open("shaders.ckd");
     ck::Shader *shader = new ck::Shader();
     shader->setCode(vv, fff);
-    //am->saveAsset("phong", shader);
-    //am->close("shaders.ckd");
-    //am->reset();
     ck::StaticMesh *smesh = new ck::StaticMesh("raw/nanosuit/nanosuit.obj");
-    //ck::StaticMeshS sms(smesh);
-    //ck::DatSize ds = sms.save();
+    ck::StaticMeshS sms(smesh);
+    ck::DatSize ds = sms.save();
 
-    //ck::StaticMeshS smss;
-    //smss.load(ds.data, ds.size);
-    //ck::StaticMesh *sm = smss.asset();
-    //am->saveAsset("nanosuit", smesh);
-    //am->close("test.ckd");
-    //am->reset();
-    //am->open("test.ckd");
-    ///*ck::StaticMesh */smesh = am->loadAsset<ck::StaticMesh>("nanosuit");
-    //am->reset();
+    ck::StaticMeshS smss;
+    smss.load(ds.data, ds.size);
+    ck::StaticMesh *sm = smss.asset();
     ck::Level *level = new ck::Level();
     ck::StaticMeshActor *sma = new ck::StaticMeshActor(smesh);
     std::shared_ptr<ck::StaticMeshActor> ptr = std::shared_ptr<ck::StaticMeshActor>(sma);

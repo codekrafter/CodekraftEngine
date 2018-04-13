@@ -3,9 +3,7 @@
 #include "ThirdParty/glm/glm.hpp"
 #include "Asset.hpp"
 #include "ThirdParty/OBJ_Loader.h"
-extern "C" {
 #include "ThirdParty/glad/glad.h"
-}
 #include "Transform.hpp"
 #include "ThirdParty/cereal/types/vector.hpp"
 
