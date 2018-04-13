@@ -13,8 +13,9 @@ addons:
             - sourceline: 'deb http://ppa.launchpad.net/keithw/glfw3/ubuntu trusty main'
         packages:
             - lcov
-            - libglfw3
-            - libglfw3-dev
+#            - libglfw3
+#            - libglfw3-dev
+            - ninja-build
 
 branches:
   only:
