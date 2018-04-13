@@ -29,7 +29,11 @@ branches:
 
 #before_install:
 
-script: ./start game
+script:
+   - mkdir build
+   - cd build
+   - cmake ..
+   - make -j$(nproc)
 
 after_success:
     # Creating report
