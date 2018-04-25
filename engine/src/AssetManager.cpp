@@ -256,6 +256,7 @@ void AssetManager::savef01(std::string name)
     }
 
     std::map<Asset *, DatSize> dsv;
+    std::map<Asset *, std::string> IDLookup;
 
     for (std::pair<std::string, Asset *> pair : chunk)
     {
@@ -263,6 +264,7 @@ void AssetManager::savef01(std::string name)
         AssetS *as = getObject(pair.second);
         DatSize ds = as->save();
         dsv[pair.second] = ds;
+        IDLookup[pair.second] = pair.first;
         delete as;
     };
 
@@ -299,6 +301,24 @@ void AssetManager::savef01(std::string name)
                 unsigned char b = (crc >> (24 - i * 8)) & 0xFF;
                 //bytes[i] = b;
                 header.push_back(b);
+            }
+        }
+
+        // ID
+        {
+            std::string ID = IDLookup[p.first];
+            const char *cstring = ID.c_str();
+            // Size
+            SizeS size = strlen(cstring);
+            size_t s = header.size();
+            header.resize(s + sizeof(SizeS));
+            assert(header.size() - s == sizeof(SizeS));
+            std::memcpy(&header[s], &size, sizeof(SizeS));
+
+            // Data (cstring)
+            for (int i = 0; i < size.s; ++i)
+            {
+                header.push_back(cstring[i]);
             }
         }
         // Group Seperator
@@ -417,6 +437,7 @@ struct HeaderEntry
     unsigned char UUID;
     std::uint32_t hash;
     size_t size;
+    std::string ID;
 };
 
 void AssetManager::loadf01(std::vector<unsigned char> d)
@@ -427,10 +448,13 @@ void AssetManager::loadf01(std::vector<unsigned char> d)
 
     ptr = ptr + 7;
 
+    // Load number of header entries (So number of assets in chunk)
     SizeS s_chunk;
     std::memcpy(&s_chunk, ptr, sizeof(SizeS));
     ptr = ptr + sizeof(SizeS);
 
+    // Load Header
+    std::vector<HeaderEntry> header;
     for (int i = 0; i < s_chunk.s; ++i)
     {
         unsigned char UUID = *ptr;
@@ -438,18 +462,42 @@ void AssetManager::loadf01(std::vector<unsigned char> d)
 
         LOG(INFO) << "UUID: 0x" << std::hex << std::setfill('0') << std::setw(4) << static_cast<short>(UUID);
 
+        // Size
         SizeS as;
         std::memcpy(&as, ptr, sizeof(SizeS));
         ptr = ptr + sizeof(SizeS);
         //LOG(INFO) << "new size: " << std::dec << as.s;
 
+        // CRC/Hash/Checksum
         unsigned char *bytes = ptr;
         std::uint32_t crc = 0;
-        for (int i = 0; i < 4; ++i)
+        for (int ii = 0; ii < 4; ++ii)
         {
-            crc |= (std::uint32_t)bytes[i] << (24 - i * 8);
+            crc |= (std::uint32_t)bytes[ii] << (24 - ii * 8);
         }
+        ptr = ptr + 4;
         //LOG(INFO) << "new crc:" << crc;
+
+        // ID
+        SizeS id_size;
+        std::memcpy(&id_size, ptr, sizeof(SizeS));
+        ptr = ptr + sizeof(SizeS);
+        std::vector<char> buffer;
+        for (int ii = 0; ii < id_size.s; ++ii)
+        {
+            buffer.push_back(*ptr);
+            ptr = ptr + 1;
+        }
+
+        std::string ID(buffer.begin(), buffer.end());
+        //LOG(INFO) << "ID: " << ID;
+
+        HeaderEntry he;
+        he.UUID = UUID;
+        he.hash = crc;
+        he.size = as.s;
+        he.ID = ID;
+        header.push_back(he);
     }
     free(data);
     data = nullptr;
