@@ -19,7 +19,6 @@ set(ENGINE_VERSION 0.0.1)
 
 #find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(OpenSSL REQUIRED)
 
 #set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 #set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)

@@ -11,7 +11,6 @@ ADD_DEFINITIONS(
 
 #find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(OpenSSL REQUIRED)
 
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -std=c++17")
