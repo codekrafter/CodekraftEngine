@@ -37,7 +37,7 @@ class AssetManager
     void savef01(std::string name);
 
     void loadf(std::string name);
-    void loadf01(std::vector<unsigned char> d);
+    void loadf01(std::vector<unsigned char> d,std::string cname);
 
     size_t getSize(std::string name);
     AssetS *getObject(Asset *a);

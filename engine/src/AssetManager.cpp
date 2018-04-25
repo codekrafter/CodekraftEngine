@@ -321,8 +321,6 @@ void AssetManager::savef01(std::string name)
                 header.push_back(cstring[i]);
             }
         }
-        // Group Seperator
-        header.push_back(0x001D);
     };
 
     // End of Transmission Block
@@ -400,7 +398,7 @@ void AssetManager::loadf(std::string name)
             switch (version)
             {
             case 0x0001:
-                loadf01(data);
+                loadf01(data, cname);
                 break;
 
             default:
@@ -440,7 +438,7 @@ struct HeaderEntry
     std::string ID;
 };
 
-void AssetManager::loadf01(std::vector<unsigned char> d)
+void AssetManager::loadf01(std::vector<unsigned char> d, std::string cname)
 {
     unsigned char *data = (unsigned char *)malloc(d.size());
     std::copy(d.begin(), d.end(), data);
@@ -453,8 +451,12 @@ void AssetManager::loadf01(std::vector<unsigned char> d)
     std::memcpy(&s_chunk, ptr, sizeof(SizeS));
     ptr = ptr + sizeof(SizeS);
 
+    // CRC Table
+    CRC::Table<std::uint32_t, 32> table(CRC::CRC_32());
+
     // Load Header
     std::vector<HeaderEntry> header;
+    std::map<std::string, Asset *> chunk;
     for (int i = 0; i < s_chunk.s; ++i)
     {
         unsigned char UUID = *ptr;
@@ -499,10 +501,40 @@ void AssetManager::loadf01(std::vector<unsigned char> d)
         he.ID = ID;
         header.push_back(he);
     }
+
+    // End of Transmission Block
+    ++ptr;
+
+    for (HeaderEntry h : header)
+    {
+        DatSize ds;
+        ds.size = h.size;
+        ds.data = (unsigned char *)malloc(ds.size);
+
+        std::memcpy(ds.data, ptr, ds.size);
+        ptr = ptr + ds.size;
+
+        //Check CRC
+        std::uint32_t crc = CRC::Calculate(ds.data, ds.size, table);
+        if (!(crc == h.hash))
+        {
+            LOG(ERROR) << "Error while loading asset: checksums do not match";
+        }
+
+        AssetS *as = getObject(h.UUID);
+        as->load(ds.data, ds.size);
+
+        chunk[h.ID] = as->asset();
+
+        delete as;
+
+        free(ds.data);
+    }
+
     free(data);
     data = nullptr;
     ptr = nullptr;
-    return;
+    map[cname] = chunk;
 };
 
 size_t AssetManager::getSize(std::string name)
