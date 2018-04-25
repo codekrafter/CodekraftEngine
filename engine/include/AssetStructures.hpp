@@ -19,7 +19,10 @@ struct AssetS
     // Export binary data, and size
     virtual DatSize save() = 0;
     virtual void load(unsigned char *data, size_t size) = 0;
-    // IMPORTANT: Each AssetS should also define a constructor that takes the corresponding asset, and a "deconstructor" that returns a corresponding asset.
+    AssetS(){};
+    virtual ~AssetS(){};
+    // IMPORTANT: Each AssetS should also define a constructor that takes the corresponding asset, and a "deconstructor"(AssetS::asset()) that returns a corresponding asset.
+    //AssetS(Asset *a) {};
 };
 
 struct TriSize
@@ -61,13 +64,10 @@ struct ShaderS : AssetS
         ptr = ptr + sizeof(TriSize);
 
         std::memcpy(ptr, v.c_str(), ts.n1);
-        LOG(DEBUG) << ptr;
         ptr = ptr + ts.n1;
         std::memcpy(ptr, f.c_str(), ts.n2);
-        LOG(DEBUG) << ptr;
         ptr = ptr + ts.n2;
         std::memcpy(ptr, g.c_str(), ts.n3);
-        LOG(DEBUG) << ptr;
         ptr = ptr + ts.n3;
         DatSize o;
         o.data = out;
@@ -109,6 +109,12 @@ struct ShaderS : AssetS
 struct TriInt
 {
     int width, height, n;
+    TriInt()
+    {
+        width = 0;
+        height = 0;
+        n = 0;
+    }
 };
 
 struct TextureS : AssetS
@@ -158,10 +164,10 @@ struct TextureS : AssetS
         std::memcpy(&ti, ptr, sizeof(TriInt));
         ptr = ptr + sizeof(TriInt);
 
-        if (data != nullptr)
+        /*if (data != nullptr)
         {
             free(data);
-        }
+        }*/
 
         data = (unsigned char *)malloc(ti.width * ti.height * ti.n);
 
@@ -169,8 +175,6 @@ struct TextureS : AssetS
         ptr = ptr + (ti.width * ti.height * ti.n);
     };
 };
-
-void empty_delete(Asset *){};
 
 struct MaterialS : AssetS
 {
@@ -264,7 +268,12 @@ struct Vec3S
     float x;
     float y;
     float z;
-    Vec3S(){};
+    Vec3S()
+    {
+        x = 0;
+        y = 0;
+        z = 0;
+    };
     Vec3S(glm::vec3 glm)
     {
         x = glm.x;
@@ -281,7 +290,11 @@ struct Vec2S
 {
     float x;
     float y;
-    Vec2S(){};
+    Vec2S()
+    {
+        x = 0;
+        y = 0;
+    };
     Vec2S(glm::vec2 glm)
     {
         x = glm.x;
@@ -308,7 +321,8 @@ struct VertexS
         tan = v.Tangent;
         bitan = v.Bitangent;
     }
-    virtual Vertex asset()
+    VertexS(){};
+    Vertex asset()
     {
         Vertex v;
         v.Position = pos.glm();
@@ -326,7 +340,13 @@ struct MeshS : AssetS
     std::vector<unsigned int> indices;
     MaterialS mat;
     inline bool operator<(const MeshS &rhs) const { return (vertices.size() < rhs.vertices.size()); };
-    MeshS(){};
+    MeshS()
+    {
+        vertices.clear();
+        vertices.push_back(VertexS());
+        indices.clear();
+        indices.push_back(0);
+    };
     MeshS(Mesh *mesh)
     {
         //std::copy(mesh->vertices.begin(), mesh->vertices.end(), std::back_inserter(vertices));
@@ -334,7 +354,14 @@ struct MeshS : AssetS
         {
             vertices.push_back(VertexS(v));
         }
-        indices = mesh->indices;
+
+        indices.clear();
+        for (unsigned int i : mesh->indices)
+        {
+            indices.push_back(i);
+        }
+        //indices = std::vector<unsigned int>(mesh->indices);
+        //indices.push_back(0);
         mat = mesh->mat;
     };
     virtual Mesh *asset()
@@ -352,7 +379,7 @@ struct MeshS : AssetS
     virtual DatSize save()
     {
         DatSize matDat = mat.save();
-        size_t size = sizeof(TriSize) + vertices.size() + indices.size() + matDat.size;
+        size_t size = sizeof(TriSize) + (vertices.size() * sizeof(VertexS)) + (indices.size() * sizeof(unsigned int)) + matDat.size;
         unsigned char *out;
         out = (unsigned char *)malloc(size);
         unsigned char *ptr = out;
@@ -367,10 +394,10 @@ struct MeshS : AssetS
         ptr = ptr + ts.n1;
         free(matDat.data);
 
-        std::memcpy(ptr, &vertices[0], ts.n2 * sizeof(VertexS));
-        ptr = ptr + ts.n2;
-        std::memcpy(ptr, &indices[0], ts.n3 * sizeof(unsigned int));
-        ptr = ptr + ts.n2;
+        std::memcpy(ptr, (const unsigned char *)vertices.data(), ts.n2 * sizeof(VertexS));
+        ptr = ptr + ts.n2 * sizeof(VertexS);
+        std::memcpy(ptr, (const unsigned char *)indices.data(), ts.n3 * sizeof(unsigned int));
+        ptr = ptr + ts.n2 * sizeof(unsigned int);
 
         DatSize o;
         o.data = out;
@@ -392,13 +419,13 @@ struct MeshS : AssetS
         mat.load(matDat.data, matDat.size);
         free(matDat.data);
 
-        vertices.reserve(ts.n2);
-        std::memcpy(&vertices[0], ptr, ts.n2 * sizeof(VertexS));
-        ptr = ptr + ts.n2;
+        vertices.resize(ts.n2);
+        std::memcpy((unsigned char *)vertices.data(), ptr, ts.n2 * sizeof(VertexS));
+        ptr = ptr + ts.n2 * sizeof(VertexS);
 
-        vertices.reserve(ts.n3);
-        std::memcpy(&indices[0], ptr, ts.n3 * sizeof(unsigned int));
-        ptr = ptr + ts.n3;
+        indices.resize(ts.n3);
+        std::memcpy((unsigned char *)indices.data(), ptr, ts.n3 * sizeof(unsigned int));
+        ptr = ptr + ts.n3 * sizeof(unsigned int);
     };
 };
 
@@ -420,12 +447,13 @@ struct StaticMeshS : AssetS
         {
             meshes.push_back(MeshS(m));
         }
+        //meshes[0];
     };
     virtual StaticMesh *asset()
     {
         StaticMesh *sm = new StaticMesh();
         //std::copy(meshes.begin(), meshes.end(), std::back_inserter(sm->meshes));
-        for (MeshS ms : meshes)
+        for (MeshS &ms : meshes)
         {
             sm->meshes.push_back(ms.asset());
         }
@@ -472,9 +500,9 @@ struct StaticMeshS : AssetS
     virtual void load(unsigned char *data, size_t size)
     {
         unsigned char *ptr = data;
-        SizeS msize = meshes.size();
+        SizeS msize;
 
-        std::memcpy(&size, ptr, sizeof(SizeS));
+        std::memcpy(&msize, ptr, sizeof(SizeS));
         ptr = ptr + sizeof(SizeS);
 
         for (int i = 0; i < msize.s; i++)

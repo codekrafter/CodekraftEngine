@@ -52,7 +52,10 @@
         "slist": "cpp",
         "algorithm": "cpp",
         "map": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "*.ipp": "cpp",
+        "filesystem": "cpp",
+        "cerrno": "cpp"
     },
     "workbench.colorTheme": "Default Dark+",
     "files.exclude": {
@@ -62,7 +65,8 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/build": true,
-        "**/bin": true
+        "**/bin": true,
+        "**/glfw": true
     },
     "search.exclude": {
         "**/node_modules": true,

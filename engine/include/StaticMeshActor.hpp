@@ -2,18 +2,21 @@
 
 #include "Actor.hpp"
 #include "StaticMesh.hpp"
+#include "AssetManager.hpp"
 
 namespace ck
 {
 class StaticMeshActor : public Actor
 {
 private:
-  std::shared_ptr<StaticMesh> mesh;
+  //std::shared_ptr<StaticMesh> mesh;
+  AssetRef<StaticMesh> ref;
 
 public:
   StaticMeshActor();
-  StaticMeshActor(std::string name);
-  StaticMeshActor(StaticMesh *m);
+  //StaticMeshActor(std::string name);
+  //StaticMeshActor(StaticMesh *m);
+  StaticMeshActor(AssetRef<StaticMesh> r);
   ~StaticMeshActor();
   virtual void onTick(float dt);
   template <class Archive>

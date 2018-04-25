@@ -8,7 +8,11 @@
 
 namespace ck
 {
+
+void empty_delete(Asset *);
+
 struct AssetS;
+class StaticMesh;
 
 template <class A>
 class AssetRef;
@@ -17,10 +21,10 @@ class AssetManager
 {
   private:
     friend class AssetRef<Asset>;
+    friend class AssetRef<StaticMesh>;
     std::map<std::string, std::map<std::string, Asset *>> map;
     std::vector<AssetRef<Asset>> refs;
-    std::string prefix;
-    std::string suffix = "dat";
+    std::string prefix = "dat";
     std::string directory = "data";
 
     AssetManager();
@@ -29,20 +33,24 @@ class AssetManager
     uint32_t checksum(std::istream &stream);
     void flush();
 
-    void savef();
-    void loadf();
+    void savef(std::string name);
+    void savef01(std::string name);
+
+    void loadf(std::string name);
+    void loadf01(std::vector<unsigned char> d);
 
     size_t getSize(std::string name);
-    AssetS *getObject(std::string name);
+    AssetS *getObject(Asset *a);
+    AssetS *getObject(unsigned char UUID);
 
   public:
     ~AssetManager();
     static AssetManager *inst();
-    void cleanup();
-    void unload();
-    void unload(std::string name);
+    static void cleanup();
+    void save();
+    //void save(std::string dir);
     void load();
-    void load(std::string name);
+    //void load(std::string dir);
 };
 
 template <class A>
@@ -52,18 +60,25 @@ class AssetRef
     std::string ID;
     std::string chunk;
 
+    void *operator new(size_t) { static_assert(true, "Do not create an AssetReference on the heap"); };           // standard new
+    void *operator new(size_t, void *) { static_assert(true, "Do not create an AssetReference on the heap"); };   // placement new
+    void *operator new[](size_t) { static_assert(true, "Do not create an AssetReference on the heap"); };         // array new
+    void *operator new[](size_t, void *) { static_assert(true, "Do not create an AssetReference on the heap"); }; // placement array new
+
   public:
-    AssetRef()
+    AssetRef() : AssetRef(""){
+                     //LOG(WARNING) << "Creating blank asset reference, this is bad practice.";
+                 };
+
+    AssetRef(std::string i, std::string c = "primary") : ID(i), chunk(c)
     {
         static_assert(std::is_base_of<Asset, A>::value, "A must be an asset");
     };
 
-    AssetRef(std::string i, std::string c = "primary") : ID(i), chunk(c){};
-
-    AssetRef operator=(std::string i)
+    /*AssetRef operator=(std::string i)
     {
         return AssetRef(i);
-    };
+    };*/
 
     AssetRef
     operator=(std::pair<std::string, std::string> p)
@@ -75,17 +90,21 @@ class AssetRef
     bool operator==(const AssetRef &o)
     {
         //assert((ID == o.ID) && !(std::is_same<A,o.A>::value)); // IDs are the same, but they are of different types. This should never happen
-        return (ID == o.ID);
+        return (ID == o.ID && chunk == o.chunk);
     };
 
-    Asset *operator->()
+    A *operator->()
     {
+        /*if (AssetManager::inst()->map.count(chunk) == 0) // Do we need to create the chunk?
+        {
+            AssetManager::inst()->load(chunk);
+        }*/
         if (AssetManager::inst()->map[chunk].count(ID) == 0) // Do we need to make a new object?
         {
-            //if (AssetManager::inst()->checkFile(chunk)) // Chunk file exists but is not loaded?
-            //AssetManager::inst()->map[chunk][ID] = new A();
+            AssetManager::inst()->map[chunk][ID] = new A();
         }
-        return AssetManager::inst()->map[chunk][ID];
+
+        return dynamic_cast<A *>(AssetManager::inst()->map[chunk][ID]);
     };
 };
 }

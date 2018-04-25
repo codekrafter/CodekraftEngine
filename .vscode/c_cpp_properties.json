@@ -5,7 +5,7 @@
             "includePath": [
                 "/usr/include",
                 "/usr/local/include",
-                "${workspaceFolder}/build/engine/include"
+                "${workspaceFolder}/build/engine/include/CK/"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -14,7 +14,7 @@
                 "path": [
                     "/usr/include",
                     "/usr/local/include",
-                    "${workspaceFolder}/build/engine/include"
+                    "${workspaceFolder}/build/engine/include/CK/"
 
                 ],
                 "limitSymbolsToIncludedHeaders": true,
@@ -28,7 +28,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/build/engine/include",
+                "${workspaceFolder}/build/engine/include/CK/",
                 "/usr/include/c++/5",
                 "/usr/include/x86_64-linux-gnu/c++/5",
                 "/usr/include/c++/5/backward",
@@ -42,7 +42,7 @@
             "compileCommands": "${workspaceFolder}/build/compile_commands.json",
             "browse": {
                 "path": [
-                    "${workspaceFolder}build/engine/include",
+                    "${workspaceFolder}build/engine/include/CK/",
                     "/usr/include/c++/5",
                     "/usr/include/x86_64-linux-gnu/c++/5",
                     "/usr/include/c++/5/backward",
@@ -62,7 +62,7 @@
             "name": "Win32",
             "includePath": [
                 "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include",
-                "${workspaceFolder}/build/engine/include"
+                "${workspaceFolder}/build/engine/include/CK/"
             ],
             "defines": [
                 "_DEBUG",
@@ -74,7 +74,7 @@
             "browse": {
                 "path": [
                     "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
-                    "${workspaceFolder}build/engine/include"
+                    "${workspaceFolder}build/engine/include/CK/"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""

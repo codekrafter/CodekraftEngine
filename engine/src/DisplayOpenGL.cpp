@@ -44,7 +44,7 @@ DisplayOpenGL::DisplayOpenGL(DisplayConfig c) : Display(c)
 
     // glfw window creation
     // --------------------
-    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Codekraft Engine", NULL, NULL);
     if (window == NULL)
     {
         LOG(FATAL) << "Failed to create GLFW window";

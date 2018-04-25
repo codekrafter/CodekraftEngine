@@ -12,15 +12,16 @@ class StaticMesh : public Asset
 {
 private:
   friend struct StaticMeshS;
-  std::vector<Mesh*> meshes;
+  std::vector<Mesh *> meshes;
   //std::vector<Material*> materials;
 
 public:
   StaticMesh();
   StaticMesh(std::string path);
   ~StaticMesh();
-  template <class Archive>
-  void serialize(Archive &ar);
+  void loadRaw(std::string path);
+  /*template <class Archive>
+  void serialize(Archive &ar);*/
   virtual void init();
   void draw(Transform trans);
   std::vector<Mesh *> getMeshes();

@@ -10874,9 +10874,9 @@ namespace Catch {
 namespace Catch {
     bool uncaught_exceptions() {
 #if defined(CATCH_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS)
-        return std::uncaught_exceptions() > 0;
+        return uncaught_exceptions() > 0;
 #else
-        return std::uncaught_exception();
+        return uncaught_exception();
 #endif
   }
 } // end namespace Catch

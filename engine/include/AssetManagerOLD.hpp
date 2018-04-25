@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning
 
 #include "Asset.hpp"
 #include <vector>

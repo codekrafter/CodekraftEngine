@@ -10,11 +10,17 @@ StaticMesh::StaticMesh()
 {
     version = 1;
     type = "STATIC_MESH";
+    meshes = std::vector<Mesh*>();
 };
 StaticMesh::StaticMesh(std::string path)
 {
     version = 1;
     type = "STATIC_MESH";
+    loadRaw(path);
+};
+
+void StaticMesh::loadRaw(std::string path)
+{
     // Initialize Loader
     objl::Loader Loader;
 
@@ -24,7 +30,7 @@ StaticMesh::StaticMesh(std::string path)
 
     if (!loaded)
     {
-        throw std::runtime_error("Could not load .obj file");
+        LOG(ERROR) << "Could not load '" << path << "' for a static mesh";
         return;
     };
 
@@ -47,23 +53,24 @@ int StaticMesh::getVersion()
     return version;
 };
 
-StaticMesh::~StaticMesh()
-{
-    for (Mesh* mesh : meshes)
+StaticMesh::~StaticMesh(){
+    /*for (Mesh *mesh : meshes)
     {
         delete mesh;
         mesh = nullptr;
-    }
+    }*/
 };
-template <class Archive>
+
+/*template <class Archive>
 void StaticMesh::serialize(Archive &ar)
 {
-    ar(/*cereal::base_class<ck::Asset>(this),*/ meshes);
-};
+    ar(cereal::base_class<ck::Asset>(this), meshes);
+};*/
+
 std::vector<Mesh *> StaticMesh::getMeshes()
 {
     std::vector<Mesh *> ms;
-    for (Mesh* m : meshes)
+    for (Mesh *m : meshes)
     {
         ms.push_back(m);
     }
@@ -72,7 +79,7 @@ std::vector<Mesh *> StaticMesh::getMeshes()
 
 void StaticMesh::init()
 {
-    for (Mesh* mesh : meshes)
+    for (Mesh *mesh : meshes)
     {
         mesh->init();
     }
