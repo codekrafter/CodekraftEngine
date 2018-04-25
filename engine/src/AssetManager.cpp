@@ -13,7 +13,7 @@ namespace ck
 
 void empty_delete(Asset *){};
 
-#define CHECK(condition, message)  \
+#define VERIFY(condition, message) \
     {                              \
         if (!condition)            \
         {                          \
@@ -22,13 +22,13 @@ void empty_delete(Asset *){};
         }                          \
     }
 
-#define CHECK_FATAL(condition, message) \
-    {                                   \
-        if (!condition)                 \
-        {                               \
-            LOG(FATAL) << message;      \
-            return;                     \
-        }                               \
+#define VERIFY_FATAL(condition, message) \
+    {                                    \
+        if (!condition)                  \
+        {                                \
+            LOG(FATAL) << message;       \
+            return;                      \
+        }                                \
     }
 
 #ifdef _WIN32
@@ -285,7 +285,7 @@ void AssetManager::savef01(std::string name)
             }*/
             assert(header.size() - s == sizeof(SizeS));
             std::memcpy(&header[s], &s_asset, sizeof(SizeS));
-            LOG(INFO) << "s_asset: " << s_asset.s;
+            //LOG(INFO) << "old size: " << s_asset.s;
         }
 
         // 32-bit CRC of asset saved data
@@ -293,7 +293,7 @@ void AssetManager::savef01(std::string name)
             std::uint32_t crc;
             //unsigned char bytes[4];
             crc = CRC::Calculate(p.second.data, p.second.size, table);
-            LOG(INFO) << crc;
+            //LOG(INFO) << "old crc:" << crc;
             for (int i = 0; i != 4; ++i)
             {
                 unsigned char b = (crc >> (24 - i * 8)) & 0xFF;
@@ -308,32 +308,24 @@ void AssetManager::savef01(std::string name)
     // End of Transmission Block
     header.push_back(0x0017);
 
-#ifndef CK_ASSETS_NOCHECK
     size_t pre_size = header.size();
     size_t expected_size = 0;
     size_t es2 = 0;
-#endif
     for (std::pair<Asset *, DatSize> p : dsv)
     {
-#ifndef CK_ASSETS_NOCHECK
         expected_size = expected_size + p.second.size;
-#endif
         // Group Seperator
         //header.push_back(0x001D);
 
         for (int i = 0; i < p.second.size; ++i)
         {
             header.push_back(p.second.data[i]);
-#ifndef CK_ASSETS_NOCHECK
             es2 = es2 + 1;
-#endif
         }
     };
-#ifndef CK_ASSETS_NOCHECK
     size_t post_size = header.size();
     size_t total_size = post_size - pre_size;
     assert(total_size == expected_size && expected_size == es2);
-#endif
 
     // End of Transmission
     header.push_back(0x0004);
@@ -375,15 +367,15 @@ void AssetManager::loadf(std::string name)
             std::vector<unsigned char> data(buffer.begin(), buffer.end());
 
             // Check Header
-            CHECK((data[0] == 0x0001 &&
-                   data[1] == 0x0043 &&
-                   data[2] == 0x004B &&
-                   data[3] == 0x0044 &&
-                   data[4] == 0x0017),
-                  "File does not start with correct heading")
+            VERIFY((data[0] == 0x0001 &&
+                    data[1] == 0x0043 &&
+                    data[2] == 0x004B &&
+                    data[3] == 0x0044 &&
+                    data[4] == 0x0017),
+                   "File does not start with correct heading")
 
             unsigned char version = data[5];
-            CHECK((data[6] == 0x0017), "File does not have correct spacing after version")
+            VERIFY((data[6] == 0x0017), "File does not have correct spacing after version")
 
             switch (version)
             {
@@ -437,19 +429,19 @@ void AssetManager::loadf01(std::vector<unsigned char> d)
 
     SizeS s_chunk;
     std::memcpy(&s_chunk, ptr, sizeof(SizeS));
+    ptr = ptr + sizeof(SizeS);
 
     for (int i = 0; i < s_chunk.s; ++i)
     {
         unsigned char UUID = *ptr;
         ptr = ptr + 1;
 
-        LOG(INFO) << "0x" << std::hex << std::setfill('0') << std::setw(4) << static_cast<short>(UUID);
+        LOG(INFO) << "UUID: 0x" << std::hex << std::setfill('0') << std::setw(4) << static_cast<short>(UUID);
 
         SizeS as;
         std::memcpy(&as, ptr, sizeof(SizeS));
         ptr = ptr + sizeof(SizeS);
-        LOG(INFO) << "as: " << std::dec << as.s;
-        return;
+        //LOG(INFO) << "new size: " << std::dec << as.s;
 
         unsigned char *bytes = ptr;
         std::uint32_t crc = 0;
@@ -457,7 +449,7 @@ void AssetManager::loadf01(std::vector<unsigned char> d)
         {
             crc |= (std::uint32_t)bytes[i] << (24 - i * 8);
         }
-        LOG(INFO) << crc;
+        //LOG(INFO) << "new crc:" << crc;
     }
     free(data);
     data = nullptr;

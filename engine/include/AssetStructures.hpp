@@ -21,6 +21,7 @@ struct AssetS
     virtual void load(unsigned char *data, size_t size) = 0;
     AssetS(){};
     virtual ~AssetS(){};
+    virtual Asset *asset() = 0;
     // IMPORTANT: Each AssetS should also define a constructor that takes the corresponding asset, and a "deconstructor"(AssetS::asset()) that returns a corresponding asset.
     //AssetS(Asset *a) {};
 };
