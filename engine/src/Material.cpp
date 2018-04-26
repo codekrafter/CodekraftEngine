@@ -4,6 +4,7 @@
 //#include "Display.hpp"
 #include "Engine.hpp"
 #include "WorldManager.hpp"
+#include "DeferredShaderCode.hpp"
 
 #include <string>
 #include <ThirdParty/glm/glm.hpp>
@@ -237,7 +238,8 @@ Material::Material(std::string d_name, std::string s_name, std::string prefix)
     //shader = std::shared_ptr<Shader>(am->loadAsset<Shader>("phong"), ed);
     //shader = std::shared_ptr<Shader>(new Shader());
     shader = std::shared_ptr<Shader>(new Shader());
-    shader->setCode(dsc::vv, dsc::fff);
+    //shader->setCode(dsc::vv, dsc::fff);
+    shader->setCode(opengl::geo_v,opengl::geo_f);
     //delete am;
     //am = nullptr;
 };

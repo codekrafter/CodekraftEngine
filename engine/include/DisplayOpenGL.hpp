@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Display.hpp"
+#include "Shader.hpp"
 
 #include <ThirdParty/glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -28,6 +29,18 @@ private:
   float lastY = SCR_HEIGHT / 2.0f;
   bool firstMouse = true;
   Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
+  // Deferred
+  unsigned int gBuffer;
+  unsigned int gPosition, gNormal, gAlbedoSpec;
+  unsigned int rboDepth;
+
+  Shader shaderGeometryPass;
+  Shader shaderLightingPass;
+
+  unsigned int quadVAO = 0;
+  unsigned int quadVBO;
+  void renderQuad();
 
   // Callbacks
   void mouse_callback(GLFWwindow *window, double xpos, double ypos);

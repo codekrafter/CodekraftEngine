@@ -19,8 +19,6 @@ public:
   StaticMeshActor(AssetRef<StaticMesh> r);
   ~StaticMeshActor();
   virtual void onTick(float dt);
-  template <class Archive>
-  void serialize(Archive &archive);
   virtual void onBeginPlay();
 };
 }

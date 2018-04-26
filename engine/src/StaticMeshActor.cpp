@@ -25,12 +25,6 @@ void StaticMeshActor::onTick(float dt)
     ref->draw(transform);
 };
 
-template <class Archive>
-void StaticMeshActor::serialize(Archive &archive)
-{
-    //archive(/*cereal::base_class<ck::Asset>(this),*/ mesh);
-};
-
 void StaticMeshActor::onBeginPlay()
 {
     ref->init();
