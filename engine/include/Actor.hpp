@@ -15,11 +15,6 @@ protected:
 public:
   Actor(){};
   //virtual ~Actor(){};
-  template <class Archive>
-  void serialize(Archive &ar)
-  {
-    ar(transform);
-  };
-  inline Transform getTransform() { return transform; }
+  inline Transform& getTransform() { return transform; }
 };
 }
