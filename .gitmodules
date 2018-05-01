@@ -1,3 +1,7 @@
 [submodule "glfw"]
 	path = glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "g3log"]
+	path = g3log
+	url = https://github.com/KjellKod/g3log.git
+	branch = master
