@@ -8,6 +8,8 @@
 #include "AssetStructures.hpp"
 #include "ThirdParty/CRC.h"
 
+#include "Logging.hpp"
+
 namespace ck
 {
 
@@ -287,7 +289,7 @@ void AssetManager::savef01(std::string name)
             }*/
             assert(header.size() - s == sizeof(SizeS));
             std::memcpy(&header[s], &s_asset, sizeof(SizeS));
-            //LOG(INFO) << "old size: " << s_asset.s;
+            LOG(INFO) << "old size: " << s_asset.s;
         }
 
         // 32-bit CRC of asset saved data
@@ -295,7 +297,7 @@ void AssetManager::savef01(std::string name)
             std::uint32_t crc;
             //unsigned char bytes[4];
             crc = CRC::Calculate(p.second.data, p.second.size, table);
-            //LOG(INFO) << "old crc:" << crc;
+            LOG(INFO) << "old crc:" << crc;
             for (int i = 0; i != 4; ++i)
             {
                 unsigned char b = (crc >> (24 - i * 8)) & 0xFF;
@@ -468,7 +470,7 @@ void AssetManager::loadf01(std::vector<unsigned char> d, std::string cname)
         SizeS as;
         std::memcpy(&as, ptr, sizeof(SizeS));
         ptr = ptr + sizeof(SizeS);
-        //LOG(INFO) << "new size: " << std::dec << as.s;
+        LOG(INFO) << "new size: " << std::dec << as.s;
 
         // CRC/Hash/Checksum
         unsigned char *bytes = ptr;
@@ -478,7 +480,7 @@ void AssetManager::loadf01(std::vector<unsigned char> d, std::string cname)
             crc |= (std::uint32_t)bytes[ii] << (24 - ii * 8);
         }
         ptr = ptr + 4;
-        //LOG(INFO) << "new crc:" << crc;
+        LOG(INFO) << "new crc:" << crc;
 
         // ID
         SizeS id_size;
@@ -492,7 +494,7 @@ void AssetManager::loadf01(std::vector<unsigned char> d, std::string cname)
         }
 
         std::string ID(buffer.begin(), buffer.end());
-        //LOG(INFO) << "ID: " << ID;
+        LOG(INFO) << "ID: " << ID;
 
         HeaderEntry he;
         he.UUID = UUID;

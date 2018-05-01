@@ -11,7 +11,7 @@ StaticMeshActor::StaticMeshActor(StaticMesh *m)
     mesh = std::shared_ptr<StaticMesh>(m);
 };*/
 
-StaticMeshActor::StaticMeshActor(AssetRef<StaticMesh> r)
+StaticMeshActor::StaticMeshActor(AssetRef<StaticMesh>& r)
 {
     ref = r;
 };

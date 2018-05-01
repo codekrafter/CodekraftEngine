@@ -2,8 +2,34 @@
 
 #include <utility>
 #include <stdlib.h>
+#include <cstring>
 
 #include "StaticMesh.hpp"
+
+// Macros
+
+#define START_SAVE() \
+unsigned char* data = (unsigned char *)malloc(size); \
+unsigned char *ptr = data;
+
+#define STRING(s)                              \
+std::memcpy(ptr, s.c_str(), s.size() + 1); \
+ptr = ptr + s.size() + 1;
+
+#define TRISIZE(one, two, three) \
+TriSize ts; \
+ts.n1 = one; \
+ts.n2 = two; \
+ts.n3 = three; \
+std::memcpy(ptr, &ts, sizeof(TriSize)); \
+ptr = ptr + sizeof(TriSize); 
+
+#define END_SAVE() \
+DatSize o; \
+o.data = data; \
+o.size = size; \
+return o;
+// End Macros
 
 namespace ck
 {
@@ -53,27 +79,18 @@ struct ShaderS : AssetS
 
     virtual DatSize save()
     {
-        unsigned char *out;
         size_t size = sizeof(TriSize) + v.size() + f.size() + g.size() + 3; // Size of the TriSize struct, sizes of all the strings plus 1 per string (store null termination)
-        out = (unsigned char *)malloc(size);
-        TriSize ts;
-        ts.n1 = v.size() + 1;
-        ts.n2 = f.size() + 1;
-        ts.n3 = g.size() + 1;
-        unsigned char *ptr = out;
-        std::memcpy(ptr, &ts, sizeof(TriSize));
-        ptr = ptr + sizeof(TriSize);
+        START_SAVE()
 
-        std::memcpy(ptr, v.c_str(), ts.n1);
-        ptr = ptr + ts.n1;
-        std::memcpy(ptr, f.c_str(), ts.n2);
-        ptr = ptr + ts.n2;
-        std::memcpy(ptr, g.c_str(), ts.n3);
-        ptr = ptr + ts.n3;
-        DatSize o;
-        o.data = out;
-        o.size = size;
-        return o;
+        TRISIZE(v.size()+1,f.size()+1,g.size()+1)
+
+        STRING(v)
+
+        STRING(f)
+
+        STRING(g)
+
+        END_SAVE()
     };
     virtual void load(unsigned char *data, size_t size)
     {
@@ -186,16 +203,16 @@ struct MaterialS : AssetS
     MaterialS(){};
     MaterialS(Material *mat)
     {
-        shader = mat->shader.get();
-        diffuse = mat->diffuse.get();
-        specular = mat->specular.get();
+        shader = mat->shader;
+        diffuse = mat->diffuse;
+        specular = mat->specular;
     };
     virtual Material *asset()
     {
         Material *mat = new Material();
-        mat->shader = std::shared_ptr<Shader>(shader.asset(), empty_delete);
-        mat->diffuse = std::shared_ptr<Texture>(diffuse.asset(), empty_delete);
-        mat->specular = std::shared_ptr<Texture>(specular.asset(), empty_delete);
+        mat->shader = shader.asset();
+        mat->diffuse = diffuse.asset();
+        mat->specular =specular.asset();
         return mat;
     };
 
@@ -381,9 +398,9 @@ struct MeshS : AssetS
     {
         DatSize matDat = mat.save();
         size_t size = sizeof(TriSize) + (vertices.size() * sizeof(VertexS)) + (indices.size() * sizeof(unsigned int)) + matDat.size;
-        unsigned char *out;
-        out = (unsigned char *)malloc(size);
-        unsigned char *ptr = out;
+        unsigned char *data;
+        data = (unsigned char *)malloc(size);
+        unsigned char *ptr = data;
         TriSize ts;
         ts.n1 = matDat.size;
         ts.n2 = vertices.size();
@@ -401,7 +418,7 @@ struct MeshS : AssetS
         ptr = ptr + ts.n2 * sizeof(unsigned int);
 
         DatSize o;
-        o.data = out;
+        o.data = data;
         o.size = size;
         return o;
     };
@@ -526,3 +543,7 @@ struct StaticMeshS : AssetS
     };
 };
 }
+
+// Undefine Macros (Make them Private)
+#undef STRING
+// End Undefine Macros

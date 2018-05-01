@@ -5,9 +5,10 @@
 #include "Texture.hpp"
 #include "ThirdParty/glad/glad.h"
 #include "ThirdParty/stb_image.h"
-#include "ThirdParty/easylogging/easylogging++.h"
 #include "ThirdParty/stb_image_write.h"
 #include "ThirdParty/cereal/types/vector.hpp"
+
+#include "Logging.hpp"
 
 namespace ck
 {
@@ -27,6 +28,10 @@ Texture::Texture(std::string fname, int nn)
 {
     version = 1;
     type = "TEXTURE";
+    if(fname == "")
+    {
+        return;
+    }
     data = stbi_load(fname.c_str(), &width, &height, &n, 0);
     if (!data)
     {

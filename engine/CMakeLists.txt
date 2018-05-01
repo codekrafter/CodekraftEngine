@@ -57,7 +57,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/CK/)
 #include_directories(/usr/local/GLFW/include)
 
 add_library(CKEngine STATIC ${SRC} ${ThirdParty_SRC})
-target_link_libraries(CKEngine glfw ${OPENGL_LIBRARIES} pthread dl ssl)
+target_link_libraries(CKEngine glfw g3logger ${OPENGL_LIBRARIES} pthread dl ssl)
 if(${UNIX} AND NOT ${APPLE})
   target_link_libraries(CKEngine X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
 endif(${UNIX} AND NOT ${APPLE})

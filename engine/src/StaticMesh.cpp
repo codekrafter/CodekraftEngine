@@ -1,6 +1,5 @@
 #include "StaticMesh.hpp"
 #include "AssetManager.hpp"
-#include "ThirdParty/easylogging/easylogging++.h"
 #include "ThirdParty/cereal/types/vector.hpp"
 
 namespace ck

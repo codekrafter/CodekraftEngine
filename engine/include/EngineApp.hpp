@@ -5,6 +5,9 @@
 #include "GameApp.hpp"
 #include "Config.hpp"
 
+#include "Logging.hpp"
+#include "g3log/logworker.hpp"
+
 namespace ck
 {
 class GameApp;
@@ -15,6 +18,8 @@ private:
   Display *display;
   EngineConfig config;
   GameApp *game;
+  std::unique_ptr<g3::LogWorker> logworker{ g3::LogWorker::createLogWorker() };
+
 
 public:
   CKEngine(EngineConfig c);

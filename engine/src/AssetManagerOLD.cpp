@@ -19,7 +19,6 @@
 #include "GenericAsset.hpp"
 #include "Assets.hpp"
 
-#include "ThirdParty/easylogging/easylogging++.h"
 
 namespace ck
 {

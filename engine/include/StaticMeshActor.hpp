@@ -16,7 +16,7 @@ public:
   StaticMeshActor();
   //StaticMeshActor(std::string name);
   //StaticMeshActor(StaticMesh *m);
-  StaticMeshActor(AssetRef<StaticMesh> r);
+  StaticMeshActor(AssetRef<StaticMesh>& r);
   ~StaticMeshActor();
   virtual void onTick(float dt);
   virtual void onBeginPlay();

@@ -5,7 +5,6 @@
 #include <sstream>
 #include <vector>
 #include <stdexcept>
-#include "ThirdParty/easylogging/easylogging++.h"
 #include "ThirdParty/cereal/types/string.hpp"
 
 #include "Shader.hpp"
@@ -104,6 +103,10 @@ int Shader::getVersion()
 // ------------------------------------------------------------------------
 void Shader::use()
 {
+    if(ID == 0)
+    {
+        init();
+    }
     glUseProgram(ID);
 }
 // utility uniform functions

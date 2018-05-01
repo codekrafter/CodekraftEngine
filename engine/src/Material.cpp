@@ -1,7 +1,7 @@
 #include "Material.hpp"
 #include "AssetManager.hpp"
 #include "Texture.hpp"
-//#include "Display.hpp"
+#include "Display.hpp"
 #include "Engine.hpp"
 #include "WorldManager.hpp"
 #include "DeferredShaderCode.hpp"
@@ -211,7 +211,7 @@ Material::Material()
     //AssetManager *am = new AssetManager();
     //am->open("shaders.ckd");
     //shader = std::shared_ptr<Texture>(am->loadAsset<Shader>("phong"));
-    shader = std::shared_ptr<Shader>(new Shader());
+    shader = new Shader();
     //shader->setCode(vv, fff);
     //am->reset();
     //delete am;
@@ -222,14 +222,22 @@ Material::Material(std::string d_name, std::string s_name, std::string prefix)
     type = "MATERIAL";
     std::string dpath = prefix + d_name;
     std::string spath = prefix + s_name;
-    diffuse = std::shared_ptr<Texture>(new Texture(dpath));
-    if (s_name != "")
+    if (d_name == "")
     {
-        specular = std::shared_ptr<Texture>(new Texture(spath));
+        diffuse = new Texture();
+        specular = new Texture();
     }
     else
     {
-        specular = std::shared_ptr<Texture>(new Texture(dpath, 2));
+        diffuse = new Texture(dpath);
+        if (s_name != "")
+        {
+            specular = new Texture(spath);
+        }
+        else
+        {
+            specular = new Texture(dpath, 2);
+        }
     }
     //AssetManager *am = new AssetManager();
 
@@ -237,9 +245,9 @@ Material::Material(std::string d_name, std::string s_name, std::string prefix)
     //shader = am->loadAssetSPTR<Shader>("phong");
     //shader = std::shared_ptr<Shader>(am->loadAsset<Shader>("phong"), ed);
     //shader = std::shared_ptr<Shader>(new Shader());
-    shader = std::shared_ptr<Shader>(new Shader());
+    shader = new Shader();
     //shader->setCode(dsc::vv, dsc::fff);
-    shader->setCode(opengl::geo_v,opengl::geo_f);
+    shader->setCode(opengl::geo_v, opengl::geo_f);
     //delete am;
     //am = nullptr;
 };

@@ -11,9 +11,8 @@ class Material : public Asset
 {
 private:
   friend struct MaterialS;
-  std::shared_ptr<Shader> shader;
-  std::shared_ptr<Texture> specular;
-  std::shared_ptr<Texture> diffuse;
+  Texture *specular;
+  Texture *diffuse;
 
 public:
   Material();
@@ -23,6 +22,7 @@ public:
   void serialize(Archive &ar);
   void draw(Transform trans);
   virtual void init();
+  Shader *shader;
 };
 }
 

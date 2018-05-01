@@ -37,7 +37,7 @@ class AssetManager
     void savef01(std::string name);
 
     void loadf(std::string name);
-    void loadf01(std::vector<unsigned char> d,std::string cname);
+    void loadf01(std::vector<unsigned char> d, std::string cname);
 
     size_t getSize(std::string name);
     AssetS *getObject(Asset *a);
@@ -66,9 +66,11 @@ class AssetRef
     void *operator new[](size_t, void *) { static_assert(true, "Do not create an AssetReference on the heap"); }; // placement array new
 
   public:
-    AssetRef() : AssetRef(""){
-                     //LOG(WARNING) << "Creating blank asset reference, this is bad practice.";
-                 };
+    AssetRef() : AssetRef("")
+    {
+        //LOG(WARNING) << "Creating blank asset reference, this is bad practice.";
+        return;
+    };
 
     AssetRef(std::string i, std::string c = "primary") : ID(i), chunk(c)
     {

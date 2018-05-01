@@ -1,4 +1,6 @@
 #include <string>
+#include <memory>
+
 #include "Level.hpp"
 #include "AssetManager.hpp"
 

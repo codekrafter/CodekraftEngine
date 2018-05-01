@@ -1,14 +1,17 @@
+#include <sstream>
+#include <iostream>
+
 #include "EngineConfig.hpp"
 #include "Engine.hpp"
 #include "EngineApp.hpp"
 #include "colormod.h"
 #include "Display.hpp"
+#include "Logging.hpp"
 
 //#include "ThirdParty/glad/glad.h"
 //#include "GLFW/glfw3.h"
-//#include "ThirdParty/easylogging/easylogging++.h"
 
-INITIALIZE_EASYLOGGINGPP
+//INITIALIZE_EASYLOGGINGPP
 
 namespace ck
 {
@@ -24,7 +27,7 @@ ck::CKEngine *initEngine(EngineConfig config)
     ss << format;
     ss << def;
     std::string redFormat = ss.str();
-    el::Configurations conf;
+    /*el::Configurations conf;
     conf.setToDefault();
     conf.set(el::Level::Global,
              el::ConfigurationType::Format, format);
@@ -35,10 +38,10 @@ ck::CKEngine *initEngine(EngineConfig config)
     conf.set(el::Level::Global, el::ConfigurationType::Filename, "./logs/ckengine.log");
     conf.set(el::Level::Global, el::ConfigurationType::ToFile, "true");
     conf.set(el::Level::Global, el::ConfigurationType::ToStandardOutput, "true");
-    el::Loggers::reconfigureLogger("default", conf);
-    LOG(INFO) << "Starting Engine Version: " << ENGINE_VERSION << std::endl;
+    el::Loggers::reconfigureLogger("default", conf);*/
     ck::CKEngine *app = new ck::CKEngine(config);
     ck::engine = app;
+    LOG(INFO) << "Starting Engine Version: " << ENGINE_VERSION << std::endl;
     return app;
 }
 

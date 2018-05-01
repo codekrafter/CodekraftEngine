@@ -66,13 +66,12 @@
         "**/.DS_Store": true,
         "**/build": true,
         "**/bin": true,
-        "**/glfw": true
     },
     "search.exclude": {
         "**/node_modules": true,
         "**/bower_components": true,
         "**/ThirdParty": true,
         ".travis.yml": true,
-        "**/.vscode": true
+        "**/.vscode": true,
     }
 }

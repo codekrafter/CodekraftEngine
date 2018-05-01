@@ -1,6 +1,10 @@
 #pragma once
 
+#include <iostream>
+#include <typeinfo>
 #include <string>
+#include <memory>
+
 #include "Engine.hpp"
 ////#include <ThirdParty/cereal/types/memory.hpp>
 ////#include <ThirdParty/cereal/types/string.hpp>
@@ -20,7 +24,6 @@ public:
     version = 1;
     type = "GENERIC";
   };
-
   Asset(const Asset &a)
   {
     LOG(DEBUG) << "Calling Copy Constructor for asset of type: " << typeid(a).name() << " && " << a.type;

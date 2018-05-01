@@ -25,7 +25,7 @@ Mesh::Mesh(objl::Mesh m, std::string directory)
     indices = m.Indices;
 };
 Mesh::~Mesh(){
-    //delete mat;
+    delete mat;
 };
 /*template <class Archive>
 void Mesh::serialize(Archive &archive)

@@ -18,7 +18,6 @@
 #include "ThirdParty/OBJ_Loader.h"
 #include "ThirdParty/IMGUI/imgui.h"
 #include "ThirdParty/IMGUI/imgui_impl_glfw_gl3.h"
-#include "ThirdParty/easylogging/easylogging++.h"
 namespace ck
 {
 namespace opengl
@@ -81,6 +80,7 @@ DisplayOpenGL::DisplayOpenGL(DisplayConfig c) : Display(c)
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
+    //glEnabled(GL_CULL);
     glfwHideWindow(window);
 
     shaderGeometryPass.setCode(geo_v, geo_f);
