@@ -12,7 +12,6 @@ namespace ck
 void empty_delete(Asset *);
 
 struct AssetS;
-class StaticMesh;
 
 template <class A>
 class AssetRef;
@@ -20,8 +19,7 @@ class AssetRef;
 class AssetManager
 {
   private:
-    friend class AssetRef<Asset>;
-    friend class AssetRef<StaticMesh>;
+    template <class T> friend class AssetRef;
     std::map<std::string, std::map<std::string, Asset *>> map;
     std::vector<AssetRef<Asset>> refs;
     std::string prefix = "dat";

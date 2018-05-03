@@ -8,27 +8,34 @@
 
 // Macros
 
-#define START_SAVE() \
-unsigned char* data = (unsigned char *)malloc(size); \
-unsigned char *ptr = data;
+#define START_SAVE()                                     \
+    unsigned char *data = (unsigned char *)malloc(size); \
+    unsigned char *ptr = data;
 
-#define STRING(s)                              \
-std::memcpy(ptr, s.c_str(), s.size() + 1); \
-ptr = ptr + s.size() + 1;
+#define S_STRING(s)                            \
+    std::memcpy(ptr, s.c_str(), s.size() + 1); \
+    ptr = ptr + s.size() + 1;
 
-#define TRISIZE(one, two, three) \
-TriSize ts; \
-ts.n1 = one; \
-ts.n2 = two; \
-ts.n3 = three; \
-std::memcpy(ptr, &ts, sizeof(TriSize)); \
-ptr = ptr + sizeof(TriSize); 
+#define S_TRISIZE(one, two, three)           \
+    TriSize ts; \
+    ts.n1 = one;                             \
+    ts.n2 = two;                             \
+    ts.n3 = three;                           \
+    std::memcpy(ptr, &ts, sizeof(TriSize));  \
+    ptr = ptr + sizeof(TriSize);
+
+#define S_SIZE(val)                          \
+    {                                        \
+        SizeS s = val;                       \
+        std::memcpy(ptr, &s, sizeof(SizeS)); \
+        ptr = ptr + sizeof(SizeS);           \
+    }
 
 #define END_SAVE() \
-DatSize o; \
-o.data = data; \
-o.size = size; \
-return o;
+    DatSize o;     \
+    o.data = data; \
+    o.size = size; \
+    return o;
 // End Macros
 
 namespace ck
@@ -40,6 +47,33 @@ struct DatSize
     size_t size;
 };
 
+struct TriInt
+{
+    int width, height, n;
+    TriInt()
+    {
+        width = 0;
+        height = 0;
+        n = 0;
+    }
+};
+
+struct TriSize
+{
+    size_t n1;
+    size_t n2;
+    size_t n3;
+};
+
+struct SizeS
+{
+    size_t s;
+
+    SizeS(size_t ss) : s(ss){};
+    SizeS() : s(0){};
+};
+
+// Asset Serializer, one for every Asset that suports serializing
 struct AssetS
 {
     // Export binary data, and size
@@ -52,87 +86,18 @@ struct AssetS
     //AssetS(Asset *a) {};
 };
 
-struct TriSize
-{
-    size_t n1;
-    size_t n2;
-    size_t n3;
-};
-
 struct ShaderS : AssetS
 {
-    ShaderS(){};
-    ShaderS(Shader *s)
-    {
-        v = s->vertex;
-        f = s->fragment;
-        g = s->geometry;
-    };
-    virtual Shader *asset()
-    {
-        Shader *s = new Shader();
-        s->vertex = v;
-        s->fragment = f;
-        s->geometry = g;
-        return s;
-    };
-
-    virtual DatSize save()
-    {
-        size_t size = sizeof(TriSize) + v.size() + f.size() + g.size() + 3; // Size of the TriSize struct, sizes of all the strings plus 1 per string (store null termination)
-        START_SAVE()
-
-        TRISIZE(v.size()+1,f.size()+1,g.size()+1)
-
-        STRING(v)
-
-        STRING(f)
-
-        STRING(g)
-
-        END_SAVE()
-    };
-    virtual void load(unsigned char *data, size_t size)
-    {
-        TriSize ts;
-        unsigned char *ptr = data;
-        std::memcpy(&ts, ptr, sizeof(TriSize));
-        ptr = ptr + sizeof(TriSize);
-
-        char *vv = (char *)malloc(ts.n1);
-        char *ff = (char *)malloc(ts.n2);
-        char *gg = (char *)malloc(ts.n3);
-
-        std::memcpy(vv, ptr, ts.n1);
-        ptr = ptr + ts.n1;
-        std::memcpy(ff, ptr, ts.n2);
-        ptr = ptr + ts.n2;
-        std::memcpy(gg, ptr, ts.n3);
-        ptr = ptr + ts.n3;
-
-        v = std::string(vv);
-        f = std::string(ff);
-        g = std::string(gg);
-
-        free(vv);
-        free(ff);
-        free(gg);
-    };
-
+    // Variables
     std::string v;
     std::string f;
     std::string g;
-};
 
-struct TriInt
-{
-    int width, height, n;
-    TriInt()
-    {
-        width = 0;
-        height = 0;
-        n = 0;
-    }
+    ShaderS();
+    ShaderS(Shader *s);
+    virtual Shader *asset();
+    virtual DatSize save();
+    virtual void load(unsigned char *data, size_t size);
 };
 
 struct TextureS : AssetS
@@ -212,7 +177,7 @@ struct MaterialS : AssetS
         Material *mat = new Material();
         mat->shader = shader.asset();
         mat->diffuse = diffuse.asset();
-        mat->specular =specular.asset();
+        mat->specular = specular.asset();
         return mat;
     };
 
@@ -447,14 +412,6 @@ struct MeshS : AssetS
     };
 };
 
-struct SizeS
-{
-    size_t s;
-
-    SizeS(size_t ss) : s(ss){};
-    SizeS() : s(0){};
-};
-
 struct StaticMeshS : AssetS
 {
     StaticMeshS(){};
@@ -543,7 +500,3 @@ struct StaticMeshS : AssetS
     };
 };
 }
-
-// Undefine Macros (Make them Private)
-#undef STRING
-// End Undefine Macros

@@ -23,17 +23,27 @@ Texture::Texture()
     this->Texture(fname, 0);
 };*/
 
-// Create texture with specified number of components, 0 for max number in file.
 Texture::Texture(std::string fname, int nn)
 {
     version = 1;
     type = "TEXTURE";
-    if(fname == "")
+    loadRaw(fname, nn);
+};
+
+// Create texture with specified number of components, 0 for max number in file.
+void Texture::loadRaw(std::string fname, int nn)
+{
+    path = fname + "/" + std::to_string(nn);
+    data = nullptr;
+    width = 0;
+    height = 0;
+    n = 0;
+    if (fname == "")
     {
         return;
     }
     data = stbi_load(fname.c_str(), &width, &height, &n, 0);
-    if (!data)
+    if (!data || data == nullptr)
     {
         LOG(ERROR) << "failed to load image '" << fname << "'" << std::endl;
     }
@@ -47,71 +57,9 @@ Texture::~Texture()
     stbi_image_free(data);
 };
 
-template <class Archive>
-void Texture::serialize(Archive &ar)
-{
-    if (!data)
-    {
-        LOG(ERROR) << "Tried to serialize image with no data";
-    }
-    //std::cout << typeid(ar).name() << std::endl;
-    //ar(cereal::base_class<ck::Asset>(this));
-    ar(width, height, n);
-    //std::cout << width << std::endl;
-    //std::cout << height << std::endl;
-    //std::cout << n << std::endl;
-    //std::cout << width * height * n << std::endl;
-    //ar(cereal::binary_data(data, width * height * n));
-};
-/*template <class Archive>
-void Texture::save(Archive &ar) const
-{
-    LOG(ERROR) << "Texture saving is broken, doing nothing";
-    //return;
-    std::ostringstream ss;
-    for (int i = 0; i < (width * height * n); ++i)
-    {
-        ss << std::hex << std::setw(2) << std::setfill('0') << data[i] << ";";
-    }
-    std::string s = ss.str();
-    //std::cout << s << std::endl;
-    ar(s);
-    ///std::vector<unsigned char> vec;
-    //vec.resize(width*height*n);
-    for (int i = 0; i < (width * height * n); ++i)
-    {
-        vec.push_back(data[i]);
-    }
-    //ar(vec);
-    //ar(cereal::make_size_tag(static_cast<cereal::size_type>(width * height * n))); // number of elements
-    //ar(cereal::binary_data(data, width * height * n));
-    ar(width, height, n);
-    //std::vector<unsigned char> vec(data, data + (width * height * n));
-    //ar(vec);
-    ar(cereal::make_size_tag(static_cast<cereal::size_type>(width * height * n))); // number of elements
-    ar(cereal::binary_data(data, width * height * n));
-}
-
-template <class Archive>
-void Texture::load(Archive &ar)
-{
-    LOG(ERROR) << "Texture loading is broken, doing nothing";
-    //return;
-    ar(width, height, n);
-
-    ///std::vector<unsigned char> vec;
-    //vec.resize(width * height * n);
-    //ar(vec);
-    //std::vector<unsigned char> vec(); //data, data + (width * height * n));
-    //ar(vec);
-    //cereal::size_type dSize;
-    //ar(cereal::make_size_tag(dSize));
-
-    //ar(cereal::binary_data(data, dSize));
-}*/
-
 void Texture::init()
 {
+    //LOG(DEBUG) << "Running Texture::init() for texture of path '" << path << "'";
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
     // set the texture wrapping/filtering options (on the currently bound texture object)
@@ -126,6 +74,8 @@ void Texture::init()
 
 void Texture::draw(int i)
 {
+    //LOG(DEBUG) << "Running Texture::draw() for texture of path '" << path << "'";
+
     glActiveTexture(GL_TEXTURE0 + i);
     glBindTexture(GL_TEXTURE_2D, ID);
 }

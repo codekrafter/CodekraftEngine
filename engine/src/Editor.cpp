@@ -1,20 +1,34 @@
 #include "ThirdParty/IMGUI/imgui.h"
 #include "Editor.hpp"
-#include "AssetManager.hpp"
+#include "Actor.hpp"
 #include "Shader.hpp"
+#include "WorldManager.hpp"
+#include "StaticMeshActor.hpp"
+#include "LightActor.hpp"
 #include <algorithm>
+#include <cxxabi.h>
 
 namespace ck
 {
+
+std::string demangle(const char *name)
+{
+
+    int status = -4; // some arbitrary value to eliminate the compiler warning
+
+    // enable c++11 by passing the flag -std=c++11 to g++
+    std::unique_ptr<char, void (*)(void *)> res{
+        abi::__cxa_demangle(name, NULL, NULL, &status),
+        std::free};
+
+    return (status == 0) ? res.get() : name;
+}
 
 Editor *Editor::inst;
 
 Editor::Editor()
 {
-};
-
-Editor::~Editor()
-{
+    showEditor = false;
 };
 
 Editor *Editor::getInstance()
@@ -22,10 +36,6 @@ Editor *Editor::getInstance()
     if (inst == nullptr)
     {
         inst = new Editor();
-        inst->assetMenu = false;
-        inst->assetLoader = false;
-        inst->assetSaver = false;
-        inst->showEditor = false;
     }
     return inst;
 };
@@ -45,157 +55,100 @@ void Editor::destroyInstance()
 
 bool Editor::showCursor()
 {
-    //return (assetMenu || assetLoader);
     return showEditor;
-};
-
-void Editor::drawassetMenus()
-{
-    /*for (AssetFile file : openEditors)
-    {
-        bool openEditor = true;
-        if (file.type == "SHADER")
-        {
-            if (!openEditor)
-            {
-                return;
-            }
-            if (vt[0] == '\0' && ft[0] == '\0' && gt[0] == '\0')
-            {
-                Shader *shader = dynamic_cast<Shader *>(file.asset());
-                std::copy(shader->vertex.begin(), shader->vertex.end(), vt);
-                std::copy(shader->fragment.begin(), shader->fragment.end(), ft);
-                std::copy(shader->geometry.begin(), shader->geometry.end(), gt);
-            }
-            ImGui::Begin("Shader Editor", &openEditor);
-            ImGui::Text("Vertex");
-            ImGui::SameLine();
-            ImGui::InputTextMultiline("v", vt, IM_ARRAYSIZE(vt));
-            ImGui::Text("Fragment");
-            ImGui::SameLine();
-            ImGui::InputTextMultiline("f", ft, IM_ARRAYSIZE(ft));
-            ImGui::Text("Geometry");
-            ImGui::SameLine();
-            ImGui::InputTextMultiline("g", gt, IM_ARRAYSIZE(gt));
-            ImGui::End();
-        }
-        else
-        {
-            LOG(ERROR) << "Could not find editor for asset of type '" << file.type << "'";
-        }
-        if (!openEditor)
-        {
-            openEditors.erase(std::remove(openEditors.begin(), openEditors.end(), file), openEditors.end());
-        }
-    }*/
 };
 
 void Editor::toggleEditor()
 {
-    if (true) //TODO check if debug build
+    showEditor = !showEditor;
+}
+
+float a_mean(float *f, int size)
+{
+    if (size == 0 || f == nullptr)
+        return 0;
+    float total;
+    for (int i = 0; i < size; ++i)
     {
-        if (showEditor)
-        {
-            showEditor = false;
-            /*assetMenu = false;
-            assetLoader = false;*/
-        }
-        else
-        {
-            showEditor = true;
-            assetMenu = true;
-        }
+        total = total + f[i];
     }
+    return total / size;
 }
 
 void Editor::Draw()
 {
     if (!showEditor)
-    {
         return;
-    }
-    if (assetMenu)
+    ImGui::ShowDemoWindow();
+    ImGui::Begin("Scene Editor", &showEditor);
+    std::vector<Actor *> c = WorldManager::getInstance()->getLevel()->contents;
+    if (ImGui::CollapsingHeader("Level Actors"))
     {
-        ImGui::Begin("Asset Menu", &assetMenu, ImGuiWindowFlags_MenuBar);
-        if (ImGui::BeginMenuBar())
+        for (Actor *a : c)
         {
-            if (ImGui::BeginMenu("File"))
+            if (ImGui::TreeNode(demangle(typeid(*a).name()).c_str()))
             {
-                if (ImGui::MenuItem("Open.."))
+                Transform t = a->getTransform();
+                glm::vec3 l = t.location;
+                glm::vec3 r = t.rotation;
+                glm::vec3 s = t.scale;
+
+                float ll[3] = {l.x, l.y, l.z};
+                ImGui::DragFloat3("Location", ll);
+                l.x = ll[0];
+                l.y = ll[1];
+                l.z = ll[2];
+
+                float rr[3] = {r.x, r.y, r.z};
+                ImGui::DragFloat3("Rotation", rr);
+                r.x = rr[0];
+                r.y = rr[1];
+                r.z = rr[2];
+
+                float ss[3] = {s.x, s.y, s.z};
+                bool uni = false;
+                ImGui::Checkbox("Uniform Scale", &map[a].first);
+                if (map[a].first)
                 {
-                    assetLoader = true;
+                    float m = a_mean(ss, 3);
+                    ImGui::DragFloat("Scale", &m, 0.01f, 0.01f, 10.0f);
+                    s.x = m;
+                    s.y = m;
+                    s.z = m;
                 }
-                if (ImGui::MenuItem("Save"))
+                else
                 {
-                    //am->close();
+                    ImGui::DragFloat3("Scale", ss);
+                    s.x = ss[0];
+                    s.y = ss[1];
+                    s.z = ss[2];
                 }
-                if (ImGui::MenuItem("Save As.."))
-                {
-                    assetSaver = true;
-                }
-                if (ImGui::MenuItem("Close"))
-                {
-                    assetMenu = false;
-                }
-                ImGui::EndMenu();
+
+                t.location = l;
+                t.rotation = r;
+                t.scale = s;
+                a->setTransform(t);
+
+                ImGui::TreePop();
             }
-            ImGui::EndMenuBar();
         }
-        //ImGui::ShowDemoWindow();
-        /*for (std::pair<std::string, AssetFile> pair : am->getMap())
-        {
-            /*if (ImGui::BeginMenu(s.c_str()))
-        {
-            ImGui::Text("Child");
-            ImGui::EndMenu();
-        };/
-            ImGui::Text(pair.first.c_str(), "NULL");
-            ImGui::SameLine();
-            ImGui::Text("(");
-            ImGui::SameLine();
-            ImGui::Text(pair.second.type.c_str(), "NULL");
-            ImGui::SameLine();
-            ImGui::Text(")");
-            ImGui::SameLine();
-            if (ImGui::Button("Open Editor"))
-            {
-                openEditors.push_back(pair.second);
-            };
-        }*/
-        ImGui::End();
     }
-
-    if (assetLoader)
+    ImGui::Spacing();
+    const char *items[] = {"StaticMesh", "Light"};
+    static int item_current = 0;
+    ImGui::Combo("Actor", &item_current, items, IM_ARRAYSIZE(items));
+    if(ImGui::Button("Spawn In Actor"))
     {
-        ImGui::Begin("Asset Loader", &assetLoader);
-        ImGui::SetWindowFocus();
-        ImGui::Text("File Name: ");
-        ImGui::SameLine();
-        ImGui::InputText("", fn, IM_ARRAYSIZE(fn));
-        ImGui::Text(fn, "NULL");
-        if (ImGui::Button("Load"))
+        switch (item_current)
         {
-            //am->open(fn);
-            assetLoader = false;
+            case 0:
+            WorldManager::getInstance()->getLevel()->addActor(new StaticMeshActor());
+            break;
+            case 1:
+                        WorldManager::getInstance()->getLevel()->addActor(new LightActor());
+            break;
         }
-        ImGui::End();
     }
-    if (assetSaver)
-    {
-        ImGui::Begin("Asset Saver", &assetSaver);
-        ImGui::SetWindowFocus();
-        ImGui::Text("File Name: ");
-        ImGui::SameLine();
-        ImGui::InputText("", fn, IM_ARRAYSIZE(fn));
-        ImGui::Text(fn, "NULL");
-        if (ImGui::Button("Save"))
-        {
-            //am->close(fn);
-            assetSaver = false;
-        }
-        ImGui::End();
-    }
-
-    drawassetMenus();
+    ImGui::End();
 };
 }

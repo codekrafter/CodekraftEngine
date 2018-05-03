@@ -16,17 +16,22 @@ class Level : public Asset
 private:
   Camera *cam;
   bool initialized = false;
+  friend class Editor;
+  friend class Display;
+  friend class DisplayOpenGL;
+  std::vector<Actor *> contents;
+  std::vector<Actor *> forward;
 
 public:
-  std::vector<std::shared_ptr<Actor>> contents;
   Level();
   virtual ~Level();
   virtual void init();
-  template <class Archive>
-  void serialize(Archive &ar);
+  void addActor(Actor *);
   void tick(float dt);
+  void forwardDraw(float dt);
   Camera *getCamera();
   void setCamera(Camera *c);
+  inline std::vector<Actor*> getContents() {return contents;};
 };
 }
 

@@ -1,32 +1,15 @@
 #include "StaticMeshActor.hpp"
+#include "StaticMeshComponent.hpp"
 
 namespace ck
 {
-StaticMeshActor::StaticMeshActor(){};
-/*StaticMeshActor::StaticMeshActor(std::string name){
-
-};
-StaticMeshActor::StaticMeshActor(StaticMesh *m)
+StaticMeshActor::StaticMeshActor()
 {
-    mesh = std::shared_ptr<StaticMesh>(m);
-};*/
-
-StaticMeshActor::StaticMeshActor(AssetRef<StaticMesh>& r)
-{
-    ref = r;
+    components.push_back(new StaticMeshComponent());
 };
 
-StaticMeshActor::~StaticMeshActor(){
-    //mesh.reset();
-};
-
-void StaticMeshActor::onTick(float dt)
+StaticMeshActor::StaticMeshActor(AssetRef<StaticMesh> &r)
 {
-    ref->draw(transform);
-};
-
-void StaticMeshActor::onBeginPlay()
-{
-    ref->init();
+    components.push_back(new StaticMeshComponent(r));
 };
 }

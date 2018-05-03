@@ -5,7 +5,7 @@
 
 #include "AssetManager.hpp"
 #include "ThirdParty/tinydir.h"
-#include "AssetStructures.hpp"
+#include "Serialization.hpp"
 #include "ThirdParty/CRC.h"
 
 #include "Logging.hpp"

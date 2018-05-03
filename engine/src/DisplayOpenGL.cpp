@@ -14,6 +14,7 @@
 #include "Camera.hpp"
 #include "Editor.hpp"
 #include "WorldManager.hpp"
+#include "LightActor.hpp"
 
 #include "ThirdParty/OBJ_Loader.h"
 #include "ThirdParty/IMGUI/imgui.h"
@@ -157,17 +158,17 @@ void DisplayOpenGL::processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS)
-        editorKeyPressed = true;
+        EditorKeyPressed = true;
     if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_RELEASE)
     {
-        if (editorKeyPressed)
+        if (EditorKeyPressed)
         {
             Editor::getInstance()->toggleEditor();
-            editorKeyPressed = false;
+            EditorKeyPressed = false;
         }
         else
         {
-            editorKeyPressed = false;
+            EditorKeyPressed = false;
         }
     }
     if (Editor::getInstance()->showCursor())
@@ -223,67 +224,6 @@ void DisplayOpenGL::update()
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //shader->use();
-    /*
-    // directional light
-    shader->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-    shader->setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-    shader->setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
-    shader->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
-    // point light 1
-    shader->setVec3("pointLights[0].position", pointLighThirdPartyositions[0]);
-    shader->setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-    shader->setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-    shader->setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-    shader->setFloat("pointLights[0].constant", 1.0f);
-    shader->setFloat("pointLights[0].linear", 0.09);
-    shader->setFloat("pointLights[0].quadratic", 0.032);
-    // point light 2
-    shader->setVec3("pointLights[1].position", pointLighThirdPartyositions[1]);
-    shader->setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-    shader->setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-    shader->setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-    shader->setFloat("pointLights[1].constant", 1.0f);
-    shader->setFloat("pointLights[1].linear", 0.09);
-    shader->setFloat("pointLights[1].quadratic", 0.032);
-    // point light 3
-    shader->setVec3("pointLights[2].position", pointLighThirdPartyositions[2]);
-    shader->setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-    shader->setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-    shader->setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-    shader->setFloat("pointLights[2].constant", 1.0f);
-    shader->setFloat("pointLights[2].linear", 0.09);
-    shader->setFloat("pointLights[2].quadratic", 0.032);
-    // point light 4
-    shader->setVec3("pointLights[3].position", pointLighThirdPartyositions[3]);
-    shader->setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-    shader->setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-    shader->setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-    shader->setFloat("pointLights[3].constant", 1.0f);
-    shader->setFloat("pointLights[3].linear", 0.09);
-    shader->setFloat("pointLights[3].quadratic", 0.032);
-    // spotLight
-    shader->setVec3("spotLight.position", camera.Position);
-    shader->setVec3("spotLight.direction", camera.Front);
-    shader->setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-    shader->setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
-    shader->setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-    shader->setFloat("spotLight.constant", 1.0f);
-    shader->setFloat("spotLight.linear", 0.09);
-    shader->setFloat("spotLight.quadratic", 0.032);
-    shader->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-    shader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
-    */ /*
-    // view/projection transformations
-    glm::mat4 projection = glm::perspective(glm::radians(WorldManager::getInstance()->getLevel()->getCamera()->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    glm::mat4 view = WorldManager::getInstance()->getLevel()->getCamera()->GetViewMatrix();
-    shader->setMat4("projection", projection);
-    shader->setMat4("view", view);
-
-    // world transformation
-    glm::mat4 model;
-    //model = glm::translate(model, glm::vec3(0.0, 0.0, 0.3 * currentFrame));
-    shader->setMat4("model", model);*/
 
     // draw mesh
     //shader->use();
@@ -324,14 +264,7 @@ void DisplayOpenGL::update()
             shaderGeometryPass.setMat4("model", model);
             nanosuit.Draw(shaderGeometryPass);
         }*/
-        if (WorldManager::getInstance()->getLevel() != nullptr)
-        {
-            WorldManager::getInstance()->getLevel()->tick(1.0f);
-        }
-        else
-        {
-            LOG(INFO) << "level null";
-        }
+        WorldManager::getInstance()->getLevel()->tick(1.0f);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // 2. lighting pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
@@ -353,7 +286,7 @@ void DisplayOpenGL::update()
         std::vector<glm::vec3> lightPositions;
         std::vector<glm::vec3> lightColors;
         srand(13);
-        for (unsigned int i = 0; i < NR_LIGHTS; i++)
+        /*for (unsigned int i = 0; i < NR_LIGHTS; i++)
         {
             // calculate slightly random offsets
             float xPos = ((rand() % 100) / 100.0) * 6.0 - 3.0;
@@ -365,13 +298,27 @@ void DisplayOpenGL::update()
             float gColor = ((rand() % 100) / 200.0f) + 0.5; // between 0.5 and 1.0
             float bColor = ((rand() % 100) / 200.0f) + 0.5; // between 0.5 and 1.0
             lightColors.push_back(glm::vec3(rColor, gColor, bColor));
+        }*/
+
+        for (Actor *a : WorldManager::getInstance()->getLevel()->getContents())
+        {
+            if (lightPositions.size() == 32)
+            {
+                break;
+            }
+            if (typeid(*a) == typeid(LightActor))
+            {
+                lightPositions.push_back(a->getTransform().location);
+            }
         }
 
         // send light relevant uniforms
         for (unsigned int i = 0; i < lightPositions.size(); i++)
         {
             shaderLightingPass.setVec3("lights[" + std::to_string(i) + "].Position", lightPositions[i]);
-            shaderLightingPass.setVec3("lights[" + std::to_string(i) + "].Color", lightColors[i]);
+            //shaderLightingPass.setVec3("lights[" + std::to_string(i) + "].Color", lightColors[i]);
+            shaderLightingPass.setVec3("lights[" + std::to_string(i) + "].Color", glm::vec3(1, 1, 1));
+
             // update attenuation parameters and calculate radius
             const float constant = 1.0; // note that we don't send this to the shader, we assume it is always 1.0 (in our case)
             const float linear = 0.7;
@@ -379,7 +326,7 @@ void DisplayOpenGL::update()
             shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Linear", linear);
             shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Quadratic", quadratic);
             // then calculate radius of light volume/sphere
-            const float maxBrightness = std::fmaxf(std::fmaxf(lightColors[i].r, lightColors[i].g), lightColors[i].b);
+            const float maxBrightness = std::fmaxf(std::fmaxf(1 /*lightColors[i].r*/, 1 /*lightColors[i].g*/), /*lightColors[i].b*/ 1);
             float radius = (-linear + std::sqrt(linear * linear - 4 * quadratic * (constant - (256.0f / 5.0f) * maxBrightness))) / (2.0f * quadratic);
             shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Radius", radius);
         }
@@ -400,23 +347,18 @@ void DisplayOpenGL::update()
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     } // Deferred Block
 
+    WorldManager::getInstance()->getLevel()->forwardDraw(1.0f);
+
     ImGui::Render();
     ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
-    // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-    // -------------------------------------------------------------------------------
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
 void DisplayOpenGL::static_framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and
-    // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
-    LOG(ERROR) << "framebuffer size callback";
 }
 
 void DisplayOpenGL::static_mouse_callback(GLFWwindow *window, double xpos, double ypos)
@@ -426,8 +368,6 @@ void DisplayOpenGL::static_mouse_callback(GLFWwindow *window, double xpos, doubl
     d->mouse_callback(window, xpos, ypos);
 }
 
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
 void DisplayOpenGL::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 {
     if (firstMouse)
@@ -459,13 +399,28 @@ void DisplayOpenGL::renderQuad()
 {
     if (quadVAO == 0)
     {
-#define QUAD_V      float quadVertices[] = { \
-            /* positions*/     /* texture Coords*/ \
-            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f, \
-            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, \
-             1.0f,  1.0f, 0.0f, 1.0f, 1.0f, \
-             1.0f, -1.0f, 0.0f, 1.0f, 0.0f, \
-        };
+#define QUAD_V float quadVertices[] = { \
+                   -1.0f,               \
+                   1.0f,                \
+                   0.0f,                \
+                   0.0f,                \
+                   1.0f,                \
+                   -1.0f,               \
+                   -1.0f,               \
+                   0.0f,                \
+                   0.0f,                \
+                   0.0f,                \
+                   1.0f,                \
+                   1.0f,                \
+                   0.0f,                \
+                   1.0f,                \
+                   1.0f,                \
+                   1.0f,                \
+                   -1.0f,               \
+                   0.0f,                \
+                   1.0f,                \
+                   0.0f,                \
+               };
 
         QUAD_V
         // setup plane VAO

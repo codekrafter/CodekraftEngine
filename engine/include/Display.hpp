@@ -28,7 +28,7 @@ protected:
   // timing
   float deltaTime = 0.0f;
 
-  bool editorKeyPressed;
+  bool EditorKeyPressed;
 
 public:
   Display() : Display(DisplayConfig(DisplayType::OPENGL)){};

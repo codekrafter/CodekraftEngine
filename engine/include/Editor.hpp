@@ -4,32 +4,21 @@
 
 namespace ck
 {
+class Actor;
 class Editor
 {
 private:
   static Editor *inst;
-  bool assetMenu = false;
-  bool assetLoader = false;
-  bool assetSaver = false;
-  AssetManager *am = nullptr;
   bool showEditor = false;
-  char fn[128];
-  std::vector<AssetRef<Asset>> openEditors;
-
-  // Data for Asset Editors
-  // Shader
-  char vt[1024 * 16] = "";
-  char ft[1024 * 16] = "";
-  char gt[1024 * 16] = "";
+  // Scene Editor Data, right now stores one bool, second for making a std::pair and is not used
+  std::map<Actor *, std::pair<bool, bool>> map;
 
 public:
   Editor();
-  ~Editor();
   static Editor *getInstance();
   static void destroyInstance();
   void Draw();
   bool showCursor();
   void toggleEditor();
-  void drawassetMenus();
 };
 }

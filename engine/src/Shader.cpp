@@ -24,14 +24,6 @@ Shader::Shader()
     geometry = "";
 }
 
-Shader::~Shader(){};
-
-template <class Archive>
-void Shader::serialize(Archive &ar)
-{
-    ar(/*cereal::base_class<ck::Asset>(this),*/ vertex, fragment, geometry);
-}
-
 void Shader::setCode(std::string v, std::string f, std::string g)
 {
     if (v != "")

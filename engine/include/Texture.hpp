@@ -12,21 +12,17 @@ private:
   unsigned char *data;
   unsigned int ID;
   int width, height, n;
+  std::string path;
 
 public:
   Texture();
+  ~Texture();
   Texture(std::string fname) : Texture(fname, 0){};
   // Create texture with specified number of components, 0 for max number in file.
   Texture(std::string fname, int nn);
-  ~Texture();
-  /*template <class Archive>
-  void serialize(Archive &ar);*/
-  template <class Archive>
-  void serialize(Archive &ar);
-  /*template <class Archive>
-  void save(Archive &ar) const;
-  template <class Archive>
-  void load(Archive &ar);*/
+  void inline loadRaw(std::string fname) { loadRaw(fname, 0); };
+  void loadRaw(std::string fname, int nn);
+  inline bool blank() { return !data; };
 
   virtual void init();
   void draw(int i);
