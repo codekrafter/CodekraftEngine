@@ -27,7 +27,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../engine/src)
 add_executable(TestGame ${SRC})
 #${CMAKE_BINARY_DIR}/engine/lib .a
 #target_link_libraries(TestGame ${CMAKE_BINARY_DIR}/engine/libCKEngine.a glfw g3logger ${OPENGL_LIBRARIES} pthread dl)
-target_link_libraries(TestGame ${CMAKE_BINARY_DIR}/engine/libCKEngine)
+target_link_libraries(TestGame ${CMAKE_BINARY_DIR}/engine/libCKEngine.so)
 #if("${UNIX}" AND NOT "${APPLE}")
 #target_link_libraries(TestGame X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
 #endif()

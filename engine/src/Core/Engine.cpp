@@ -8,11 +8,6 @@
 #include "Rendering/Display.hpp"
 #include "Logging.hpp"
 
-//#include "ThirdParty/glad/glad.h"
-//#include "GLFW/glfw3.h"
-
-//INITIALIZE_EASYLOGGINGPP
-
 namespace ck
 {
 ck::CKEngine *engine = nullptr;
@@ -27,18 +22,6 @@ ck::CKEngine *initEngine(EngineConfig config)
     ss << format;
     ss << def;
     std::string redFormat = ss.str();
-    /*el::Configurations conf;
-    conf.setToDefault();
-    conf.set(el::Level::Global,
-             el::ConfigurationType::Format, format);
-    conf.set(el::Level::Error,
-             el::ConfigurationType::Format, redFormat);
-    conf.set(el::Level::Fatal,
-             el::ConfigurationType::Format, redFormat);
-    conf.set(el::Level::Global, el::ConfigurationType::Filename, "./logs/ckengine.log");
-    conf.set(el::Level::Global, el::ConfigurationType::ToFile, "true");
-    conf.set(el::Level::Global, el::ConfigurationType::ToStandardOutput, "true");
-    el::Loggers::reconfigureLogger("default", conf);*/
     ck::CKEngine *app = new ck::CKEngine(config);
     ck::engine = app;
     LOG(INFO) << "Starting Engine Version: " << ENGINE_VERSION << std::endl;

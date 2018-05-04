@@ -64,8 +64,7 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/build": true,
-        "**/bin": true,
+        "**/build": true
     },
     "search.exclude": {
         "**/node_modules": true,

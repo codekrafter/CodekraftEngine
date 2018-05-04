@@ -41,7 +41,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 
 add_library(CKEngine SHARED ${SRC})
-target_link_libraries(CKEngine glfw g3logger ${OPENGL_LIBRARIES} pthread.a dl.a)
+target_link_libraries(CKEngine glfw g3logger ${OPENGL_LIBRARIES} pthread dl)
 if("${UNIX}" AND NOT "${APPLE}")
   target_link_libraries(CKEngine X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
 endif()
