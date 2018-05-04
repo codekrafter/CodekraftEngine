@@ -1,11 +1,11 @@
-#include "Engine.hpp"
-#include "StaticMeshActor.hpp"
-#include "WorldManager.hpp"
-#include "AssetManager.hpp"
-#include "Serialization.hpp"
-#include "DeferredShaderCode.hpp"
-#include "Config.hpp"
-#include "BillboardActor.hpp"
+#include "Core/Engine.hpp"
+#include "StaticMesh/StaticMeshActor.hpp"
+#include "ECS/WorldManager.hpp"
+#include "Assets/AssetManager.hpp"
+#include "Assets/Serialization.hpp"
+#include "Rendering/DeferredShaderCode.hpp"
+#include "Core/Config.hpp"
+#include "Billboard/BillboardActor.hpp"
 
 int main(int argc, char *argv[])
 {

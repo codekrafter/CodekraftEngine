@@ -1,2 +1,3 @@
 #define CATCH_CONFIG_MAIN
-#include <ThirdParty/catch.hpp>
+//#define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
+#include "ThirdParty/catch.hpp"

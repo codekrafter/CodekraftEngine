@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ $(echo ${PWD##*/}) == "build" ]; then
+    cd ..
+fi
+
+./scripts/deploy.sh
