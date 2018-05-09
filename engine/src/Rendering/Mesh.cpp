@@ -24,7 +24,8 @@ Mesh::Mesh(objl::Mesh m, std::string directory)
     mat = new Material(mmat.map_Kd, mmat.map_Ks, directory);
     indices = m.Indices;
 };
-Mesh::~Mesh(){
+Mesh::~Mesh()
+{
     delete mat;
 };
 /*template <class Archive>
@@ -60,9 +61,9 @@ void Mesh::init()
     glBindVertexArray(0);
     mat->init();
 };
-void Mesh::draw(Transform trans)
+void Mesh::draw(glm::mat4 model)
 {
-    mat->draw(trans);
+    mat->draw(model);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

@@ -1,5 +1,6 @@
 #include "BillboardActor.hpp"
 #include "ECS/WorldManager.hpp"
+#include "ECS/Level.hpp"
 
 namespace ck
 {
@@ -50,7 +51,7 @@ void BillboardActor::onTick(float dt)
     shader->setMat4("projection", projection);
     shader->setMat4("view", view);
 
-    glm::mat4 model = glm::lookAt(transform.location,cam->Position, cam->Up);
+    glm::mat4 model = glm::lookAt(transform.location, cam->Position, cam->Up);
     /*model = glm::translate(model, transform.location);
 
     model = glm::rotate(model, transform.rotation.x, glm::vec3(1.0, 0.0, 0.0));
@@ -73,7 +74,7 @@ BillboardActor::BillboardActor()
     icon = AssetRef<Texture>("bbicon", "textures");
     /*if (icon->blank())
     {*/
-        icon->loadRaw("raw/nanosuit/arm_dif.png");
+    icon->loadRaw("raw/nanosuit/arm_dif.png");
     //}
 };
 
@@ -103,4 +104,4 @@ void BillboardActor::onBeginPlay()
     shader->init();
     icon->init();
 }
-}
+} // namespace ck

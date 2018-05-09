@@ -23,7 +23,7 @@ public:
   /*template <class Archive>
   void serialize(Archive &ar);*/
   virtual void init();
-  void draw(Transform trans);
+  void draw(glm::mat4 model);
   std::vector<Mesh *> getMeshes();
   virtual std::string getType();
   virtual int getVersion();

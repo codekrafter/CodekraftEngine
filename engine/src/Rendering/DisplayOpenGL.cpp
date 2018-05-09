@@ -13,10 +13,13 @@
 #include "Editor/Editor.hpp"
 #include "ECS/WorldManager.hpp"
 #include "Lighting/LightActor.hpp"
+#include "ECS/Level.hpp"
 
 #include "ThirdParty/OBJ_Loader.h"
 #include "ThirdParty/IMGUI/imgui.h"
 #include "ThirdParty/IMGUI/imgui_impl_glfw_gl3.h"
+#include "ThirdParty/ImGuizmo.hpp"
+
 namespace ck
 {
 namespace opengl
@@ -193,6 +196,7 @@ void DisplayOpenGL::update()
     // -----
     processInput(window);
     ImGui_ImplGlfwGL3_NewFrame();
+    ImGuizmo::BeginFrame();
 
     bool showDebug = true;
     //ImGui::Begin("Debug", &showDebug)
@@ -436,5 +440,5 @@ void DisplayOpenGL::renderQuad()
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 }
-}
-}
+} // namespace opengl
+} // namespace ck

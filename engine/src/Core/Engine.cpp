@@ -24,7 +24,7 @@ ck::CKEngine *initEngine(EngineConfig config)
     std::string redFormat = ss.str();
     ck::CKEngine *app = new ck::CKEngine(config);
     ck::engine = app;
-    LOG(INFO) << "Starting Engine Version: " << ENGINE_VERSION << std::endl;
+    LOG(INFO) << "Starting Codekraft Engine Version: " << ENGINE_VERSION << std::endl;
     return app;
 }
 

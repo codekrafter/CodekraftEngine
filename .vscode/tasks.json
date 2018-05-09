@@ -4,52 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build and run",
+            "label": "deploy",
             "type": "shell",
-            "command": "cd build && ninja && ninja run",
+            "command": "./deploy",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": "$gcc"
-        },
-        {
-            "label": "build",
-            "type": "shell",
-            "command": "cd build && ninja",
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": "$gcc"
-        },
-        {
-            "label": "run",
-            "type": "shell",
-            "command": "cd build/testgame && ./TestGame",
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": "$gcc"
-        },
-        {
-            "label": "clean",
-            "type": "shell",
-            "command": "cd build && ninja clean",
-            "group": "build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",

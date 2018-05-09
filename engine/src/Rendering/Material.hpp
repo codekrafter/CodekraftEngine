@@ -18,9 +18,7 @@ public:
   Material();
   Material(std::string d_name, std::string s_name, std::string prefix = "");
   ~Material();
-  template <class Archive>
-  void serialize(Archive &ar);
-  void draw(Transform trans);
+  void draw(glm::mat4 model);
   virtual void init();
   Shader *shader;
 };

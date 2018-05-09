@@ -9,7 +9,7 @@ StaticMesh::StaticMesh()
 {
     version = 1;
     type = "STATIC_MESH";
-    meshes = std::vector<Mesh*>();
+    meshes = std::vector<Mesh *>();
 };
 StaticMesh::StaticMesh(std::string path)
 {
@@ -77,11 +77,11 @@ void StaticMesh::init()
         mesh->init();
     }
 };
-void StaticMesh::draw(Transform trans)
+void StaticMesh::draw(glm::mat4 model)
 {
     for (Mesh *mesh : meshes)
     {
-        mesh->draw(trans);
+        mesh->draw(model);
     }
 };
 }

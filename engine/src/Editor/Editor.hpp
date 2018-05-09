@@ -10,8 +10,11 @@ class Editor
 private:
   static Editor *inst;
   bool showEditor = false;
-  // Scene Editor Data, right now stores one bool, second for making a std::pair and is not used
-  std::map<Actor *, std::pair<bool, bool>> map;
+  // Scene Editor Data, stores if open
+  std::map<Actor *, bool> map;
+  // Pointer to currently selected object
+  Actor *selected = nullptr;
+  int si = 0;
 
 public:
   Editor();

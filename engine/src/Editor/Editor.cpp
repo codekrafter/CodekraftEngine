@@ -1,12 +1,15 @@
+#include <algorithm>
+#include <cxxabi.h>
+
 #include "ThirdParty/IMGUI/imgui.h"
+#include "ThirdParty/ImGuizmo.hpp"
 #include "Editor/Editor.hpp"
 #include "ECS/Actor.hpp"
 #include "Rendering/Shader.hpp"
 #include "ECS/WorldManager.hpp"
 #include "StaticMesh/StaticMeshActor.hpp"
 #include "Lighting/LightActor.hpp"
-#include <algorithm>
-#include <cxxabi.h>
+#include "ECS/Level.hpp"
 
 namespace ck
 {
@@ -79,76 +82,74 @@ void Editor::Draw()
 {
     if (!showEditor)
         return;
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
     ImGui::Begin("Scene Editor", &showEditor);
     std::vector<Actor *> c = WorldManager::getInstance()->getLevel()->contents;
     if (ImGui::CollapsingHeader("Level Actors"))
     {
-        for (Actor *a : c)
+        ImGui::InputInt("Selection ID", &si);
+        if (si < 0 || si > c.size() + 1)
         {
-            if (ImGui::TreeNode(demangle(typeid(*a).name()).c_str()))
-            {
-                Transform t = a->getTransform();
-                glm::vec3 l = t.location;
-                glm::vec3 r = t.rotation;
-                glm::vec3 s = t.scale;
-
-                float ll[3] = {l.x, l.y, l.z};
-                ImGui::DragFloat3("Location", ll);
-                l.x = ll[0];
-                l.y = ll[1];
-                l.z = ll[2];
-
-                float rr[3] = {r.x, r.y, r.z};
-                ImGui::DragFloat3("Rotation", rr);
-                r.x = rr[0];
-                r.y = rr[1];
-                r.z = rr[2];
-
-                float ss[3] = {s.x, s.y, s.z};
-                bool uni = false;
-                ImGui::Checkbox("Uniform Scale", &map[a].first);
-                if (map[a].first)
-                {
-                    float m = a_mean(ss, 3);
-                    ImGui::DragFloat("Scale", &m, 0.01f, 0.01f, 10.0f);
-                    s.x = m;
-                    s.y = m;
-                    s.z = m;
-                }
-                else
-                {
-                    ImGui::DragFloat3("Scale", ss);
-                    s.x = ss[0];
-                    s.y = ss[1];
-                    s.z = ss[2];
-                }
-
-                t.location = l;
-                t.rotation = r;
-                t.scale = s;
-                a->setTransform(t);
-
-                ImGui::TreePop();
-            }
+            si = 0;
         }
-    }
+        selected = c[si];
+        for (int i = 0; i < c.size(); ++i)
+        {
+            Actor *a = c[i];
+            if (a->getName() == "" || a->getName().empty() || a->getName().size() == 0)
+            {
+                a->setName(demangle(typeid(*a).name()).c_str());
+            }
+            ImGui::TreeNodeEx((void *)a, ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen, a->getName().c_str());
+        }
+    } /*
+    else
+    {
+        selected = nullptr;
+    }*/
     ImGui::Spacing();
     const char *items[] = {"StaticMesh", "Light"};
     static int item_current = 0;
     ImGui::Combo("Actor", &item_current, items, IM_ARRAYSIZE(items));
-    if(ImGui::Button("Spawn In Actor"))
+    if (ImGui::Button("Spawn In Actor"))
     {
         switch (item_current)
         {
-            case 0:
+        case 0:
             WorldManager::getInstance()->getLevel()->addActor(new StaticMeshActor());
             break;
-            case 1:
-                        WorldManager::getInstance()->getLevel()->addActor(new LightActor());
+        case 1:
+            WorldManager::getInstance()->getLevel()->addActor(new LightActor());
             break;
         }
     }
+
+    // Draw Gizmo
+    if (selected != nullptr)
+    {
+        glm::mat4 view = WorldManager::getInstance()->getLevel()->getCamera()->GetViewMatrix();
+        glm::mat4 proj = WorldManager::getInstance()->getLevel()->getCamera()->getProjection();
+        glm::mat4 model;
+
+        Transform trans = selected->getTransform();
+        ImGuizmo::RecomposeMatrixFromComponents(&trans.location.x, &trans.rotation.x, &trans.scale.x, &model[0][0]);
+
+        ImGuiIO &io = ImGui::GetIO();
+        ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+
+        glm::mat4 om = model;
+        ImGuizmo::Manipulate(&view[0][0], &proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::WORLD, &model[0][0], NULL, NULL);
+
+        float t[3], r[3], s[3];
+        //ImGuizmo::DecomposeMatrixToComponents(&model[0][0], t, r, s);
+        ImGuizmo::DecomposeMatrixToComponents(&model[0][0], &trans.location.x, &trans.rotation.x, &trans.scale.x);
+
+        //trans.location = glm::vec3(t[0], t[1], t[2]);
+        //trans.rotation = Math::Quaternion::euler(r[0], r[1], r[2]);
+        //trans.scale = Math::Vector3(s[0], s[1], s[2]);
+
+        selected->setTransform(trans);
+    }
     ImGui::End();
 };
-}
+} // namespace ck

@@ -6,6 +6,7 @@
 #include "ECS/WorldManager.hpp"
 #include "DeferredShaderCode.hpp"
 #include "GLM.hpp"
+#include "ECS/Level.hpp"
 
 #include <string>
 
@@ -200,7 +201,7 @@ void main()
     FragColor = texture(ourTexture, TexCoords);
 }
 )";
-}
+} // namespace dsc
 
 Material::Material()
 {
@@ -271,29 +272,19 @@ void Material::init()
     shader->init();
 }
 
-void Material::draw(Transform trans)
+void Material::draw(glm::mat4 model)
 {
     shader->use();
-    shader->setVec3("viewPos", WorldManager::getInstance()->getLevel()->getCamera()->Position);
-    shader->setFloat("material.shininess", 32.0f);
+    /*shader->setVec3("viewPos", WorldManager::getInstance()->getLevel()->getCamera()->Position);
+    shader->setFloat("material.shininess", 32.0f);*/
 
     glm::mat4 projection = glm::perspective(glm::radians(WorldManager::getInstance()->getLevel()->getCamera()->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = WorldManager::getInstance()->getLevel()->getCamera()->GetViewMatrix();
     shader->setMat4("projection", projection);
     shader->setMat4("view", view);
 
-    // world transformation
-    glm::mat4 model;
-    model = glm::translate(model, trans.location);
-
-    model = glm::rotate(model, trans.rotation.x, glm::vec3(1.0, 0.0, 0.0));
-    model = glm::rotate(model, trans.rotation.y, glm::vec3(0.0, 1.0, 0.0));
-    model = glm::rotate(model, trans.rotation.z, glm::vec3(0.0, 0.0, 1.0));
-
-    model = glm::scale(model, trans.scale);
-
     shader->setMat4("model", model);
     diffuse->draw(0);
     specular->draw(1);
 }
-}
+} // namespace ck

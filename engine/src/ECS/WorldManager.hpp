@@ -1,9 +1,13 @@
 #pragma once
 
-#include "Level.hpp"
+#include <vector>
+#include <string>
+
+//#include "Level.hpp"
 
 namespace ck
 {
+class Level;
 class WorldManager
 {
 private:
@@ -17,5 +21,6 @@ public:
   static void destroyInstance();
   Level *getLevel();
   void loadLevel(Level *l);
+  std::vector<std::string> nameReg;
 };
 }

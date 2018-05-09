@@ -55,7 +55,8 @@
         "optional": "cpp",
         "*.ipp": "cpp",
         "filesystem": "cpp",
-        "cerrno": "cpp"
+        "cerrno": "cpp",
+        "future": "cpp"
     },
     "workbench.colorTheme": "Default Dark+",
     "files.exclude": {

@@ -34,4 +34,3 @@ fi
 
 cp ./TestGame ../../testing/
 cd ../../testing/
-./TestGame

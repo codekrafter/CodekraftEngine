@@ -6,7 +6,6 @@
 #include "Core/Config.hpp"
 
 #include "Logging.hpp"
-#include "g3log/logworker.hpp"
 
 namespace ck
 {
