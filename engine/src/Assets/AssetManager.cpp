@@ -7,6 +7,7 @@
 #include "ThirdParty/tinydir.h"
 #include "Serialization.hpp"
 #include "ThirdParty/CRC.h"
+#include "Core/Engine.hpp"
 
 #include "Logging.hpp"
 
@@ -125,8 +126,6 @@ AssetS *AssetManager::getObject(unsigned char UUID)
     }
 };
 
-AssetManager *AssetManager::iinst;
-
 AssetManager::AssetManager(){};
 
 AssetManager::~AssetManager(){};
@@ -145,17 +144,7 @@ std::string AssetManager::processID(std::string i)
 
 AssetManager *AssetManager::inst()
 {
-    if (iinst == nullptr)
-    {
-        iinst = new AssetManager();
-    }
-    return iinst;
-};
-
-void AssetManager::cleanup()
-{
-    delete iinst;
-    iinst = nullptr;
+    return getEngine()->am;
 };
 
 void AssetManager::flush()
@@ -429,7 +418,8 @@ void AssetManager::loadf(std::string name)
     // End of transmisson block
     header.push_back(0x0017);
 
- */ return;
+ */
+    return;
 };
 
 struct HeaderEntry
@@ -551,7 +541,7 @@ size_t AssetManager::getSize(std::string name)
     {
         return sizeof(MeshS);
     }
-    else if (name == "MATERIAL")
+    else if (name == "Material")
     {
         return sizeof(MaterialS);
     }
@@ -604,4 +594,4 @@ AssetS *AssetManager::getObject(Asset *a)
         return nullptr;
     }
 };
-}
+} // namespace ck

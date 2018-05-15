@@ -3,6 +3,7 @@
 #include "GLM.hpp"
 #include "ThirdParty/ImGuizmo.hpp"
 #include "ECS/Actor.hpp"
+#include "Rendering/Core/RenderingManager.hpp"
 
 namespace ck
 {
@@ -31,10 +32,16 @@ void StaticMeshComponent::render()
   }
   ImGuizmo::RecomposeMatrixFromComponents(&t.location.x, &t.rotation.x, &t.scale.x, &model[0][0]);
 
-  ref->draw(model);
+  RenderingManager::inst()->getRenderer()->render(ref.get(), mat, model);
+
+  //ref->draw(model);
 };
 void StaticMeshComponent::onBeginPlay()
 {
-  ref->init();
+  //ref->init();
+  mat = new Material();
+  RenderingManager::inst()->getRenderer()->init(ref.get());
+  RenderingManager::inst()->getRenderer()->init(mat);
+  
 };
 } // namespace ck

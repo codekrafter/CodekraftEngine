@@ -11,6 +11,8 @@ class StaticMeshComponent : virtual public SceneComponent
 private:
 protected:
   AssetRef<StaticMesh> ref;
+  friend class Editor;
+  Material *mat;
 
 public:
   StaticMeshComponent() : ref("cube", "engine.meshes"){};
@@ -18,4 +20,4 @@ public:
   virtual void render();
   virtual void onBeginPlay();
 };
-}
+} // namespace ck

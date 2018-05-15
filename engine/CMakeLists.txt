@@ -1,9 +1,9 @@
 set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 
 cmake_minimum_required(VERSION 3.5)
-project(CKEngine)
+project(CodekraftEngine)
 
-include(cotire)
+cmake_policy(SET CMP0072 NEW)
 
 ADD_DEFINITIONS(
 #    -std=c++1z
@@ -24,7 +24,7 @@ find_package(OpenGL REQUIRED)
 #set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 #set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -w -ferror-limit=2 -D_GLIBCXX_DEBUG")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -w -ferror-limit=2 -D_GLIBCXX_DEBUG")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB_RECURSE SRC "src/*.cpp" "src/*.c" "src/*.inl")
@@ -51,7 +51,6 @@ if("${APPLE}")
   Find_Library(CoreDisplay CoreDisplay)
   target_link_libraries(CKEngine ${Cocoa} ${IOKit} ${CoreDisplay})
 endif()
-#cotire(CKEngine)
 
 add_executable(CKTests test.cpp)
 target_link_libraries(CKTests CKEngine)

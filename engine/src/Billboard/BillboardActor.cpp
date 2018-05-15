@@ -1,6 +1,7 @@
 #include "BillboardActor.hpp"
 #include "ECS/WorldManager.hpp"
 #include "ECS/Level.hpp"
+#include "ThirdParty/glad/glad.h"
 
 namespace ck
 {
@@ -39,33 +40,14 @@ void main()
 
 void BillboardActor::onTick(float dt)
 {
-    // Rotate
-    Camera *cam = WorldManager::getInstance()->getLevel()->getCamera();
-    glm::mat4 mat = glm::lookAt(cam->Position, cam->Position + cam->Front, cam->Up);
-    //transform.rotation = cam->Up + cam->Up;
-
-    // Render
-    shader->use();
-    glm::mat4 projection = glm::perspective(glm::radians(WorldManager::getInstance()->getLevel()->getCamera()->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    glm::mat4 view = WorldManager::getInstance()->getLevel()->getCamera()->GetViewMatrix();
-    shader->setMat4("projection", projection);
-    shader->setMat4("view", view);
-
-    glm::mat4 model = glm::lookAt(transform.location, cam->Position, cam->Up);
-    /*model = glm::translate(model, transform.location);
+    glm::mat4 model;
+    model = glm::translate(model, transform.location);
 
     model = glm::rotate(model, transform.rotation.x, glm::vec3(1.0, 0.0, 0.0));
     model = glm::rotate(model, transform.rotation.y, glm::vec3(0.0, 1.0, 0.0));
     model = glm::rotate(model, transform.rotation.z, glm::vec3(0.0, 0.0, 1.0));
 
-    model = glm::scale(model, transform.scale);*/
-
-    shader->setMat4("model", model);
-    icon->draw(0);
-
-    glBindVertexArray(VAO);
-    glPointSize(10);
-    glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, 0);
+    model = glm::scale(model, transform.scale);
 };
 
 BillboardActor::BillboardActor()
@@ -101,7 +83,7 @@ void BillboardActor::onBeginPlay()
 
     shader->setCode(bb_v, bb_f);
 
-    shader->init();
-    icon->init();
+    //shader->init();
+    //icon->init();
 }
 } // namespace ck

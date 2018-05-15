@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <vector>
 #include <stdexcept>
 #include "ThirdParty/cereal/types/string.hpp"
@@ -42,6 +43,10 @@ void Shader::setCode(std::string v, std::string f, std::string g)
 
 void Shader::init()
 {
+    if (ID != 0)
+    {
+        destroy();
+    }
     // 2. compile shaders
     unsigned int vid, fid;
     int success;
@@ -83,6 +88,54 @@ void Shader::init()
         glDeleteShader(gid);
 };
 
+void Shader::destroy()
+{
+    if (ID == 0)
+    {
+        LOG(INFO) << "Not destroying";
+        return;
+    }
+    LOG(INFO) << "Destroying";
+    glUseProgram(0);
+    glDeleteProgram(ID);
+    ID = 0;
+};
+void Shader::open(std::string vf, std::string ff)
+{
+    errno = 0;
+    std::ifstream ifs;
+    ifs.open(vf);
+    std::string vb((std::istreambuf_iterator<char>(ifs)),
+                   std::istreambuf_iterator<char>());
+    vertex = vb;
+
+    ifs.close();
+    ifs.open(ff);
+
+    std::string fb((std::istreambuf_iterator<char>(ifs)),
+                   std::istreambuf_iterator<char>());
+
+    fragment = fb;
+
+    vfile = vf;
+    ffile = ff;
+};
+
+void Shader::reload()
+{
+    if (vfile.size() == 0 || ffile.size() == 0)
+    {
+        LOG(INFO) << "Shader does not have file names set, cannot hot reload";
+        return;
+    }
+    open(vfile, ffile);
+
+    //destroy();
+    LOG(INFO) << "Pre ID: " << ID;
+    init();
+    LOG(INFO) << "Post ID: " << ID;
+}
+
 std::string Shader::getType()
 {
     return type;
@@ -95,7 +148,7 @@ int Shader::getVersion()
 // ------------------------------------------------------------------------
 void Shader::use()
 {
-    if(ID == 0)
+    if (ID == 0)
     {
         init();
     }
@@ -187,4 +240,4 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         }
     }
 }
-}
+} // namespace ck

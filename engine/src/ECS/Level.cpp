@@ -1,8 +1,11 @@
 #include <string>
 #include <memory>
+#include <typeinfo>
 
 #include "Level.hpp"
 #include "Assets/AssetManager.hpp"
+#include "Rendering/Core/RenderingManager.hpp"
+#include "Camera/ACamera.hpp"
 
 namespace ck
 {
@@ -11,7 +14,6 @@ Level::Level()
     version = 1;
     type = "LEVEL";
     contents = std::vector<Actor *>();
-    cam = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 };
 Level::~Level()
 {
@@ -21,7 +23,6 @@ Level::~Level()
         delete p;
         p = nullptr;
     }
-    delete cam;
 };
 
 void Level::init()
@@ -44,6 +45,7 @@ void Level::tick(float dt)
         this->init();
         initialized = true;
     }
+    return;
     for (Actor *a : contents)
     {
         a->render();
@@ -67,31 +69,21 @@ void Level::addActor(Actor *a)
     }
 };
 
-void Level::forwardDraw(float dt)
+ACamera *Level::getCamera()
 {
-    if (!initialized)
-    {
-        this->init();
-        initialized = true;
-    }
-    for (Actor *a : forward)
-    {
-        a->onTick(dt);
-    }
-};
+    const std::type_info &type_target = typeid(ACamera);
+    auto it = find_if(contents.begin(), contents.end(), [=](const Actor *actor) { return typeid(*actor) == type_target; });
 
-Camera *Level::getCamera()
-{
-    return cam;
-};
-
-void Level::setCamera(Camera *c)
-{
-    if (cam != nullptr)
+    if (*it == 0x0 || it == contents.end())
     {
-        delete cam;
-        cam = nullptr;
+        LOG(INFO) << "no camera, making one ";
+        ACamera *cam = new ACamera();
+        contents.push_back(cam);
+        return cam;
     }
-    cam = c;
-};
+    else
+    {
+        return dynamic_cast<ACamera *>(*it);
+    }
 }
+} // namespace ck

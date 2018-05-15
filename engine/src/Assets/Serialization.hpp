@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "Rendering/StaticMesh.hpp"
+#include "Rendering/Shader.hpp"
 
 // Macros
 
@@ -16,12 +17,12 @@
     std::memcpy(ptr, s.c_str(), s.size() + 1); \
     ptr = ptr + s.size() + 1;
 
-#define S_TRISIZE(one, two, three)           \
-    TriSize ts; \
-    ts.n1 = one;                             \
-    ts.n2 = two;                             \
-    ts.n3 = three;                           \
-    std::memcpy(ptr, &ts, sizeof(TriSize));  \
+#define S_TRISIZE(one, two, three)          \
+    TriSize ts;                             \
+    ts.n1 = one;                            \
+    ts.n2 = two;                            \
+    ts.n3 = three;                          \
+    std::memcpy(ptr, &ts, sizeof(TriSize)); \
     ptr = ptr + sizeof(TriSize);
 
 #define S_SIZE(val)                          \
@@ -161,6 +162,13 @@ struct TextureS : AssetS
 
 struct MaterialS : AssetS
 {
+    MaterialS(){};
+    MaterialS(Material *mat){};
+    virtual Material *asset() { return nullptr; };
+    virtual DatSize save() { return DatSize(); };
+    virtual void load(unsigned char *, size_t size){};
+};
+/*{
     ShaderS shader;
     TextureS diffuse;
     TextureS specular;
@@ -244,7 +252,7 @@ struct MaterialS : AssetS
         specular.load(SpecularDat.data, SpecularDat.size);
         free(SpecularDat.data);
     };
-};
+};*/
 
 struct Vec3S
 {
@@ -499,4 +507,4 @@ struct StaticMeshS : AssetS
         }
     };
 };
-}
+} // namespace ck

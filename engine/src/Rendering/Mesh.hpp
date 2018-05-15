@@ -4,7 +4,7 @@
 #include "Assets/Asset.hpp"
 #include "ThirdParty/OBJ_Loader.h"
 #include "ThirdParty/cereal/types/vector.hpp"
-#include "Material.hpp"
+#include "Rendering/Material/Material.hpp"
 
 namespace ck
 {
@@ -26,6 +26,8 @@ class Mesh : public Asset
 {
 private:
   friend struct MeshS;
+  friend class Renderer;
+  friend class OpenGLRenderer;
   unsigned int VBO, VAO, EBO;
   //glm::mat4 trans;
   std::vector<Vertex> vertices;

@@ -2,19 +2,31 @@
 
 namespace ck
 {
-enum class DisplayType
+enum class DrawType
 {
-    OPENGL
+    OPENGL,
+    VULKAN
 };
-struct DisplayConfig
+
+enum class WindowType
 {
-    DisplayType type;
-    DisplayConfig() : DisplayConfig(DisplayType::OPENGL){};
-    DisplayConfig(DisplayType type) : type(type){};
+    GLFW
+};
+struct RenderingConfig
+{
+    WindowType window;
+    DrawType draw;
+    int width = 800;
+    int height = 600;
+    RenderingConfig() : RenderingConfig(DrawType::OPENGL){};
+    RenderingConfig(DrawType d) : RenderingConfig(d, WindowType::GLFW){};
+    RenderingConfig(DrawType d, WindowType w) : window(w), draw(d){};
+
+  private:
 };
 struct EngineConfig
 {
-    DisplayConfig display;
-    EngineConfig() : display(){};
+    RenderingConfig rendering;
+    EngineConfig() : rendering(){};
 };
-}
+} // namespace ck

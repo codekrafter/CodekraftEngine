@@ -1,12 +1,10 @@
-#ifndef CAMERA_CPP
-#define CAMERA_CPP
+/*
 
 #include <vector>
 
 #include "ThirdParty/glad/glad.h"
 #include "GLM.hpp"
 
-#include "Camera/Camera.hpp"
 #include "Rendering/Display.hpp"
 
 namespace ck
@@ -103,4 +101,4 @@ void Camera::updateCameraVectors()
     Up = glm::normalize(glm::cross(Right, Front));
 }
 }
-#endif
+*/

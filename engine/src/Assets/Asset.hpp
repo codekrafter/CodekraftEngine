@@ -32,7 +32,6 @@ public:
   };
 
   virtual ~Asset(){};
-  virtual void init() = 0;
   /*template <class Archive>
   void serialize(Archive &ar) { ar(version, type); };*/
   virtual std::string getType() { return type; };

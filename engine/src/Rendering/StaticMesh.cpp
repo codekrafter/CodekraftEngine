@@ -72,6 +72,7 @@ std::vector<Mesh *> StaticMesh::getMeshes()
 
 void StaticMesh::init()
 {
+    return;
     for (Mesh *mesh : meshes)
     {
         mesh->init();

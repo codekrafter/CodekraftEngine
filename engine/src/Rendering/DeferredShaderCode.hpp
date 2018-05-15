@@ -126,7 +126,8 @@ void main()
     float Specular = texture(gAlbedoSpec, TexCoords).a;
     
     // then calculate lighting as usual
-    vec3 lighting  = Diffuse * 0.1; // hard-coded ambient component
+    //vec3 lighting  = Diffuse * 0.1; // hard-coded ambient component
+    vec3 lighting  = Diffuse * 0.7; // extra ambient light for in development
     vec3 viewDir  = normalize(viewPos - FragPos);
     for(int i = 0; i < NR_LIGHTS; ++i)
     {
@@ -148,8 +149,9 @@ void main()
             lighting += diffuse + specular;
         }
     }   
-    FragColor = vec4(lighting, 1.0);
-    //FragColor = vec4(Diffuse,1.0);
+    //FragColor = vec4(lighting, 1.0);
+    FragColor = vec4(Diffuse,1.0);
+    //FragColor = vec4(FragPos,1.0);
 }
 )";
 
@@ -180,5 +182,5 @@ void main()
     FragColor = vec4(0.5,0.5,0.5,1.0);
 }
 )";
-}
-}
+} // namespace opengl
+} // namespace ck

@@ -8,24 +8,15 @@
 #include "Rendering/Shader.hpp"
 #include "ECS/WorldManager.hpp"
 #include "StaticMesh/StaticMeshActor.hpp"
+#include "StaticMesh/StaticMeshComponent.hpp"
 #include "Lighting/LightActor.hpp"
 #include "ECS/Level.hpp"
+#include "Logging.hpp"
+#include "Camera/ACamera.hpp"
+#include "Camera/CameraUtils.hpp"
 
 namespace ck
 {
-
-std::string demangle(const char *name)
-{
-
-    int status = -4; // some arbitrary value to eliminate the compiler warning
-
-    // enable c++11 by passing the flag -std=c++11 to g++
-    std::unique_ptr<char, void (*)(void *)> res{
-        abi::__cxa_demangle(name, NULL, NULL, &status),
-        std::free};
-
-    return (status == 0) ? res.get() : name;
-}
 
 Editor *Editor::inst;
 
@@ -84,51 +75,44 @@ void Editor::Draw()
         return;
     //ImGui::ShowDemoWindow();
     ImGui::Begin("Scene Editor", &showEditor);
-    std::vector<Actor *> c = WorldManager::getInstance()->getLevel()->contents;
-    if (ImGui::CollapsingHeader("Level Actors"))
+    std::vector<Actor *> &c = WorldManager::getInstance()->getLevel()->contents;
+    ImGui::Separator();
+    selected = c[si];
+    for (int i = 0; i < c.size(); ++i)
     {
-        ImGui::InputInt("Selection ID", &si);
-        if (si < 0 || si > c.size() + 1)
+        Actor *a = c[i];
+        if (a->getName() == "" || a->getName().empty() || a->getName().size() == 0)
         {
-            si = 0;
+            a->setName(demangle(typeid(*a).name()));
         }
-        selected = c[si];
-        for (int i = 0; i < c.size(); ++i)
+        map[a] = map[a];
+        bool activated = (selected == a);
+        bool pre = activated;
+        ImGui::Selectable(a->getName().c_str(), &activated);
+        if (!(pre) && (activated))
         {
-            Actor *a = c[i];
-            if (a->getName() == "" || a->getName().empty() || a->getName().size() == 0)
-            {
-                a->setName(demangle(typeid(*a).name()).c_str());
-            }
-            ImGui::TreeNodeEx((void *)a, ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen, a->getName().c_str());
+            ptrdiff_t pos = std::find(c.begin(), c.end(), a) - c.begin();
+            si = pos;
+            selected = a;
         }
-    } /*
-    else
-    {
-        selected = nullptr;
-    }*/
-    ImGui::Spacing();
-    const char *items[] = {"StaticMesh", "Light"};
-    static int item_current = 0;
-    ImGui::Combo("Actor", &item_current, items, IM_ARRAYSIZE(items));
-    if (ImGui::Button("Spawn In Actor"))
-    {
-        switch (item_current)
-        {
-        case 0:
-            WorldManager::getInstance()->getLevel()->addActor(new StaticMeshActor());
-            break;
-        case 1:
-            WorldManager::getInstance()->getLevel()->addActor(new LightActor());
-            break;
-        }
+        //ImGui::TreeNodeEx("a", ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen, "%s", a->getName().c_str());
     }
+    ImGui::Separator();
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    // TODO: Property Editor
 
     // Draw Gizmo
     if (selected != nullptr)
     {
-        glm::mat4 view = WorldManager::getInstance()->getLevel()->getCamera()->GetViewMatrix();
-        glm::mat4 proj = WorldManager::getInstance()->getLevel()->getCamera()->getProjection();
+        RenderingConfig rc;
+        glm::mat4 proj = getProjection(rc);
+        Transform cam_trans = WorldManager::getInstance()->getLevel()->getCamera()->getTransform();
+        glm::vec3 pos = cam_trans.location;
+        DirVectors dv = getVectors(cam_trans.rotation.y, cam_trans.rotation.x);
+        glm::mat4 view = getViewMatrix(pos, dv);
+
         glm::mat4 model;
 
         Transform trans = selected->getTransform();
@@ -140,15 +124,36 @@ void Editor::Draw()
         glm::mat4 om = model;
         ImGuizmo::Manipulate(&view[0][0], &proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::WORLD, &model[0][0], NULL, NULL);
 
-        float t[3], r[3], s[3];
-        //ImGuizmo::DecomposeMatrixToComponents(&model[0][0], t, r, s);
         ImGuizmo::DecomposeMatrixToComponents(&model[0][0], &trans.location.x, &trans.rotation.x, &trans.scale.x);
 
-        //trans.location = glm::vec3(t[0], t[1], t[2]);
-        //trans.rotation = Math::Quaternion::euler(r[0], r[1], r[2]);
-        //trans.scale = Math::Vector3(s[0], s[1], s[2]);
-
         selected->setTransform(trans);
+    }
+    ImGui::End();
+
+    ImGui::Begin("Shader Editor", &s_open);
+    if (ImGui::Button("Reload Selected"))
+    {
+
+        bool found = false;
+        if (!(selected == nullptr))
+        {
+
+            for (ActorComponent *ac : selected->components)
+            {
+                if (typeid(StaticMeshComponent) == typeid(*ac))
+                {
+                    found = true;
+                    StaticMeshComponent *smc = dynamic_cast<StaticMeshComponent *>(ac);
+                    smc->mat->getShader()->reload();
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                LOG(INFO) << "Didnt find Static Mesh Component";
+            }
+        }
     }
     ImGui::End();
 };

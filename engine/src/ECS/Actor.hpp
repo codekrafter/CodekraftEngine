@@ -17,6 +17,8 @@ private:
 protected:
   Transform transform;
   friend class Level;
+  friend class CKEngine;
+  friend class Editor;
   std::vector<ActorComponent *> components;
 
 public:

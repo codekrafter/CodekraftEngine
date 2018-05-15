@@ -5,3 +5,5 @@
 #include "g3log/logworker.hpp"
 
 const LEVELS ERROR {WARNING.value +1, {"ERROR"}};
+
+const char *demangle(const char *name);

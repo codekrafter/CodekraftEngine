@@ -1,4 +1,4 @@
-#include "Material.hpp"
+/*#include "Rendering/Material/Material.hpp"
 #include "Assets/AssetManager.hpp"
 #include "Texture.hpp"
 #include "Rendering/Display.hpp"
@@ -275,8 +275,8 @@ void Material::init()
 void Material::draw(glm::mat4 model)
 {
     shader->use();
-    /*shader->setVec3("viewPos", WorldManager::getInstance()->getLevel()->getCamera()->Position);
-    shader->setFloat("material.shininess", 32.0f);*/
+    //shader->setVec3("viewPos", WorldManager::getInstance()->getLevel()->getCamera()->Position);
+    //shader->setFloat("material.shininess", 32.0f);
 
     glm::mat4 projection = glm::perspective(glm::radians(WorldManager::getInstance()->getLevel()->getCamera()->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = WorldManager::getInstance()->getLevel()->getCamera()->GetViewMatrix();
@@ -288,3 +288,4 @@ void Material::draw(glm::mat4 model)
     specular->draw(1);
 }
 } // namespace ck
+*/

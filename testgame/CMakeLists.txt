@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(CKTestGame)
 
+cmake_policy(SET CMP0072 NEW)
+
 set(CMAKE_INSTALL_PREFIX ..)
 
 ADD_DEFINITIONS(
@@ -16,7 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -D_GLIBCXX_DEBUG")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -D_GLIBCXX_DEBUG")
 
 file(GLOB SRC "src/*.cpp")
 

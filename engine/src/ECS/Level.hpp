@@ -1,23 +1,20 @@
 #pragma once
 
 #include "Assets/Asset.hpp"
-
-#include "Assets/Asset.hpp"
 #include "ECS/Actor.hpp"
-#include "Camera/Camera.hpp"
 
 namespace ck
 {
+class ACamera;
 class Level : public Asset
 {
 private:
-  Camera *cam;
   bool initialized = false;
   friend class Editor;
   friend class Display;
   friend class DisplayOpenGL;
   std::vector<Actor *> contents;
-  std::vector<Actor *> forward;
+  //std::vector<Actor *> forward;
 
 public:
   Level();
@@ -25,12 +22,10 @@ public:
   virtual void init();
   void addActor(Actor *);
   void tick(float dt);
-  void forwardDraw(float dt);
-  Camera *getCamera();
-  void setCamera(Camera *c);
-  inline std::vector<Actor*> getContents() {return contents;};
+  inline std::vector<Actor *> getContents() { return contents; };
+  ACamera *getCamera();
 };
-}
+} // namespace ck
 
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior

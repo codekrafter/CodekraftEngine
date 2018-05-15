@@ -1,5 +1,5 @@
 #include "Mesh.hpp"
-#include "Material.hpp"
+#include "Rendering/Material/Material.hpp"
 #include "GLM.hpp"
 #include "Assets/Asset.hpp"
 #include "ThirdParty/OBJ_Loader.h"
@@ -21,7 +21,7 @@ Mesh::Mesh(objl::Mesh m, std::string directory)
         vertices.push_back(v);
     }
     objl::Material mmat = m.MeshMaterial;
-    mat = new Material(mmat.map_Kd, mmat.map_Ks, directory);
+    mat = new Material(); //mmat.map_Kd, mmat.map_Ks, directory);
     indices = m.Indices;
 };
 Mesh::~Mesh()
@@ -59,13 +59,13 @@ void Mesh::init()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, TexCoords));
 
     glBindVertexArray(0);
-    mat->init();
+    //mat->init();
 };
 void Mesh::draw(glm::mat4 model)
 {
-    mat->draw(model);
+    //mat->draw(model);
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 };
-}
+} // namespace ck

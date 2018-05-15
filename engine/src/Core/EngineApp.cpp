@@ -1,31 +1,14 @@
 #include <string>
 #include <cstring>
 #include <iostream>
-#include <g3log/logmessage.hpp>
-
+#include <chrono>
 
 #include "Core/EngineApp.hpp"
-#include "Rendering/Display.hpp"
-#include "Rendering/DisplayOpenGL.hpp"
-
-#ifdef HAVE_CXA_DEMANGLE
-const char* demangle(const char* name)
-{
-   char buf[1024];
-    unsigned int size=1024;
-    int status;
-    char* res = abi::__cxa_demangle (name,
-                                 buf,
-                                 &size,
-                                 &status);
-    return res;
-  }
-#else
-const char* demangle(const char* name)
-{
-  return name;
-}
-#endif  
+#include "Assets/AssetManager.hpp"
+#include "Rendering/Core/RenderingManager.hpp"
+#include "ECS/WorldManager.hpp"
+#include "ECS/Level.hpp"
+#include "Logging.hpp"
 
 int remove_whitesaces(char *p)
 {
@@ -37,10 +20,16 @@ int remove_whitesaces(char *p)
     {
         switch (p[i])
         {
-        case ' ': space = true;  break;
-        case '\t': space = true;  break;
-        case '\n': break; // you could set space true for \r and \n
-        case '\r': break; // if you consider them spaces, I just ignore them.
+        case ' ':
+            space = true;
+            break;
+        case '\t':
+            space = true;
+            break;
+        case '\n':
+            break; // you could set space true for \r and \n
+        case '\r':
+            break; // if you consider them spaces, I just ignore them.
         default:
             if (space && new_len > 0)
                 p[new_len++] = ' ';
@@ -62,41 +51,56 @@ inline int remove_whitesaces(std::string &str)
                 // but u can return std::string instead.
 }
 
-static std::string ckLogFormatter(const g3::LogMessage& msg)
+static std::string ckLogFormatter(const g3::LogMessage &msg)
 {
     std::string out;
-      out.append(msg.timestamp() + "\t"
-                 + msg.level() 
-                 + " [" 
-                 + msg.file() 
-                 + "->" 
-                 + msg.function() 
-                 + ":" + msg.line() + "]\t");
-      return out;
+    out.append(msg.timestamp() + "\t" + msg.level() + " [" + msg.file() + "->" + msg.function() + ":" + msg.line() + "]\t");
+    return out;
 }
 
-struct CustomSink {
+struct CustomSink
+{
 
-  enum FG_Color {YELLOW = 93, RED = 91, GREEN=32, WHITE = 97};
+    enum FG_Color
+    {
+        YELLOW = 93,
+        RED = 91,
+        GREEN = 32,
+        WHITE = 97
+    };
 
-  FG_Color GetColor(const LEVELS level) const {
-     if (level.value == WARNING.value) { return YELLOW; }
-     if (level.value == DEBUG.value) { return GREEN; }
-     if(level.value == ERROR.value) {return RED;}
-     if (g3::internal::wasFatal(level)) { return RED; }
+    FG_Color GetColor(const LEVELS level) const
+    {
+        if (level.value == WARNING.value)
+        {
+            return YELLOW;
+        }
+        if (level.value == DEBUG.value)
+        {
+            return GREEN;
+        }
+        if (level.value == ERROR.value)
+        {
+            return RED;
+        }
+        if (g3::internal::wasFatal(level))
+        {
+            return RED;
+        }
 
-     return WHITE;
-  }
-  
-  void ReceiveLogMessage(g3::LogMessageMover logEntry) {
-     auto level = logEntry.get()._level;
-     auto color = GetColor(level);
-     std::string m = logEntry.get().toString(ckLogFormatter);
-     remove_whitesaces(m);
+        return WHITE;
+    }
 
-     std::cout << "\033[" << color << "m" 
-       << m << "\033[m" << std::endl;
-  }
+    void ReceiveLogMessage(g3::LogMessageMover logEntry)
+    {
+        auto level = logEntry.get()._level;
+        auto color = GetColor(level);
+        std::string m = logEntry.get().toString(ckLogFormatter);
+        remove_whitesaces(m);
+
+        std::cout << "\033[" << color << "m"
+                  << m << "\033[m" << std::endl;
+    }
 };
 namespace ck
 {
@@ -105,27 +109,68 @@ CKEngine::CKEngine(EngineConfig c)
     config = c;
     auto sinkHandle = logworker->addSink(std::make_unique<CustomSink>(), &CustomSink::ReceiveLogMessage);
     initializeLogging(logworker.get());
-    switch (c.display.type)
+    /*switch (c.rendering.draw)
     {
-    case DisplayType::OPENGL:
-        display = new opengl::DisplayOpenGL(c.display);
+    case DrawType::OPENGL:
+        display = new opengl::DisplayOpenGL(c.rendering);
         break;
     default:
-        LOG(ERROR) << "Cannot Find Display for DisplayType " << demangle(typeid(c.display.type).name());
-    }
+        LOG(ERROR) << "Cannot Find Display for DisplayType " << demangle(typeid(c.rendering.draw).name());
+    }*/
+    //display = new opengl::DisplayOpenGL(c.rendering);
+
+    am = new AssetManager();
+
+    rm = new RenderingManager(c.rendering);
 };
 CKEngine::~CKEngine()
 {
-    delete display;
-    display = nullptr;
+    game->onShutdown();
+    delete game;
+    game = nullptr;
+
+    delete am;
+    am = nullptr;
+
+    delete rm;
+    rm = nullptr;
 };
-Display *CKEngine::getDisplay()
+
+typedef std::chrono::high_resolution_clock Time;
+typedef std::chrono::duration<float> fsec;
+
+void CKEngine::init()
 {
-    return display;
-};
+    LOG(INFO) << "Initialized Engine";
+    Level *level = WorldManager::getInstance()->getLevel();
+    RenderingManager::inst()->getWindow()->init();
+    RenderingManager::inst()->getRenderer()->init();
+
+    level->init();
+
+    lastFrame = Time::now();
+}
 
 void CKEngine::update()
 {
-    display->update();
+    Level *level = WorldManager::getInstance()->getLevel();
+    tunit currentFrame = Time::now();
+    fsec deltaTime = currentFrame - lastFrame;
+    float dt = deltaTime.count();
+    lastFrame = currentFrame;
+
+    RenderingManager::inst()->preRender();
+    level->tick(dt);
+    std::vector<Actor *> actors = level->getContents();
+    for (Actor *a : actors)
+    {
+        a->render();
+        for (ActorComponent *ac : a->components)
+        {
+            ac->render();
+        }
+    }
+
+    RenderingManager::inst()->postRender();
 }
-}
+} // namespace ck

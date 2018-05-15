@@ -19,14 +19,15 @@ class AssetRef;
 class AssetManager
 {
   private:
-    template <class T> friend class AssetRef;
+    template <class T>
+    friend class AssetRef;
     std::map<std::string, std::map<std::string, Asset *>> map;
     std::vector<AssetRef<Asset>> refs;
     std::string prefix = "dat";
     std::string directory = "data";
 
+    friend class CKEngine;
     AssetManager();
-    static AssetManager *iinst;
     static std::string processID(std::string id);
     uint32_t checksum(std::istream &stream);
     void flush();
@@ -44,7 +45,6 @@ class AssetManager
   public:
     ~AssetManager();
     static AssetManager *inst();
-    static void cleanup();
     void save();
     //void save(std::string dir);
     void load();
@@ -95,16 +95,23 @@ class AssetRef
 
     A *operator->()
     {
-        /*if (AssetManager::inst()->map.count(chunk) == 0) // Do we need to create the chunk?
-        {
-            AssetManager::inst()->load(chunk);
-        }*/
         if (AssetManager::inst()->map[chunk].count(ID) == 0) // Do we need to make a new object?
         {
             AssetManager::inst()->map[chunk][ID] = new A();
         }
 
         return dynamic_cast<A *>(AssetManager::inst()->map[chunk][ID]);
+        //return get();
     };
+
+    A *get()
+    {
+        if (AssetManager::inst()->map[chunk].count(ID) == 0) // Do we need to make a new object?
+        {
+            AssetManager::inst()->map[chunk][ID] = new A();
+        }
+
+        return dynamic_cast<A *>(AssetManager::inst()->map[chunk][ID]);
+    }
 };
-}
+} // namespace ck

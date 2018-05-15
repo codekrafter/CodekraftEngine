@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
+add_subdirectory(build-tool/)
+
 add_subdirectory(ThirdParty)
 
 find_program(iwyu_path NAMES include-what-you-use iwyu)

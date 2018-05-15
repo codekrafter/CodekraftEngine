@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include "Rendering/Display.hpp"
 #include "Rendering/Shader.hpp"
 
@@ -14,7 +14,7 @@ namespace opengl
 class DisplayOpenGL : public Display
 {
 public:
-  DisplayOpenGL(DisplayConfig c);
+  DisplayOpenGL(RenderingConfig c);
   virtual ~DisplayOpenGL();
   virtual bool shouldClose();
   virtual void update();
@@ -49,8 +49,6 @@ private:
   static void static_mouse_callback(GLFWwindow *window, double xpos, double ypos);
   static void static_scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
   void processInput(GLFWwindow *window);
-
-public:
 };
 }
-}
+}*/

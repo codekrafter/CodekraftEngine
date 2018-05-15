@@ -1,3 +1,4 @@
+/*
 #include <stdexcept>
 
 #include "Rendering/DisplayOpenGL.hpp"
@@ -9,7 +10,6 @@
 #include "Core/EngineApp.hpp"
 #include "ThirdParty/stb_image.h"
 #include "GLM.hpp"
-#include "Camera/Camera.hpp"
 #include "Editor/Editor.hpp"
 #include "ECS/WorldManager.hpp"
 #include "Lighting/LightActor.hpp"
@@ -29,7 +29,7 @@ void DisplayOpenGL::glfw_error_callback(int error, const char *description)
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-DisplayOpenGL::DisplayOpenGL(DisplayConfig c) : Display(c)
+DisplayOpenGL::DisplayOpenGL(RenderingConfig c) : Display(c)
 {
     // glfw: initialize and configure
     // ------------------------------
@@ -213,15 +213,6 @@ void DisplayOpenGL::update()
     Editor::getInstance()->Draw();
 
     // positions of the point lights
-    /*glm::vec3 pointLighThirdPartyositions[] = {
-        glm::vec3(0.7f, 0.2f, 2.0f),
-        glm::vec3(2.3f, -3.3f, -4.0f),
-        glm::vec3(-4.0f, 2.0f, -12.0f),
-        glm::vec3(0.0f, 0.0f, -3.0f)};
-    shader->use();
-    shader->setInt("material.diffuse", 0);
-    shader->setInt("material.specular", 1);
-    */
     // render
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -229,23 +220,7 @@ void DisplayOpenGL::update()
 
     // draw mesh
     //shader->use();
-    /*if (smesh != nullptr)
-    {
-        smesh->draw();
-    }
-    else
-    {
-        LOG(INFO) << "smesh null";
-    }*/
     // Forward Render
-    /*if (WorldManager::getInstance()->getLevel() != nullptr)
-    {
-        WorldManager::getInstance()->getLevel()->tick(1.0f);
-    }
-    else
-    {
-        LOG(INFO) << "level null";
-    }*/
 
     { // Deferred Block
         // 1. geometry pass: render scene's geometry/color data into gbuffer
@@ -258,14 +233,6 @@ void DisplayOpenGL::update()
         //shaderGeometryPass.use();
         //shaderGeometryPass.setMat4("projection", projection);
         //shaderGeometryPass.setMat4("view", view);
-        /*for (unsigned int i = 0; i < objectPositions.size(); i++)
-        {
-            model = glm::mat4();
-            model = glm::translate(model, objectPositions[i]);
-            model = glm::scale(model, glm::vec3(0.25f));
-            shaderGeometryPass.setMat4("model", model);
-            nanosuit.Draw(shaderGeometryPass);
-        }*/
         WorldManager::getInstance()->getLevel()->tick(1.0f);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -288,19 +255,6 @@ void DisplayOpenGL::update()
         std::vector<glm::vec3> lightPositions;
         std::vector<glm::vec3> lightColors;
         srand(13);
-        /*for (unsigned int i = 0; i < NR_LIGHTS; i++)
-        {
-            // calculate slightly random offsets
-            float xPos = ((rand() % 100) / 100.0) * 6.0 - 3.0;
-            float yPos = ((rand() % 100) / 100.0) * 6.0 - 4.0;
-            float zPos = ((rand() % 100) / 100.0) * 6.0 - 3.0;
-            lightPositions.push_back(glm::vec3(xPos, yPos, zPos));
-            // also calculate random color
-            float rColor = ((rand() % 100) / 200.0f) + 0.5; // between 0.5 and 1.0
-            float gColor = ((rand() % 100) / 200.0f) + 0.5; // between 0.5 and 1.0
-            float bColor = ((rand() % 100) / 200.0f) + 0.5; // between 0.5 and 1.0
-            lightColors.push_back(glm::vec3(rColor, gColor, bColor));
-        }*/
 
         for (Actor *a : WorldManager::getInstance()->getLevel()->getContents())
         {
@@ -328,7 +282,7 @@ void DisplayOpenGL::update()
             shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Linear", linear);
             shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Quadratic", quadratic);
             // then calculate radius of light volume/sphere
-            const float maxBrightness = std::fmaxf(std::fmaxf(1 /*lightColors[i].r*/, 1 /*lightColors[i].g*/), /*lightColors[i].b*/ 1);
+            //const float maxBrightness = std::fmaxf(std::fmaxf(1 lightColors[i].r, 1 /*lightColors[i].g*//*), /*lightColors[i].b*//* 1);
             float radius = (-linear + std::sqrt(linear * linear - 4 * quadratic * (constant - (256.0f / 5.0f) * maxBrightness))) / (2.0f * quadratic);
             shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Radius", radius);
         }
@@ -349,8 +303,6 @@ void DisplayOpenGL::update()
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     } // Deferred Block
 
-    WorldManager::getInstance()->getLevel()->forwardDraw(1.0f);
-
     ImGui::Render();
     ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -365,9 +317,9 @@ void DisplayOpenGL::static_framebuffer_size_callback(GLFWwindow *window, int wid
 
 void DisplayOpenGL::static_mouse_callback(GLFWwindow *window, double xpos, double ypos)
 {
-    Display *display = getEngine()->getDisplay();
-    DisplayOpenGL *d = dynamic_cast<DisplayOpenGL *>(display);
-    d->mouse_callback(window, xpos, ypos);
+    //Display *display = getEngine()->getDisplay();
+    //DisplayOpenGL *d = dynamic_cast<DisplayOpenGL *>(display);
+    //d->mouse_callback(window, xpos, ypos);
 }
 
 void DisplayOpenGL::mouse_callback(GLFWwindow *window, double xpos, double ypos)
@@ -437,8 +389,9 @@ void DisplayOpenGL::renderQuad()
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     }
     glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 }
 } // namespace opengl
 } // namespace ck
+*/

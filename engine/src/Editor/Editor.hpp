@@ -16,6 +16,9 @@ private:
   Actor *selected = nullptr;
   int si = 0;
 
+  // Shader Editor
+  bool s_open;
+
 public:
   Editor();
   static Editor *getInstance();

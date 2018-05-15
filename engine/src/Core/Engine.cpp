@@ -5,7 +5,8 @@
 #include "Core/Engine.hpp"
 #include "Core/EngineApp.hpp"
 #include "colormod.h"
-#include "Rendering/Display.hpp"
+#include "Rendering/Core/RenderingManager.hpp"
+#include "Rendering/Core/Window.hpp"
 #include "Logging.hpp"
 
 namespace ck
@@ -14,14 +15,6 @@ ck::CKEngine *engine = nullptr;
 
 ck::CKEngine *initEngine(EngineConfig config)
 {
-    ck::term::color::Modifier red(ck::term::color::Code::FG_RED);
-    ck::term::color::Modifier def(ck::term::color::Code::FG_DEFAULT);
-    std::string format = "[%datetime] [%level] %msg";
-    std::ostringstream ss;
-    ss << red;
-    ss << format;
-    ss << def;
-    std::string redFormat = ss.str();
     ck::CKEngine *app = new ck::CKEngine(config);
     ck::engine = app;
     LOG(INFO) << "Starting Codekraft Engine Version: " << ENGINE_VERSION << std::endl;
@@ -30,8 +23,9 @@ ck::CKEngine *initEngine(EngineConfig config)
 
 int run(ck::CKEngine *engine)
 {
-    engine->getDisplay()->showWindow();
-    while (!engine->getDisplay()->shouldClose())
+    engine->init();
+    RenderingManager::inst()->getWindow()->setVisibility(true);
+    while (!RenderingManager::inst()->getWindow()->shouldClose())
     {
         engine->update();
     }
@@ -42,4 +36,4 @@ ck::CKEngine *getEngine()
 {
     return ck::engine;
 }
-}
+} // namespace ck
