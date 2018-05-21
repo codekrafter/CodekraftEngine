@@ -13,10 +13,6 @@
     unsigned char *data = (unsigned char *)malloc(size); \
     unsigned char *ptr = data;
 
-#define S_STRING(s)                            \
-    std::memcpy(ptr, s.c_str(), s.size() + 1); \
-    ptr = ptr + s.size() + 1;
-
 #define S_TRISIZE(one, two, three)          \
     TriSize ts;                             \
     ts.n1 = one;                            \

@@ -9,7 +9,7 @@
 ////#include <ThirdParty/cereal/types/memory.hpp>
 ////#include <ThirdParty/cereal/types/string.hpp>
 ////#include <ThirdParty/cereal/types/polymorphic.hpp>
-{
+namespace ck {
   class Asset
   {
   protected:
