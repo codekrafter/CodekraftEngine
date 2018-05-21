@@ -1,0 +1,7 @@
+{
+    "name": "TestGame",
+    "engineVersion": 0.1,
+    "projectVersion": 0.1,
+    "engine": false,
+    "src": "../testgame/src/",
+}

@@ -1,0 +1,3 @@
+const std::string include_heading = R"(
+#include "Assets/Serialization.hpp"
+)";

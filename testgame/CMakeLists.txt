@@ -5,12 +5,6 @@ cmake_policy(SET CMP0072 NEW)
 
 set(CMAKE_INSTALL_PREFIX ..)
 
-ADD_DEFINITIONS(
-#    -std=c++1z
-#    -frtti
-)
-
-#find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -18,7 +12,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_BUILD_TYPE Debug)
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -D_GLIBCXX_DEBUG")
 
 file(GLOB SRC "src/*.cpp")
 

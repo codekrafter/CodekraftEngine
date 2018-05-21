@@ -32,11 +32,52 @@
         ptr = ptr + sizeof(SizeS);           \
     }
 
+#define S_STRUCT(struct)                           \
+    {                                              \
+        std::memcpy(ptr, &struct, sizeof(struct)); \
+        ptr = ptr + sizeof(struct);                \
+    }
+
+#define S_STRING(str)                                  \
+    {                                                  \
+        SizeS sz(str.size() + 1);                      \
+        std::memcpy(ptr, &sz, sizeof(SizeS));          \
+        ptr = ptr + sizeof(SizeS);                     \
+                                                       \
+        std::memcpy(ptr, str.c_str(), str.size() + 1); \
+        ptr = ptr + str.size() + 1;                    \
+    }
+
 #define END_SAVE() \
     DatSize o;     \
     o.data = data; \
     o.size = size; \
     return o;
+
+#define START_LOAD() \
+    unsigned char *ptr = data;
+
+#define L_STRING(str)                         \
+    {                                         \
+        SizeS sz;                             \
+        std::memcpy(&sz, ptr, sizeof(SizeS)); \
+        ptr = ptr + sizeof(SizeS);            \
+                                              \
+        char *ss = (char *)malloc(sz.s);      \
+        std::memcpy(ss, ptr, sz.s);           \
+        ptr = ptr + sz.s;                     \
+        str = std::string(ss);                \
+                                              \
+        free(ss);                             \
+    }
+
+#define L_STRUCT(struct)                           \
+    {                                              \
+        std::memcpy(&struct, ptr, sizeof(struct)); \
+        ptr = ptr + sizeof(struct);                \
+    }
+
+#define END_LOAD()
 // End Macros
 
 namespace ck

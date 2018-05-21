@@ -26,14 +26,6 @@ DatSize ShaderS::save()
     size_t size = sizeof(SizeS) * 3 + v.size() + f.size() + g.size() + 3; // Size of the TriSize struct, sizes of all the strings plus 1 per string (store null termination)
     START_SAVE()
 
-    //TRISIZE(v.size() + 1, f.size() + 1, g.size() + 1)
-
-    S_SIZE(v.size() + 1)
-
-    S_SIZE(f.size() + 1)
-
-    S_SIZE(g.size() + 1)
-
     S_STRING(v)
 
     S_STRING(f)
@@ -43,40 +35,16 @@ DatSize ShaderS::save()
     END_SAVE()
 };
 
-void ShaderS::load(unsigned char *data, size_t size)
-{
-    unsigned char *ptr = data;
+void ShaderS::load(unsigned char *data, size_t size){
+    START_LOAD()
 
-    SizeS s1;
-    SizeS s2;
-    SizeS s3;
+        L_STRING(v)
 
-    std::memcpy(&s1, ptr, sizeof(SizeS));
-    ptr = ptr + sizeof(SizeS);
+            L_STRING(f)
 
-    std::memcpy(&s2, ptr, sizeof(SizeS));
-    ptr = ptr + sizeof(SizeS);
+                L_STRING(g)
 
-    std::memcpy(&s3, ptr, sizeof(SizeS));
-    ptr = ptr + sizeof(SizeS);
+                    END_LOAD()
 
-    char *vv = (char *)malloc(s1.s);
-    char *ff = (char *)malloc(s2.s);
-    char *gg = (char *)malloc(s3.s);
-
-    std::memcpy(vv, ptr, s1.s);
-    ptr = ptr + s1.s;
-    std::memcpy(ff, ptr, s2.s);
-    ptr = ptr + s2.s;
-    std::memcpy(gg, ptr, s3.s);
-    ptr = ptr + s3.s;
-
-    v = std::string(vv);
-    f = std::string(ff);
-    g = std::string(gg);
-
-    free(vv);
-    free(ff);
-    free(gg);
 };
 }

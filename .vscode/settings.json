@@ -57,7 +57,8 @@
         "filesystem": "cpp",
         "cerrno": "cpp",
         "future": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        ".*ckproj": "json"
     },
     "workbench.colorTheme": "Default Dark+",
     "files.exclude": {
