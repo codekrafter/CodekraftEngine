@@ -30,6 +30,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 file(GLOB_RECURSE SRC "src/*.cpp" "src/*.c" "src/*.inl")
 #file(GLOB_RECURSE ThirdParty_SRC "include/*.c" "include/*.cpp" "include/*.inl")
 #file(GLOB_RECURSE HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/*.hpp" "include/*.h" "include/*.c" "include/*.inl")
+
 configure_file (
   "src/EngineConfig.hpp.in"
   "include/EngineConfig.hpp"
@@ -39,6 +40,7 @@ configure_file (
 #include_directories(/usr/local/GLFW/include)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
+link_directories()
 
 add_library(CKEngine SHARED ${SRC})
 target_link_libraries(CKEngine glfw g3logger ${OPENGL_LIBRARIES} pthread dl)
@@ -55,6 +57,6 @@ endif()
 add_executable(CKTests test.cpp)
 target_link_libraries(CKTests CKEngine)
 
-install(TARGETS CKEngine DESTINATION lib)
-install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/CK       
-         DESTINATION "include")
+#install(TARGETS CKEngine DESTINATION lib)
+#install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/CK       
+#         DESTINATION "include")

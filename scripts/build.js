@@ -4,6 +4,8 @@
 
 let fs = require('fs')
 
+let start_dir = process.cwd();
+
 var args = []
 var options = []
 var file
@@ -99,41 +101,81 @@ try {
 
 engine = config["engine"] || engine;
 
-print(config["name"])
-
 function mkdir(name) { try { fs.mkdirSync(name) } catch (err) { if (err.code !== 'EEXIST') throw err } }
 
 function cd(dir) { process.chdir(dir) }
 
-mkdir("generated")
+mkdir("working")
 
-mkdir("generated/cmake")
+mkdir("working/cmake")
 
-mkdir("generated/ckb")
+mkdir("working/ckb")
 
-cd("generated")
+cd("working")
 
-cd("cmake")
-
-function exec(command, args) {
-    var result = spawnSync(command,args)
-    if (result.stderr.toString()) {
+function exec(command, args = [], stdout = true, stderr = true) {
+    var result = spawnSync(command, args)
+    if (result.stderr.toString() && stderr) {
         printe(result.stderr.toString())
     }
-    if (result.stdout.toString()) {
+    if (result.stdout.toString() && stdout) {
         print(result.stdout.toString())
     }
 }
 var src = config["src"];
-if(src == null)
-{
+if (src == null) {
     src = "../../"
-} else
-{
+} else {
     src = "../../" + src
 }
 
-let cmakeFile = `
+function findEngine() {
+    if (engine) {
+        var out = {
+            headers: "",
+            lib: "",
+            libLoc: ""
+        }
+
+        return out
+    }
+    var out = {}
+
+    if (process.platform == 'win32') {
+        printe("Windows support needs to be implemented")
+        process.exit(-1)
+    }
+
+    if (!fs.exists("/opt/CodekraftEngine")) {
+        printe("Engine is not in /opt/CodekraftEngine, please install it")
+        process.exit(-1)
+    }
+
+    out.headers = "/opt/CodekraftEngine/include/"
+    out.libLoc = "/opt/CodekraftEngine/lib"
+    out.lib = "CodekraftEngine"
+
+    return out
+}
+
+var cmakeFile = "ERROR OPENING"
+
+var ef = findEngine();
+
+var NAME = config["name"]
+var ENGINE_HEADERS = ef.headers
+var ENGINE_LIB = ef.lib
+var ENGINE_LIB_LOC = ef.libLoc
+var SRC = config["src"]
+var PREC = config["preCompile"]
+var CLINK
+try {
+    CLINK = config["linkCode"]
+} catch (e) {
+    CLINK = `target_link_libraries(${NAME} ${ENGINE_LIB})`
+}
+var CFIND = config["find"]
+cmakeFile = `
 cmake_minimum_required(VERSION 3.5)
 project(${NAME})
 
@@ -143,14 +185,56 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(NAME ${NAME})
+
+${FIND}
+
 set(CMAKE_BUILD_TYPE Debug)
 
 file(GLOB SRC "${SRC}/*.cpp")
 
+${PREC}
+
 include_directories(${ENGINE_HEADERS})
+link_directories(${ENGINE_LIB_LOC})
 
-add_executable(%${NAME} \${SRC})
-target_link_libraries(T${NAME} \${CMAKE_BINARY_DIR}/engine/libCKEngine.so)
+add_executable(${NAME} \${SRC})
+#target_link_libraries(${NAME} \${CMAKE_BINARY_DIR}/engine/libCKEngine.so)
+${LINK}
 `
+function runCmake() {
+    exec("cmake", ["..", "-GNinja"])
+    let f_dir = process.cwd();
+    //cd(start_dir)
+    cd("cmake")
+    if (engine) {
+        print(process.cwd())
+        var ckl = "../../" + config["cmake"]
+        exec("cmake", [ckl, "-GNinja"])
+    }
+    else {
+        exec("cmake", ["..", "-GNinja"])
+    }
 
-exec("cmake", [src,"-GNinja"])
+    cd(f_dir)
+}
+print(start_dir)
+
+
+// First cmake to generate compile commands
+exec("cmake", ["..", "-GNinja"])
+
+
+// Run CodekraftBuild tool
+cd(start_dir)
+cd("working")
+cd("ckb")
+exec("ckbuild", [start_dir + "/working/cmake/compile_commands.json"])
+// Run CMake again
+exec("cmake", ["..", "-GNinja"])
+
+// Run Ninja
+cd(start_dir)
+cd("working")
+cd("cmake")
+exec("ninja", [])

@@ -10,7 +10,8 @@
 
 namespace ck
 {
-CKClass() class StaticMeshComponent : virtual public SceneComponent
+CKClass();
+class StaticMeshComponent : virtual public SceneComponent
 {
 private:
 protected:

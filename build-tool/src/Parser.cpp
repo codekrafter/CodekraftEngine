@@ -63,7 +63,9 @@ std::vector<CKObject> parseFile(std::string file)
                     auto lfc = line.find("class");
                     if (line.find("class") == std::string::npos)
                     {
+                        std::cout << "LINE: " << line << std::endl;
                         std::cout << "Found CKClass Macro, but did not find class declaration in next line" << std::endl;
+                        std::cout << "File: " << file << " Line: " << ln << std::endl;
                     }
                     std::string name = getClassName(line);
                     currentOBJ.name = name;

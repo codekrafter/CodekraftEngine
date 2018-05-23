@@ -12,3 +12,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 add_executable(CodekraftBuild src/main.cpp)
 
 set_target_properties(CodekraftBuild PROPERTIES CXX_STANDARD 17 OUTPUT_NAME ckbuild)
+
+install(TARGETS CodekraftBuild RUNTIME DESTINATION bin)
