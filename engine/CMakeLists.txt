@@ -3,7 +3,9 @@ set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 cmake_minimum_required(VERSION 3.5)
 project(CodekraftEngine)
 
+if(${CMAKE_MINOR_VERSION} GREATER_EQUAL 10)
 cmake_policy(SET CMP0072 NEW)
+endif()
 
 ADD_DEFINITIONS(
 #    -std=c++1z
