@@ -6,14 +6,15 @@ let fs = require('fs')
 
 let start_dir = process.cwd();
 
+let child_process = require("child_process")
+
 var args = []
 var options = []
 var file
 
-const { spawnSync } = require("child_process")
-
 var engine = false
 var verbose = false
+var install = false
 var dir = process.cwd()
 
 function print(str) { console.log(str) }
@@ -21,6 +22,8 @@ function print(str) { console.log(str) }
 function printe(str) { console.error('\x1b[31m%s\x1b[0m', str) }
 
 function printw(str) { console.warn('\x1b[33m%s\x1b[0m', str) }
+
+function printb(str) { console.warn('\x1b[1m%s\x1b[0m', str) }
 
 function printv(str) { verbose ? console.log(str) : {} }
 
@@ -77,6 +80,10 @@ if (options.length != 0) {
                 case "verbose":
                     verbose = true
                     break
+                case "i":
+                case "install":
+                    install = true
+                    break
             }
         }
     })
@@ -114,13 +121,10 @@ mkdir("working/ckb")
 cd("working")
 
 function exec(command, args = [], stdout = true, stderr = true) {
-    var result = spawnSync(command, args)
-    if (result.stderr.toString() && stderr) {
-        printe(result.stderr.toString())
-    }
-    if (result.stdout.toString() && stdout) {
-        print(result.stdout.toString())
-    }
+    var done = false
+    var options = {}
+    options.stdio = [process.stdin, (stdout ? process.stdout : 'ignore'), (stderr ? process.stderr : 'ignore')]
+    const child = child_process.spawnSync(command, args, options)
 }
 var src = config["src"];
 if (src == null) {
@@ -146,7 +150,7 @@ function findEngine() {
         process.exit(-1)
     }
 
-    if (!fs.exists("/opt/CodekraftEngine")) {
+    if (!fs.existsSync("/opt/CodekraftEngine")) {
         printe("Engine is not in /opt/CodekraftEngine, please install it")
         process.exit(-1)
     }
@@ -163,23 +167,27 @@ var cmakeFile = "ERROR OPENING"
 var ef = findEngine();
 
 var NAME = config["name"]
+if(NAME == undefined)
+{
+    printe("Config does not contain name")
+    process.exit(-1)
+}
 var ENGINE_HEADERS = ef.headers
 var ENGINE_LIB = ef.lib
 var ENGINE_LIB_LOC = ef.libLoc
-var SRC = config["src"]
-var PREC = config["preCompile"]
-var CLINK
-try {
-    CLINK = config["linkCode"]
-} catch (e) {
-    CLINK = `target_link_libraries(${NAME} ${ENGINE_LIB})`
-}
-var CFIND = config["find"]
+var SRC = config["src"] ? "../" + config["src"] : "../src"
+var PREC = config["preCompile"] ? config["preCompile"] : "#NO PRECOMPILE STEPS"
+var CLINK = config["linkCode"] ? config["linkCode"] : `target_link_libraries(${NAME} ${ENGINE_LIB})`
+var CFIND = config["find"] ? config["find"] : "#NO CUSTOM FIND DIRECTIVES"
 cmakeFile = `
 cmake_minimum_required(VERSION 3.5)
 project(${NAME})
 
+if(\${CMAKE_MINOR_VERSION} GREATER 10)
 cmake_policy(SET CMP0072 NEW)
+endif()
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -187,7 +195,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(NAME ${NAME})
 
-${FIND}
+${CFIND}
 
 set(CMAKE_BUILD_TYPE Debug)
 
@@ -200,41 +208,63 @@ link_directories(${ENGINE_LIB_LOC})
 
 add_executable(${NAME} \${SRC})
 #target_link_libraries(${NAME} \${CMAKE_BINARY_DIR}/engine/libCKEngine.so)
-${LINK}
+${CLINK}
 `
 function runCmake() {
-    exec("cmake", ["..", "-GNinja"])
     let f_dir = process.cwd();
-    //cd(start_dir)
+    cd(start_dir)
+    cd("working")
     cd("cmake")
     if (engine) {
-        print(process.cwd())
         var ckl = "../../" + config["cmake"]
-        exec("cmake", [ckl, "-GNinja"])
+        exec("cmake", [ckl, "-GNinja"], false)
     }
     else {
-        exec("cmake", ["..", "-GNinja"])
+        exec("cmake", ["..", "-GNinja"], false)
     }
 
     cd(f_dir)
 }
-print(start_dir)
 
+cd(start_dir)
+cd("working")
+if (!engine) {
+    fs.writeFileSync('./CMakeLists.txt', cmakeFile)
+}
 
 // First cmake to generate compile commands
-exec("cmake", ["..", "-GNinja"])
-
+//exec("cmake", ["..", "-GNinja"])
+printb("First CMake Round")
+runCmake()
 
 // Run CodekraftBuild tool
+printb("Running CodekraftBuild Tool")
 cd(start_dir)
 cd("working")
 cd("ckb")
-exec("ckbuild", [start_dir + "/working/cmake/compile_commands.json"])
+print(process.cwd())
+exec("ckbuild", ["-go",start_dir + "/working/cmake/compile_commands.json"])
+
 // Run CMake again
-exec("cmake", ["..", "-GNinja"])
+//exec("cmake", ["..", "-GNinja"])
+printb("Second CMake Round")
+runCmake()
 
 // Run Ninja
+printb("Running Ninja")
 cd(start_dir)
 cd("working")
 cd("cmake")
 exec("ninja", [])
+
+// Check install
+if (install) {
+    if (config["install"]) {
+        cd(start_dir)
+        exec("sudo", ["./" + config["install"]])
+    }
+    else {
+        printe("Specified to install, but there is no install script in project config")
+        process.exit(-1)
+    }
+}

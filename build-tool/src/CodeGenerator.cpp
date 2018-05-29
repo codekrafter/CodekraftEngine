@@ -2,6 +2,7 @@
 
 #include <sys/types.h> // required for stat.h
 #include <sys/stat.h>  // no clue why required -- man pages say so
+#include <iomanip>
 
 void createDirectory(std::string sPath)
 {
@@ -40,36 +41,90 @@ std::vector<std::string> split(const std::string &str, const std::string &delim)
 
 namespace ckb
 {
-std::pair<std::string, std::string> generateCode(CKObject obj, std::string fileName);
-std::string generateCode(ParseOutput parsed)
+
+std::string generateLookup(std::vector<CKObject> objs)
+{
+    std::stringstream file;
+
+    file << "#include <vector>" << std::endl
+         << std::endl
+         << std::endl;
+
+    for (CKObject o : objs)
+    {
+        file << "#include \"" << o.name << ".generated.hpp\"" << std::endl;
+    }
+    file << std::endl;
+
+    file << "namespace ck" << std::endl
+         << "{" << std::endl
+         << "struct AssetS;" << std::endl
+         << "}" << std::endl
+
+         << "namespace ckg" << std::endl
+         << "{" << std::endl;
+    for (CKObject o : objs)
+    {
+        file << "\t"
+             << "struct " << o.name << "S;" << std::endl;
+    }
+    file << "}" << std::endl
+         << std::endl
+         << std::endl
+         << std::endl;
+
+    file << "namespace ck" << std::endl
+         << "{" << std::endl;
+
+    file << "std::vector<AssetS*> getGeneratedObjects()" << std::endl
+         << "{" << std::endl
+         << "\t"
+         << "std::vector<AssetS*> out;" << std::endl
+         << std::endl;
+
+    file << "\t"
+         << "return out;" << std::endl
+         << "}" << std::endl;
+
+    file << "}" << std::endl;
+
+    return file.str();
+}
+
+std::pair<std::string, std::string> generateCode(CKObject obj, std::string fileName, unsigned char UUID);
+void generateCode(ParseOutput parsed)
 {
     createDirectory("generated");
-
+    unsigned char cUUID = 0x0001;
+    std::vector<CKObject> totalObjects;
     for (std::pair<std::string, std::vector<CKObject>> p : parsed.files)
     {
         std::vector<std::string> path = split(p.first, "/");
         std::string fileName = "./generated/" + split(path[path.size() - 1], ".")[0];
         for (CKObject o : p.second)
         {
-            errno = 0;
+            totalObjects.push_back(o);
             std::cout << "Generating  " << o.name << std::endl;
-            std::pair<std::string, std::string> code = generateCode(o, fileName);
+            std::pair<std::string, std::string> code = generateCode(o, fileName, cUUID);
             std::ofstream os(fileName + ".generated.hpp", std::ios::trunc);
-            std::cerr << strerror(errno) << std::endl;
             os << code.first;
             os.close();
-            std::cout << "filename: " << fileName << std::endl;
             os.open(fileName + ".generated.cpp", std::ios::trunc);
             os << code.second;
             os.close();
+            cUUID = cUUID + 0x0001;
         }
     }
-    return "";
+
+    std::ofstream os("./generated/Lookup.generated.cpp", std::ios::trunc);
+    os << generateLookup(totalObjects);
+    os.close();
+    return;
 };
 
 std::string calculateSize(CKObject obj);
 
-std::pair<std::string, std::string> generateCode(CKObject obj, std::string fileName)
+std::pair<std::string, std::string> generateCode(CKObject obj, std::string fileName, unsigned char UUID)
 {
     std::stringstream hpp;
     std::stringstream cpp;
@@ -78,10 +133,13 @@ std::pair<std::string, std::string> generateCode(CKObject obj, std::string fileN
     hpp << "#ifndef CKOBJECT_HEADING" << std::endl
         << "#define CKOBJECT_HEADING" << std::endl
         << include_heading << std::endl
-        << "#endif" << std::endl;
+        << "#endif" << std::endl
+        << std::endl;
 
     // Start Object
-    hpp << "struct " << obj.name << "S : AssetS" << std::endl
+    hpp << "namespace ckg" << std::endl
+        << "{" << std::endl
+        << "struct " << obj.name << "S : AssetS" << std::endl
         << "{" << std::endl
         << "  private:" << std::endl;
     // Fields
@@ -97,16 +155,23 @@ std::pair<std::string, std::string> generateCode(CKObject obj, std::string fileN
         << "\t"
         << "virtual DatSize save() override;" << std::endl
         << "\t"
-        << "virtual void load(unsigned char *data, size_t size) override;" << std::endl;
+        << "virtual void load(unsigned char *data, size_t size) override;" << std::endl
+        << "\t"
+        << "virtual inline unsigned char getUUID() override;" << std::endl
+        << "\t"
+        << "virtual inline " << obj.name << "S *clone() override;" << std::endl;
     // End Object
-    hpp << "};" << std::endl;
+    hpp << "};" << std::endl
+        << "}" << std::endl;
 
     // Start Source
     cpp << "#include \"" << fileName << ".generated.hpp"
         << "\"" << std::endl
         << std::endl
         << std::endl
-        << std::endl;
+        << std::endl
+        << "namespace ckg " << std::endl
+        << "{" << std::endl;
     // Asset Constructor
     cpp << obj.name << "S::" << obj.name << "S(" << obj.name << "* a)" << std::endl
         << "{" << std::endl;
@@ -184,6 +249,26 @@ std::pair<std::string, std::string> generateCode(CKObject obj, std::string fileN
     cpp << "\t"
         << "END_LOAD()" << std::endl
         << "}" << std::endl;
+
+    cpp << std::endl;
+
+    // Get UUID
+    cpp << "inline unsigned char" << obj.name << "S::getUUID()" << std::endl
+        << "{" << std::endl
+        << "\t"
+        << "return 0x" << std::hex << std::setfill('0') << std::setw(4) << static_cast<int>(UUID) << ";" << std::endl
+        << "}" << std::endl;
+
+    cpp << std::endl;
+
+    // Clone
+    cpp << "inline " << obj.name << "S *" << obj.name << "S::clone()" << std::endl
+        << "{" << std::endl
+        << "\t"
+        << "return new " << obj.name << "S();" << std::endl
+        << "}" << std::endl;
+    cpp << "}" << std::endl;
+
     // Return Source Files
     return std::make_pair(hpp.str(), cpp.str());
 }

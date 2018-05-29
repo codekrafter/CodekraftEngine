@@ -5,27 +5,5 @@
     "engine": true,
     "src": "./src/",
     "cmake": ".",
-    "type": "shared",
-    "find":
-    [
-        "find_package(OpenGL REQUIRED)"
-    ],
-    "preCompile": [
-        "configure_file (",
-        "'src/EngineConfig.hpp.in'",
-        "'include/EngineConfig.hpp'",
-        ")"
-    ],
-    "linkCode": [
-        "target_link_libraries(${NAME} glfw g3logger ${OPENGL_LIBRARIES} pthread dl)",
-        "if('${UNIX}' AND NOT '${APPLE}')",
-        "  target_link_libraries(${NAME} X11 Xrandr Xinerama Xi Xxf86vm Xcursor)",
-        "endif()",
-        "if('${APPLE}')",
-        "  Find_Library(Cocoa Cocoa)",
-        "  Find_Library(IOKit IOKit)",
-        "  Find_Library(CoreDisplay CoreDisplay)",
-        "  target_link_libraries(${NAME} ${Cocoa} ${IOKit} ${CoreDisplay})",
-        "endif()"
-    ]
+    "install": "install.sh"
 }

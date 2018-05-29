@@ -1,10 +1,15 @@
 #pragma once
 
 #include "GLM.hpp"
+#include "Engine.hpp"
 
 #include "Assets/Asset.hpp"
+
+//#include "Shader.generated.hpp"
+
 namespace ck
 {
+CKClass();
 class Shader : public Asset
 {
 private:
@@ -17,16 +22,29 @@ public:
   virtual void init();
   virtual std::string getType();
   virtual int getVersion();
+
+  CKProperty();
   std::string vertex = "";
+
+  CKProperty();
   std::string fragment = "";
+
+  CKProperty();
   std::string geometry = "";
+
+  CKProperty();
   std::string vfile;
+
+  CKProperty();
   std::string ffile;
   void setCode(std::string v, std::string f, std::string g = "");
   void use();
   void destroy();
   void open(std::string vf, std::string ff);
+
+  CKEvent();
   void reload();
+
   void setBool(const std::string &name, bool value) const;
   void setInt(const std::string &name, int value) const;
   void setFloat(const std::string &name, float value) const;

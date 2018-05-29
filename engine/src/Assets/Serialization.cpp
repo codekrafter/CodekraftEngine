@@ -3,7 +3,7 @@
 namespace ck
 {
 
-ShaderS::ShaderS(){};
+/*ShaderS::ShaderS(){};
 
 ShaderS::ShaderS(Shader *s)
 {
@@ -46,5 +46,5 @@ void ShaderS::load(unsigned char *data, size_t size){
 
                     END_LOAD()
 
-};
+};*/
 }

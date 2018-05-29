@@ -94,7 +94,7 @@ unsigned char getUUID(Asset *a)
     }
 };
 
-AssetS *AssetManager::getObject(unsigned char UUID)
+/*AssetS *AssetManager::getObject(unsigned char UUID)
 {
 
     if (UUID == 0x0001)
@@ -124,7 +124,7 @@ AssetS *AssetManager::getObject(unsigned char UUID)
         LOG(ERROR) << "Could not find asset of UUID: 0x" << ss.str();
         return nullptr;
     }
-};
+};*/
 
 AssetManager::AssetManager(){};
 

@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "Rendering/StaticMesh.hpp"
+#include "Rendering/Material/Material.hpp"
 #include "Rendering/Shader.hpp"
 
 // Macros
@@ -122,9 +123,12 @@ struct AssetS
     virtual Asset *asset() = 0;
     // IMPORTANT: Each AssetS should also define a constructor that takes the corresponding asset, and a "deconstructor"(AssetS::asset()) that returns a corresponding asset.
     //AssetS(Asset *a) {};
+
+    virtual inline unsigned char getUUID() = 0;
+    virtual inline AssetS *clone() = 0;
 };
 
-struct ShaderS : AssetS
+/*struct ShaderS : AssetS
 {
     // Variables
     std::string v;
@@ -185,11 +189,6 @@ struct TextureS : AssetS
         std::memcpy(&ti, ptr, sizeof(TriInt));
         ptr = ptr + sizeof(TriInt);
 
-        /*if (data != nullptr)
-        {
-            free(data);
-        }*/
-
         data = (unsigned char *)malloc(ti.width * ti.height * ti.n);
 
         std::memcpy(data, ptr, (ti.width * ti.height * ti.n));
@@ -205,91 +204,6 @@ struct MaterialS : AssetS
     virtual DatSize save() { return DatSize(); };
     virtual void load(unsigned char *, size_t size){};
 };
-/*{
-    ShaderS shader;
-    TextureS diffuse;
-    TextureS specular;
-
-    MaterialS(){};
-    MaterialS(Material *mat)
-    {
-        shader = mat->shader;
-        diffuse = mat->diffuse;
-        specular = mat->specular;
-    };
-    virtual Material *asset()
-    {
-        Material *mat = new Material();
-        mat->shader = shader.asset();
-        mat->diffuse = diffuse.asset();
-        mat->specular = specular.asset();
-        return mat;
-    };
-
-    virtual DatSize save()
-    {
-        DatSize ShaderDat = shader.save();
-        DatSize DiffuseDat = diffuse.save();
-        DatSize SpecularDat = specular.save();
-        size_t size = sizeof(TriSize) + ShaderDat.size + DiffuseDat.size + SpecularDat.size;
-        unsigned char *data = (unsigned char *)malloc(size);
-        unsigned char *ptr = data;
-
-        TriSize ts;
-        ts.n1 = ShaderDat.size;
-        ts.n2 = DiffuseDat.size;
-        ts.n3 = SpecularDat.size;
-        std::memcpy(ptr, &ts, sizeof(TriSize));
-        ptr = ptr + sizeof(TriSize);
-
-        std::memcpy(ptr, ShaderDat.data, ts.n1);
-        ptr = ptr + ts.n1;
-        free(ShaderDat.data);
-
-        std::memcpy(ptr, DiffuseDat.data, ts.n2);
-        ptr = ptr + ts.n2;
-        free(DiffuseDat.data);
-
-        std::memcpy(ptr, SpecularDat.data, ts.n3);
-        ptr = ptr + ts.n3;
-        free(SpecularDat.data);
-
-        DatSize o;
-        o.size = size;
-        o.data = data;
-        return o;
-    };
-    virtual void load(unsigned char *data, size_t size)
-    {
-        unsigned char *ptr = data;
-
-        DatSize ShaderDat;
-        DatSize DiffuseDat;
-        DatSize SpecularDat;
-
-        TriSize ts;
-        std::memcpy(&ts, ptr, sizeof(TriSize));
-        ptr = ptr + sizeof(TriSize);
-
-        ShaderDat.data = (unsigned char *)malloc(ts.n1);
-        std::memcpy(ShaderDat.data, ptr, ts.n1);
-        ptr = ptr + ts.n1;
-        shader.load(ShaderDat.data, ShaderDat.size);
-        free(ShaderDat.data);
-
-        DiffuseDat.data = (unsigned char *)malloc(ts.n2);
-        std::memcpy(DiffuseDat.data, ptr, ts.n2);
-        ptr = ptr + ts.n2;
-        diffuse.load(DiffuseDat.data, DiffuseDat.size);
-        free(DiffuseDat.data);
-
-        SpecularDat.data = (unsigned char *)malloc(ts.n3);
-        std::memcpy(SpecularDat.data, ptr, ts.n3);
-        ptr = ptr + ts.n3;
-        specular.load(SpecularDat.data, SpecularDat.size);
-        free(SpecularDat.data);
-    };
-};*/
 
 struct Vec3S
 {
@@ -543,5 +457,5 @@ struct StaticMeshS : AssetS
             free(d);
         }
     };
-};
+};*/
 } // namespace ck

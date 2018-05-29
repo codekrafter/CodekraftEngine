@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(CKTestGame)
 
-if(${CMAKE_MINOR_VERSION} GREATER_EQUAL 10)
+if(${CMAKE_MINOR_VERSION} GREATER 10)
 cmake_policy(SET CMP0072 NEW)
 endif()
 
