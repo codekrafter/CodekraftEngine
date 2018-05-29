@@ -1,9 +1,0 @@
-{
-    "name": "CodekraftBuildTool",
-    "engineVersion": 0.1,
-    "projectVersion": 0.1,
-    "engine": true,
-    "src": "./src/",
-    "cmake": ".",
-    "install": "./install.sh"
-}

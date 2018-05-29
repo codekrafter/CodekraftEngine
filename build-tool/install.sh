@@ -1,7 +1,10 @@
 #!/bin/bash
 
-cd ./working/cmake
-sudo ninja install
+echo "install script is still in progress after build-tool revamp"
 
-echo "-- Installing: /usr/local/bin/ckb -> /usr/local/bin/ckbuild"
-sudo ln -sf /usr/local/bin/ckbuild /usr/local/bin/ckb
+#cd ./working/cmake
+#sudo ninja install
+
+#echo "-- Installing: /usr/local/bin/ckb -> /usr/local/bin/ckbuild"
+#sudo ln -sf /usr/local/bin/ckbuild /usr/local/bin/ckb
+
