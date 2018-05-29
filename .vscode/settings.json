@@ -75,5 +75,6 @@
         "**/ThirdParty": true,
         ".travis.yml": true,
         "**/.vscode": true,
-    }
+    },
+    "go.formatTool": "gofmt"
 }
