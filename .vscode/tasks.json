@@ -4,39 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build and run test game",
+            "label": "deploy",
             "type": "shell",
-            "command": "./start game run",
+            "command": "./deploy",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": "$gcc"
-        },
-        {
-            "label": "build test game",
-            "type": "shell",
-            "command": "./start game",
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": "$gcc"
-        },
-        {
-            "label": "clean testgame",
-            "type": "shell",
-            "command": "./start clean game",
-            "group": "build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",

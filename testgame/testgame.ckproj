@@ -1,0 +1,6 @@
+{
+    "name": "TestGame",
+    "engineVersion": 0.1,
+    "projectVersion": 0.1,
+    "src": "./src/"
+}

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ $(echo ${PWD##*/}) == "CKEngine" ]; then
+    cd ..
+fi
+
+if [ ! $(echo ${PWD##*/}) == "build" ]; then
+    echo "Must be run in root of project or in build directory"
+    exit 0
+fi
+
+ninja
+../deploy
+
+cd ..
+cd testing
+./TestGame

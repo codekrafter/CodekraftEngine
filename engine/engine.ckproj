@@ -1,0 +1,6 @@
+{
+    "name": "Codekraft Engine",
+    "projectVersion": 0.1,
+    "engine": true,
+    "install": true
+}

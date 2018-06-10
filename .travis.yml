@@ -2,7 +2,7 @@ language: cpp
 sudo: false
 dist: trusty
 compiler:
-- g++
+- clang++
 os:
 - linux
 
@@ -10,18 +10,14 @@ addons:
     apt:
         sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://repos.codelite.org/wx3.1.0/ubuntu/ trusty universe'
             - sourceline: 'deb http://ppa.launchpad.net/keithw/glfw3/ubuntu trusty main'
         packages:
             - lcov
-            - libwxbase3.1-0-unofficial
-            - libwxbase3.1-dev
-            - libwxgtk3.1-0-unofficial
-            - libwxgtk3.1-dev
-            - wx3.1-headers
-            - wx-common
-            - libglfw3
-            - libglfw3-dev
+#            - libglfw3
+#            - libglfw3-dev
+            - ninja-build
+            - xorg-dev
+            - libglu1-mesa-dev
 
 branches:
   only:
@@ -29,7 +25,11 @@ branches:
 
 #before_install:
 
-script: ./start game
+script:
+   - mkdir build
+   - cd build
+   - cmake .. -G "Ninja"
+   - ninja all
 
 after_success:
     # Creating report

@@ -5,7 +5,8 @@
 *.slo
 *.lo
 *.o
-*.obj
+#Enable Model Files
+#*.obj
 
 # Precompiled Headers
 *.gch
@@ -44,3 +45,9 @@ CTestTestfile.cmake
 
 build/
 bin/
+
+#Generated Folders from CKBuild
+generated/
+
+#Go
+pkg/

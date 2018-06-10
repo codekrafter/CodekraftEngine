@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+    <OutputName>ckbuild</OutputName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Json" Version="4.5.0" />
+  </ItemGroup>
+</Project>

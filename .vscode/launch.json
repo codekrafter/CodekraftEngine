@@ -5,13 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Debug Test Game",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/testgame/TestGame",
+            "program": "${workspaceFolder}/testing/TestGame",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/build/testgame",
+            "cwd": "${workspaceFolder}/testing",
+            "preLaunchTask": "deploy",
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
@@ -22,6 +23,16 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "Debug Build Tool",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceRoot}/build-tool/bin/Debug/netcoreapp2.0/ckbuild.dll",
+            "args": ["."],
+            "cwd": "${workspaceRoot}/engine/",
+            "stopAtEntry": false,
+            "console": "internalConsole"
         }
     ]
 }

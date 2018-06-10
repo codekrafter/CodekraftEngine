@@ -1,0 +1,14 @@
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Release/netcoreapp2.0/linux-x64/libhostpolicy.so
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Release/netcoreapp2.0/linux-x64/libhostfxr.so
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Release/netcoreapp2.0/linux-x64/ckbuild
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Release/netcoreapp2.0/linux-x64/ckbuild.deps.json
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Release/netcoreapp2.0/linux-x64/ckbuild.runtimeconfig.json
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Release/netcoreapp2.0/linux-x64/ckbuild.runtimeconfig.dev.json
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Release/netcoreapp2.0/linux-x64/ckbuild.dll
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Release/netcoreapp2.0/linux-x64/ckbuild.pdb
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Release/netcoreapp2.0/linux-x64/ckbuild.csprojAssemblyReference.cache
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Release/netcoreapp2.0/linux-x64/ckbuild.csproj.CoreCompileInputs.cache
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Release/netcoreapp2.0/linux-x64/ckbuild.AssemblyInfoInputs.cache
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Release/netcoreapp2.0/linux-x64/ckbuild.AssemblyInfo.cs
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Release/netcoreapp2.0/linux-x64/ckbuild.dll
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Release/netcoreapp2.0/linux-x64/ckbuild.pdb

@@ -1,0 +1,11 @@
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Debug/netcoreapp2.0/ckbuild.deps.json
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Debug/netcoreapp2.0/ckbuild.runtimeconfig.json
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Debug/netcoreapp2.0/ckbuild.runtimeconfig.dev.json
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Debug/netcoreapp2.0/ckbuild.dll
+/home/codekrafter/Documents/CodekraftEngine/build-tool/bin/Debug/netcoreapp2.0/ckbuild.pdb
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Debug/netcoreapp2.0/ckbuild.csprojAssemblyReference.cache
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Debug/netcoreapp2.0/ckbuild.csproj.CoreCompileInputs.cache
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Debug/netcoreapp2.0/ckbuild.AssemblyInfoInputs.cache
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Debug/netcoreapp2.0/ckbuild.AssemblyInfo.cs
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Debug/netcoreapp2.0/ckbuild.dll
+/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/Debug/netcoreapp2.0/ckbuild.pdb

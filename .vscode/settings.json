@@ -48,7 +48,17 @@
         "codecvt": "cpp",
         "csignal": "cpp",
         "string": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "slist": "cpp",
+        "algorithm": "cpp",
+        "map": "cpp",
+        "optional": "cpp",
+        "*.ipp": "cpp",
+        "filesystem": "cpp",
+        "cerrno": "cpp",
+        "future": "cpp",
+        "string_view": "cpp",
+        "*.ckproj": "json"
     },
     "workbench.colorTheme": "Default Dark+",
     "files.exclude": {
@@ -57,14 +67,14 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/build": true,
-        "**/bin": true
+        "**/build": true
     },
     "search.exclude": {
         "**/node_modules": true,
         "**/bower_components": true,
         "**/ThirdParty": true,
         ".travis.yml": true,
-        "**/.vscode": true
-    }
+        "**/.vscode": true,
+    },
+    "go.formatTool": "gofmt"
 }
