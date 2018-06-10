@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.5)
 include_directories("${CMAKE_BINARY_DIR}/ThirdParty/g3log/include")
 include_directories("${CMAKE_SOURCE_DIR}/ThirdParty/g3log/src")
 
-add_subdirectory(build-tool/)
-
 add_subdirectory(ThirdParty)
 
 #find_program(iwyu_path NAMES include-what-you-use iwyu)

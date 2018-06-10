@@ -1,9 +1,6 @@
 {
-    "name": "CodekraftEngine",
-    "engineVersion": 0.1,
+    "name": "Codekraft Engine",
     "projectVersion": 0.1,
     "engine": true,
-    "src": "./src/",
-    "cmake": ".",
-    "install": "install.sh"
+    "install": true
 }
