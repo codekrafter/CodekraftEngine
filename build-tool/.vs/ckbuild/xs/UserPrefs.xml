@@ -1,0 +1,22 @@
+﻿<Properties StartupConfiguration="{C1938DBB-8DAD-4B25-BDB8-FEAD809AD8CF}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="src/CodeGenerator.cs">
+    <Files>
+      <File FileName="src/Main.cs" Line="169" Column="22" />
+      <File FileName="src/Utils.cs" Line="18" Column="43" />
+      <File FileName="src/BuildSelection.cs" Line="7" Column="12" />
+      <File FileName="src/SourceFile.cs" Line="14" Column="29" />
+      <File FileName="src/HeaderParser.cs" Line="112" Column="63" />
+      <File FileName="src/ProjectSettings.cs" Line="37" Column="45" />
+      <File FileName="src/CodeGenerator.cs" Line="17" Column="10" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.ckbuild PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations>
+    <MultiItemSolutionRunConfiguration Id="Run Build Tool" Name="Run Build Tool" />
+  </MultiItemStartupConfigurations>
+</Properties>

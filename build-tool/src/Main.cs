@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using static ckb.Utils;
 
 namespace ckb
 {
@@ -9,42 +10,6 @@ namespace ckb
     {
 
         ProgramSettings settings = new ProgramSettings();
-
-        void PrintFatal(string message, int code = -1)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine(message);
-            Console.ResetColor();
-            Environment.Exit(code);
-        }
-
-        void PrintFatalSoft(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine(message);
-            Console.ResetColor();
-        }
-
-        void PrintError(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
-            Console.ResetColor();
-        }
-
-        void PrintWarning(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine(message);
-            Console.ResetColor();
-        }
-
-        void PrintVerbose(string message)
-        {
-            if (!settings.verbose)
-                return;
-            Console.WriteLine(message);
-        }
 
         static int Main(string[] args)
         {
@@ -118,6 +83,8 @@ namespace ckb
                 }
             }
 
+            InitUtils(settings);
+
             // For now we only want one target, but it is a list for future compatibility
             if (NonOpts.Count > 1)
             {
@@ -176,7 +143,29 @@ namespace ckb
 
             string confString = File.ReadAllText(path);
             proj.parse(confString, settings);
-            BuildSelection bs = new BuildSelection(dir + "/src");
+            BuildSelection bs = new BuildSelection(dir);
+            HeaderParser hp = new HeaderParser(bs);
+            Dictionary<SourceFile, List<CKObject>> objDict = hp.Parse();
+            if (settings.verbose)
+            {
+                foreach (KeyValuePair<SourceFile, List<CKObject>> pair in objDict)
+                {
+                    SourceFile file = pair.Key;
+                    List<CKObject> list = pair.Value;
+                    Console.WriteLine();
+
+                    Console.WriteLine("File: " + file.name + "# of OBJs: " + list.Count);
+                    foreach (CKObject obj in list)
+                    {
+                        Console.WriteLine(obj);
+                    }
+
+                    Console.WriteLine();
+                }
+            }
+
+            CodeGenerator cg = new CodeGenerator(objDict);
+            cg.generate("./generated/headers/");
             return 0;
         }
     }

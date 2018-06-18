@@ -4,45 +4,66 @@ using System;
 
 namespace ckb
 {
-    class BuildSelection
+    public class BuildSelection
     {
         public BuildSelection(string dir)
         {
-            files = recurseGetSRC(dir);
+            // Generate Source File List, also generates headers list, for generating CKObjects
+            files = recurseGetSRC(dir + "/src/");
 
-            foreach (string file in files)
-            {
-                Console.WriteLine(file);
-            }
+            includePaths.Add(dir + "/include/");
+            includePaths.Add(dir + "/src/");
+
+            libPaths.Add(dir + "/lib/");
+
+            rootDir = Path.GetRelativePath(".", dir);
         }
 
-        private List<string> recurseGetSRC(string path)
+        private List<SourceFile> recurseGetSRC(string path)
         {
             List<string> fs = new List<string>(Directory.GetFiles(path));
-            List<string> ofs = new List<string>();
+            List<string> ds = new List<string>(Directory.GetDirectories(path));
+            List<SourceFile> ofs = new List<SourceFile>();
             foreach (string f in fs.ToArray())
             {
-                if ((File.GetAttributes(f) & FileAttributes.Directory) == FileAttributes.Directory)
+                string[] parts = f.Split(".", StringSplitOptions.RemoveEmptyEntries);
+                if (parts[parts.Length - 1] == "cpp")
                 {
-                    List<string> nfs = recurseGetSRC(f);
-                    ofs.AddRange(nfs);
+                    ofs.Add(new SourceFile(f));
                 }
-                else
+
+                if (parts[parts.Length - 1] == "c")
                 {
-                    string[] parts = f.Split(".", StringSplitOptions.RemoveEmptyEntries);
-                    if (parts[parts.Length - 1] == ".cpp" || parts[parts.Length - 1] == ".c")
-                    {
-                        ofs.Add(f);
-                    }
+                    ofs.Add(new SourceFile(f, FileType.C_SOURCE));
+                }
+
+                if (parts[parts.Length - 1] == "hpp")
+                {
+                    headers.Add(new SourceFile(f, FileType.CPP_HEADER));
+                }
+
+                if (parts[parts.Length - 1] == "h")
+                {
+                    headers.Add(new SourceFile(f, FileType.C_HEADER));
                 }
             }
+
+            foreach (string d in ds.ToArray())
+            {
+                List<SourceFile> nfs = recurseGetSRC(d);
+                ofs.AddRange(nfs);
+            }
+
             return ofs;
         }
-        List<string> files;
-        List<string> includePaths;
+        public List<SourceFile> files = new List<SourceFile>();
 
-        List<string> libPaths;
+        public List<SourceFile> headers = new List<SourceFile>();
 
-        List<string> rootDir;
+        public List<string> includePaths = new List<string>();
+
+        public List<string> libPaths = new List<string>();
+
+        public string rootDir;
     }
 }

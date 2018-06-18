@@ -1,20 +1,33 @@
 #!/bin/bash
 
-echo "Building Project"
+echo "Detecting Operating System..."
 echo
-
-dotnet publish -v q -c Release -r linux-x64
-rc=$?
-
-if [[ $rc != 0 ]]; then
-echo
-echo "Building exited with $rc, Not completing install"
-exit $rc
+OS=-1
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+       OS=1
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+        OS=2
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+        echo "Please Use Windows Scripts"
+        OS=1 
+        exit -1
+elif [[ "$OSTYPE" == "msys" ]]; then
+        echo "Please Use Windows Scripts"
+        OS=1
+        exit -1
+elif [[ "$OSTYPE" == "win32" ]]; then
+        echo "Please Use Windows Scripts"
+        exit -1
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+        echo "FreeBSD is not officially supported"
+        OS=1
+else
+        echo "Unknown Operating System, please Submit Ticket, Your Operating System is '$OSTYPE'"
+        exit -1
 fi
 
-echo
-echo "Done Building Project"
-echo
+echo "Done Detecting Operating"
+
 
 cd bin 
 
@@ -22,7 +35,14 @@ cd Release
 
 cd netcoreapp2.0
 
-cd linux-x64
+if [[ OS -eq 1 ]]; then
+    cd linux-x64
+elif [[ OS -eq 2 ]]; then
+    cd osx-x64
+else 
+    echo "Unknown OS Code: $OS"
+    exit -1
+fi
 
 echo "Installing Files..."
 
@@ -33,6 +53,9 @@ sudo cp ckbuild /usr/local/lib/ckbuild/
 
 echo "    Installing Required Linux Shared Libraries"
 sudo cp ./*.so /usr/local/lib/ckbuild/
+
+echo "    Installing Required Mac Shared Libraries"
+sudo cp ./*.dylib /usr/local/lib/ckbuild/
 
 echo "    Installing Required Windows Shared Libraries"
 sudo cp ./*.dll /usr/local/lib/ckbuild/
