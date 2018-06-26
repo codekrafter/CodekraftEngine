@@ -1,6 +1,0 @@
-[submodule "engine/ThirdParty/--force"]
-	path = engine/ThirdParty/--force
-	url = https://github.com/glfw/glfw.git
-[submodule "engine/ThirdParty/g3log"]
-	path = engine/ThirdParty/g3log
-	url = https://github.com/KjellKod/g3log.git
