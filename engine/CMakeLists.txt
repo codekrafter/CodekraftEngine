@@ -19,7 +19,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ENGINE_VERSION 0.0.1)
 #set(CMAKE_INSTALL_PREFIX ..)
 add_subdirectory(ThirdParty/)
-find_package(glfw3 REQUIRED)
+#find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 if(NOT EXISTS {CMAKE_CURRENT_SOURCE_DIR}/generated/code/)

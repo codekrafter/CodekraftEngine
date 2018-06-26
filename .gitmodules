@@ -1,0 +1,6 @@
+[submodule "engine/ThirdParty/g3log"]
+	path = engine/ThirdParty/g3log
+	url = https://github.com/KjellKod/g3log.git
+[submodule "engine/ThirdParty/glfw"]
+	path = engine/ThirdParty/glfw
+	url = https://github.com/glfw/glfw.git
