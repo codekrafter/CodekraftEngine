@@ -167,23 +167,35 @@ namespace ckb
 
             CodeGenerator cg = new CodeGenerator(objDict);
             cg.generate(dir + "./generated/code/");
-            if (proj.engine)
-            {
-                string source = Path.GetFullPath(Environment.CurrentDirectory + "/" + dir);
-                Directory.CreateDirectory(Path.GetFullPath(dir + "./generated/cmake/"));
-                Directory.SetCurrentDirectory(Path.GetFullPath(dir + "./generated/cmake/"));
-                ProcessStartInfo startInfo = new ProcessStartInfo("cmake", source + "")
-                {
-                    CreateNoWindow = false
-                };
-                startInfo.Environment["WITH_CKB"] = "TESTINGYES";
-                Process cmake_p = Process.Start(startInfo);
-
-            }
-            else
+            if (!proj.engine)
             {
                 Utils.PrintFatal("We only support building the engine right now, hold on until we push the update");
             }
+
+            string source = Path.GetFullPath(Environment.CurrentDirectory + "/" + dir);
+            Directory.CreateDirectory(Path.GetFullPath(dir + "./generated/cmake/"));
+            Directory.SetCurrentDirectory(Path.GetFullPath(dir + "./generated/cmake/"));
+            ProcessStartInfo startInfo = new ProcessStartInfo("cmake", source + " -GNinja")
+            {
+                CreateNoWindow = false
+            };
+            startInfo.Environment["WITH_CKB"] = "TRUE";
+            startInfo.RedirectStandardOutput = true;
+            Process cmake_p = Process.Start(startInfo);
+            cmake_p.WaitForExit();
+
+            Console.WriteLine();
+
+            ProcessStartInfo n_startInfo = new ProcessStartInfo("ninja", "")
+            {
+                CreateNoWindow = false
+            };
+            n_startInfo.Environment["WITH_CKB"] = "TRUE";
+            //n_startInfo.RedirectStandardOutput = true;
+            Process ninja_p = Process.Start(n_startInfo);
+            ninja_p.WaitForExit();
+
+            Console.WriteLine();
             return 0;
         }
     }

@@ -22,15 +22,10 @@ add_subdirectory(ThirdParty/)
 #find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-if(NOT EXISTS {CMAKE_CURRENT_SOURCE_DIR}/generated/code/)
-  message(FATAL "Did not find code generated in source directory. Do not manually call cmake, run this through the Codekraft Build Tool")
-endif(NOT EXISTS {CMAKE_CURRENT_SOURCE_DIR}/generated/code/)
+if(NOT DEFINED ENV{WITH_CKB})
+  message(FATAL_ERROR "Please do not run cmake manually, please use the Codekraft Build Tool")
+endif(NOT DEFINED ENV{WITH_CKB})
 
-message(WARNING ENV{WITH_CKB})
-
-#set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(CMAKE_BUILD_TYPE Debug)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -w -ferror-limit=2 -D_GLIBCXX_DEBUG")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
