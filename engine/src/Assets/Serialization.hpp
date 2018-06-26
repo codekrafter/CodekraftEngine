@@ -45,6 +45,8 @@
         ptr = ptr + str.size() + 1;                    \
     }
 
+#define S_STD_STRING S_STRING
+
 #define END_SAVE() \
     DatSize o;     \
     o.data = data; \
@@ -67,6 +69,8 @@
                                               \
         free(ss);                             \
     }
+
+#define L_STD_STRING L_STRING
 
 #define L_STRUCT(struct)                           \
     {                                              \

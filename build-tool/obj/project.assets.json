@@ -6936,13 +6936,13 @@
       "projectName": "ckbuild",
       "projectPath": "/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/ckbuild.csproj",
       "packagesPath": "/Users/codekrafter/.nuget/packages/",
-      "outputPath": "/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/obj",
+      "outputPath": "/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/codekrafter/.config/NuGet/NuGet.Config"
+        "/Users/codekrafter/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
@@ -6965,18 +6965,17 @@
       "netcoreapp2.0": {
         "dependencies": {
           "Microsoft.NETCore.App": {
-            "suppressParent": "All",
             "target": "Package",
-            "version": "2.0",
+            "version": "[2.0.0, )",
             "autoReferenced": true
-          },
-          "System.Json": {
-            "target": "Package",
-            "version": "4.5.0"
           },
           "Scriban": {
             "target": "Package",
-            "version": "1.2.1"
+            "version": "[1.2.1, )"
+          },
+          "System.Json": {
+            "target": "Package",
+            "version": "[4.5.0, )"
           }
         },
         "imports": [

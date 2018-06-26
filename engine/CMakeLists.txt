@@ -18,9 +18,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(ENGINE_VERSION 0.0.1)
 #set(CMAKE_INSTALL_PREFIX ..)
-
+add_subdirectory(ThirdParty/)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
+
+if(NOT EXISTS {CMAKE_CURRENT_SOURCE_DIR}/generated/code/)
+  message(FATAL "Did not find code generated in source directory. Do not manually call cmake, run this through the Codekraft Build Tool")
+endif(NOT EXISTS {CMAKE_CURRENT_SOURCE_DIR}/generated/code/)
+
+message(WARNING ENV{WITH_CKB})
 
 #set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 #set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)

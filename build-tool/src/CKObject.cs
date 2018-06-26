@@ -3,30 +3,62 @@ using System.Json;
 
 namespace ckb
 {
+    public class Variable
+    {
+        public string name = "";
+        public string type = "";
+        public string defaultVal = "";
+        public override string ToString()
+        {
+            return "{name='" + name + "',type='" + type + "',defaultVal='" + defaultVal + "'}";
+        }
+        public string size
+        {
+            get
+            {
+                switch (type)
+                {
+                    case "std::string":
+                        return name + ".size() + 1 + sizeof(SizeS)";
+                    default:
+                        return "sizeof(" + type + ")";
+                }
+            }
+        }
+    }
+
+    public struct Event
+    {
+        public string label;
+        public string callableName;
+        public Event(string callableName)
+        {
+            label = "LABEL: " + callableName;
+            this.callableName = callableName;
+        }
+    }
     public class CKObject
     {
         public string name = "";
 
         // Name : Type
-        public Dictionary<string, string> vars = new Dictionary<string, string>();
+        public List<Variable> vars = new List<Variable>();
 
         // Label : Callable Name
-        public Dictionary<string, string> events = new Dictionary<string, string>();
+        public List<Event> events = new List<Event>();
 
         public override string ToString()
         {
             string output = "{name=\"" + name + "\",vars=[";
-            foreach (var pair in vars)
+            foreach (var var in vars)
             {
-                output = output + "{\"" + pair.Key + "\",\"" + pair.Value + "\"},";
+                output = output + var.ToString();
             }
-            output = output.Substring(0, output.Length - 1);
             output = output + "],events=[";
-            foreach (var pair in events)
+            foreach (var Event in events)
             {
-                output = output + "{\"" + pair.Key + "\",\"" + pair.Value + "\"},";
+                output = output + Event.ToString();
             }
-            output = output.Substring(0, output.Length - 1);
             output = output + "]}";
             return output;
         }

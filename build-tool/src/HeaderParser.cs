@@ -59,30 +59,45 @@ namespace ckb
                                 name = "ERROR";
                             }
                             currentObj.name = name;
-                            Utils.PrintWarning("Name: " + name);
                             nextItem = 0;
                         }
                         else if (nextItem == 2)
                         {
                             string[] parts = line.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                            if (currentObj.vars.ContainsKey(parts[1]))
+                            bool redef = false;
+                            currentObj.vars.ForEach((obj) => redef |= (obj.name == parts[1]));
+                            if (redef)
                             {
                                 Utils.PrintError("Redefinition of " + currentObj.name + "." + parts[1] + ". Overwriting");
                                 Utils.PrintError("File: " + file.path + "/" + file.name + " Line: " + lineNum);
                             }
-                            currentObj.vars[parts[1]] = parts[0];
+                            Variable cvar = new Variable();
+                            cvar.name = parts[1];
+                            cvar.type = parts[0];
+                            if (parts.Length > 3)
+                            {
+                                cvar.defaultVal = parts[3].Substring(0, parts[3].Length - 1);
+                            }
+                            else
+                            {
+                                cvar.name = cvar.name.Substring(0, cvar.name.Length - 1);
+                            }
+                            currentObj.vars.Add(cvar);
 
                             nextItem = 0;
                         }
                         else if (nextItem == 3)
                         {
                             string[] parts = line.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                            if (currentObj.events.ContainsKey(parts[1]))
+                            bool redef = false;
+                            currentObj.events.ForEach((obj) => redef |= (obj.callableName == parts[1]));
+                            if (redef)
                             {
                                 Utils.PrintError("Redefinition of " + currentObj.name + "." + parts[1] + ". Overwriting");
                                 Utils.PrintError("File: " + file.path + "/" + file.name + " Line: " + lineNum);
                             }
-                            currentObj.events[parts[1]] = parts[1];
+                            Event cevent = new Event(parts[1]);
+                            currentObj.events.Add(cevent);
 
                             nextItem = 0;
                         }

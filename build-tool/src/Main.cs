@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -165,7 +166,24 @@ namespace ckb
             }
 
             CodeGenerator cg = new CodeGenerator(objDict);
-            cg.generate("./generated/headers/");
+            cg.generate(dir + "./generated/code/");
+            if (proj.engine)
+            {
+                string source = Path.GetFullPath(Environment.CurrentDirectory + "/" + dir);
+                Directory.CreateDirectory(Path.GetFullPath(dir + "./generated/cmake/"));
+                Directory.SetCurrentDirectory(Path.GetFullPath(dir + "./generated/cmake/"));
+                ProcessStartInfo startInfo = new ProcessStartInfo("cmake", source + "")
+                {
+                    CreateNoWindow = false
+                };
+                startInfo.Environment["WITH_CKB"] = "TESTINGYES";
+                Process cmake_p = Process.Start(startInfo);
+
+            }
+            else
+            {
+                Utils.PrintFatal("We only support building the engine right now, hold on until we push the update");
+            }
             return 0;
         }
     }
