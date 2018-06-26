@@ -72,8 +72,19 @@ namespace ckb
                                 Utils.PrintError("File: " + file.path + "/" + file.name + " Line: " + lineNum);
                             }
                             Variable cvar = new Variable();
+                            if (parts[0].Trim() == "unsigned" || parts[0].Trim() == "signed")
+                            {
+                                cvar.type = parts[0] + " " + parts[1];
+                                //string[] newA = new string[parts.Length - 1];
+                                //Array.Copy(parts, newA, parts.Length - 1);
+                                //Array.Resize(ref parts, newA.Length);
+                                parts = parts.Skip(1).ToArray();
+                            }
+                            else
+                            {
+                                cvar.type = parts[0];
+                            }
                             cvar.name = parts[1];
-                            cvar.type = parts[0];
                             if (parts.Length > 3)
                             {
                                 cvar.defaultVal = parts[3].Substring(0, parts[3].Length - 1);

@@ -6926,23 +6926,23 @@
     ]
   },
   "packageFolders": {
-    "/Users/codekrafter/.nuget/packages/": {},
-    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "/home/codekrafter/.nuget/packages/": {},
+    "/usr/share/dotnet/sdk/NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/ckbuild.csproj",
+      "projectUniqueName": "/home/codekrafter/Documents/CodekraftEngine/build-tool/ckbuild.csproj",
       "projectName": "ckbuild",
-      "projectPath": "/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/ckbuild.csproj",
-      "packagesPath": "/Users/codekrafter/.nuget/packages/",
-      "outputPath": "/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/obj/",
+      "projectPath": "/home/codekrafter/Documents/CodekraftEngine/build-tool/ckbuild.csproj",
+      "packagesPath": "/home/codekrafter/.nuget/packages/",
+      "outputPath": "/home/codekrafter/Documents/CodekraftEngine/build-tool/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        "/usr/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/codekrafter/.nuget/NuGet/NuGet.Config"
+        "/home/codekrafter/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"

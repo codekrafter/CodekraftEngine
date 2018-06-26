@@ -1,17 +1,32 @@
 #pragma once
 
 #include "Assets/Asset.hpp"
+#include "Engine.hpp"
 //#include <ThirdParty/cereal/access.hpp>
+
+namespace ckg
+{
+  struct TextureS;
+}
 
 namespace ck
 {
+CKClass();
 class Texture : public Asset
 {
 private:
-  friend struct TextureS;
+  friend struct ckg::TextureS;
+  //CKProperty();
   unsigned char *data;
+  CKProperty();
   unsigned int ID;
-  int width, height, n;
+  CKProperty();
+  int width;
+  CKProperty();
+  int height;
+  CKProperty();
+  int n;
+  CKProperty();
   std::string path;
 
 public:

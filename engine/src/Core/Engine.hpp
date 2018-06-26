@@ -3,6 +3,10 @@
 #include "Core/EngineApp.hpp"
 //#include "Core/Config.hpp"
 
+#define CKClass()
+#define CKProperty()
+#define CKEvent()
+
 namespace ck
 {
 

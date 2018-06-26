@@ -144,6 +144,7 @@ namespace ckb
 
             string confString = File.ReadAllText(path);
             proj.parse(confString, settings);
+            CKObject.initUUID(0x0001);
             BuildSelection bs = new BuildSelection(dir);
             HeaderParser hp = new HeaderParser(bs);
             Dictionary<SourceFile, List<CKObject>> objDict = hp.Parse();
@@ -183,6 +184,10 @@ namespace ckb
             startInfo.RedirectStandardOutput = true;
             Process cmake_p = Process.Start(startInfo);
             cmake_p.WaitForExit();
+            if (cmake_p.ExitCode != 0)
+            {
+                Utils.PrintFatal("CMake did not exit cleaning, aborting...");
+            }
 
             Console.WriteLine();
 
@@ -194,6 +199,10 @@ namespace ckb
             //n_startInfo.RedirectStandardOutput = true;
             Process ninja_p = Process.Start(n_startInfo);
             ninja_p.WaitForExit();
+            if (ninja_p.ExitCode != 0)
+            {
+                Utils.PrintFatal("Build error in ninja, aborting...");
+            }
 
             Console.WriteLine();
             return 0;

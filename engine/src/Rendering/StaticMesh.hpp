@@ -8,10 +8,12 @@
 
 namespace ck
 {
+CKClass();
 class StaticMesh : public Asset
 {
 private:
   friend struct StaticMeshS;
+  //CKProperty();
   std::vector<Mesh *> meshes;
   //std::vector<Material*> materials;
 
@@ -28,12 +30,12 @@ public:
   virtual std::string getType();
   virtual int getVersion();
 };
-}
-// Include any archives you plan on using with your type before you register it
-// Note that this could be done in any other location so long as it was prior
-// to this file being included
-//#include <ThirdParty/cereal/types/polymorphic.hpp>
-//#include <ThirdParty/cereal/archives/portable_binary.hpp>
+} // namespace ck
+  // Include any archives you plan on using with your type before you register it
+  // Note that this could be done in any other location so long as it was prior
+  // to this file being included
+  //#include <ThirdParty/cereal/types/polymorphic.hpp>
+  //#include <ThirdParty/cereal/archives/portable_binary.hpp>
 
 //CEREAL_REGISTER_TYPE(ck::StaticMesh);
 

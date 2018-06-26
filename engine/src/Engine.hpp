@@ -1,5 +1,3 @@
 #pragma once
 
-#define CKClass()
-#define CKProperty()
-#define CKEvent()
+#include "Core/Engine.hpp"

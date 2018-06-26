@@ -38,9 +38,11 @@ class AssetManager
     void loadf(std::string name);
     void loadf01(std::vector<unsigned char> d, std::string cname);
 
-    size_t getSize(std::string name);
+    //size_t getSize(std::string name);
     AssetS *getObject(Asset *a);
     AssetS *getObject(unsigned char UUID);
+
+    unsigned char getUUID(Asset *a);
 
   public:
     ~AssetManager();

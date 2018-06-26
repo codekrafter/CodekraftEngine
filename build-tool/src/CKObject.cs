@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Json;
+using System;
 
 namespace ckb
 {
@@ -63,5 +64,44 @@ namespace ckb
             return output;
         }
 
+        private static byte c_UUID = 0x0000;
+
+        private byte i_uuid = 0x0000;
+
+        public static void initUUID(byte starting)
+        {
+            if (c_UUID > 0x0000)
+            {
+                Utils.PrintFatal("Reintializing UUID, aborting...");
+            }
+
+            c_UUID = starting;
+        }
+
+        public byte uuid
+        {
+            get
+            {
+                if (c_UUID < 0x0001)
+                {
+                    Utils.PrintFatal("UUIDs have not been intialized, aborting...");
+                    return 0x0000;
+                }
+                if (i_uuid < 0x0001)
+                {
+                    i_uuid = c_UUID;
+                    c_UUID++;
+                }
+                return i_uuid;
+            }
+        }
+
+        public string uuidString
+        {
+            get
+            {
+                return "0x" + uuid.ToString("X4");
+            }
+        }
     }
 }

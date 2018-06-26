@@ -5,6 +5,10 @@
 #include "ThirdParty/OBJ_Loader.h"
 #include "ThirdParty/cereal/types/vector.hpp"
 #include "Rendering/Material/Material.hpp"
+namespace ckg
+{
+  struct MeshS;
+}
 
 namespace ck
 {
@@ -22,13 +26,19 @@ struct Vertex
   glm::vec3 Bitangent;
 };
 
+CKClass();
 class Mesh : public Asset
 {
 private:
-  friend struct MeshS;
+  friend struct ckg::MeshS;
   friend class Renderer;
   friend class OpenGLRenderer;
-  unsigned int VBO, VAO, EBO;
+  CKProperty();
+  unsigned int VBO;
+  CKProperty();
+  unsigned int VAO;
+  CKProperty();
+  unsigned int EBO;
   //glm::mat4 trans;
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;

@@ -8,8 +8,14 @@
 #include "Serialization.hpp"
 #include "ThirdParty/CRC.h"
 #include "Core/Engine.hpp"
-
 #include "Logging.hpp"
+
+#include "Shader.generated.hpp"
+#include "StaticMesh.generated.hpp"
+#include "Material.generated.hpp"
+#include "Mesh.generated.hpp"
+#include "Texture.generated.hpp"
+using namespace ckg;
 
 namespace ck
 {
@@ -65,9 +71,13 @@ bool createDirectory(const char *path)
 }
 #endif
 
-unsigned char getUUID(Asset *a)
+unsigned char AssetManager::getUUID(Asset *a)
 {
-    if (typeid(*a) == typeid(Shader))
+    AssetS* obj = getObject(a);
+    unsigned char UUID = obj->getUUID();
+    delete obj;
+    return UUID;
+    /*if (typeid(*a) == typeid(Shader))
     {
         return 0x0001;
     }
@@ -91,12 +101,18 @@ unsigned char getUUID(Asset *a)
     {
         LOG(ERROR) << "Could not find UUID of asset type: '" << typeid(a).name() << "'";
         return 0x0000;
-    }
+    }*/
 };
 
 /*AssetS *AssetManager::getObject(unsigned char UUID)
 {
-
+    if(!UUIDmap.contains(UUID))
+    {
+         std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(4) << static_cast<int>(UUID);
+        LOG(ERROR) << "Could not find asset of UUID: 0x" << ss.str();
+        return nullptr;
+    }
     if (UUID == 0x0001)
     {
         return new ShaderS();
@@ -529,7 +545,7 @@ void AssetManager::loadf01(std::vector<unsigned char> d, std::string cname)
     map[cname] = chunk;
 };
 
-size_t AssetManager::getSize(std::string name)
+/*size_t AssetManager::getSize(std::string name)
 {
     std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 
@@ -558,7 +574,7 @@ size_t AssetManager::getSize(std::string name)
         LOG(ERROR) << "Could not find asset for name: '" << name << "'";
         return 0;
     }
-};
+};*/
 
 AssetS *AssetManager::getObject(Asset *a)
 {

@@ -29,6 +29,22 @@
         ptr = ptr + sizeof(SizeS);           \
     }
 
+#define S_UNSIGNED_INT(val)                  \
+    {                                        \
+        UIntS i = val;                       \
+        std::memcpy(ptr, &i, sizeof(UIntS)); \
+        ptr = ptr + sizeof(UIntS);           \
+    }
+
+#define S_SIGNED_INT(val)                  \
+    {                                        \
+        SIntS i = val;                       \
+        std::memcpy(ptr, &i, sizeof(SIntS)); \
+        ptr = ptr + sizeof(SIntS);           \
+    }
+
+#define S_INT S_SIGNED_INT
+
 #define S_STRUCT(struct)                           \
     {                                              \
         std::memcpy(ptr, &struct, sizeof(struct)); \
@@ -71,6 +87,24 @@
     }
 
 #define L_STD_STRING L_STRING
+
+#define L_UNSIGNED_INT(t_u_int)              \
+    {                                        \
+        UIntS i;                             \
+        std::memcpy(&i, ptr, sizeof(UIntS)); \
+        ptr = ptr + sizeof(UIntS);           \
+        t_u_int = i.i;                       \
+    }
+
+#define L_SIGNED_INT(t_s_int)              \
+    {                                        \
+        SIntS i;                             \
+        std::memcpy(&i, ptr, sizeof(SIntS)); \
+        ptr = ptr + sizeof(SIntS);           \
+        t_s_int = i.i;                       \
+    }
+
+#define L_INT L_SIGNED_INT
 
 #define L_STRUCT(struct)                           \
     {                                              \
@@ -116,6 +150,22 @@ struct SizeS
     SizeS() : s(0){};
 };
 
+struct UIntS
+{
+    unsigned int i;
+
+    UIntS(unsigned int ii) : i(ii){};
+    UIntS() : i(0){};
+};
+
+struct SIntS
+{
+    signed int i;
+
+    SIntS(signed int ii) : i(ii){};
+    SIntS() : i(0){};
+};
+
 // Asset Serializer, one for every Asset that suports serializing
 struct AssetS
 {
@@ -128,8 +178,8 @@ struct AssetS
     // IMPORTANT: Each AssetS should also define a constructor that takes the corresponding asset, and a "deconstructor"(AssetS::asset()) that returns a corresponding asset.
     //AssetS(Asset *a) {};
 
-    virtual inline unsigned char getUUID() = 0;
-    virtual inline AssetS *clone() = 0;
+    const virtual unsigned char getUUID() = 0;
+    //virtual inline AssetS *clone() = 0;
 };
 
 /*struct ShaderS : AssetS

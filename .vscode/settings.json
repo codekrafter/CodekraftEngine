@@ -58,7 +58,11 @@
         "cerrno": "cpp",
         "future": "cpp",
         "string_view": "cpp",
-        "*.ckproj": "json"
+        "*.ckproj": "json",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "numeric": "cpp",
+        "cinttypes": "cpp"
     },
     "workbench.colorTheme": "Default Dark+",
     "files.exclude": {

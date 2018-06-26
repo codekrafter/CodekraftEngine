@@ -33,7 +33,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB_RECURSE SRC "src/*.cpp" "src/*.c")# "src/*.inl")
-file(GLOB_RECURSE GEN_SRC "working/ckb/generated/*.cpp")
+file(GLOB_RECURSE GEN_SRC "generated/code/*.cpp")
 #file(GLOB_RECURSE ThirdParty_SRC "include/*.c" "include/*.cpp" "include/*.inl")
 #file(GLOB_RECURSE HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/*.hpp" "include/*.h" "include/*.c" "include/*.inl")
 
@@ -46,10 +46,10 @@ configure_file (
 #include_directories(/usr/local/GLFW/include)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/../ckb/generated/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/generated/code/)
 link_directories()
 
-add_library(CodekraftEngine SHARED ${SRC})
+add_library(CodekraftEngine SHARED ${SRC} ${GEN_SRC})
 target_link_libraries(CodekraftEngine glfw g3logger ${OPENGL_LIBRARIES} pthread dl)
 if("${UNIX}" AND NOT "${APPLE}")
   target_link_libraries(CodekraftEngine X11 Xrandr Xinerama Xi Xxf86vm Xcursor)

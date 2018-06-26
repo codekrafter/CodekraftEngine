@@ -4,9 +4,11 @@
 #include "Rendering/Shader.hpp"
 #include "Assets/Asset.hpp"
 #include "GLM.hpp"
+#include "Engine.hpp"
 
 namespace ck
 {
+CKClass();
 class Material : public Asset
 {
 private:

@@ -18,20 +18,25 @@ namespace ckb
             // Cleanse Path
             string path = Environment.CurrentDirectory + "/" + dir;
             path = Path.GetRelativePath(".", path);
+            List<CKObject> totalObjs = new List<CKObject>();
+            List<string> totalIncludes = new List<string>();
 
             foreach (var pair in filesDict)
             {
                 // Retrive file and objects for easy access
                 SourceFile file = pair.Key;
                 List<CKObject> objs = pair.Value;
-
+                totalObjs.AddRange(objs);
+                totalIncludes.Add(Path.GetFileNameWithoutExtension(file.name) + ".generated.hpp");
                 var header = Template.Parse(@"
 /*
  * Generated Code for file '{{file.name}}' by Codekraft Build Tool
  * Do not edit
  */
 
-#include ""Serialization.hpp""
+#include ""Assets/Serialization.hpp""
+#include ""{{ include_file }}""
+using namespace ck;
 
 namespace ckg
 {
@@ -54,9 +59,12 @@ struct {{obj.name}}S : AssetS
      */
     {{obj.name}}S();
     {{obj.name}}S({{obj.name}} *{{obj.name | string.slice 0 1 | string.downcase}});
-    virtual {{obj.name}} *asset();
-    virtual DatSize save();
-    virtual void load(unsigned char *data, size_t size);
+    virtual {{obj.name}} *asset() override;
+    virtual DatSize save() override;
+    virtual void load(unsigned char *data, size_t size) override;
+
+    const virtual unsigned char getUUID() override;
+    //virtual {{obj.name}}S *clone() override;
 };
 
 {{- end }}
@@ -68,6 +76,7 @@ struct {{obj.name}}S : AssetS
 ");
                 var source = Template.Parse(@"
 #include ""{{- include_name -}}""
+using namespace ck;
 
 namespace ckg
 {
@@ -101,18 +110,24 @@ DatSize {{obj.name}}S::save()
     {{end}}
     START_SAVE()
     {{ for var in obj.vars }}
-    S_{{var.type | string.upcase | string.replace ""::"" ""_"" }}()
+    S_{{var.type | string.upcase | string.replace ""::"" ""_"" | string.replace "" "" ""_""}}({{ var.name }});
     {{end}}
     END_SAVE()
 };
 
-void {{obj.name}}S::load(unsigned char *data, size_t size){
+void {{obj.name}}S::load(unsigned char *data, size_t size)
+{
     START_LOAD()
     {{ for var in obj.vars }}
-    L_{{var.type | string.upcase | string.replace ""::"" ""_"" }}()
+    L_{{var.type | string.upcase | string.replace ""::"" ""_"" | string.replace "" "" ""_""}}({{ var.name }});
     {{end}}
     END_LOAD()
 
+};
+
+const unsigned char {{obj.name}}S::getUUID()
+{
+    return {{obj.uuid_string}};
 };
 
 {{- end }}
@@ -123,7 +138,7 @@ void {{obj.name}}S::load(unsigned char *data, size_t size){
  */            
 ");
 
-                var header_o = header.Render(new { objects = objs, file = file });
+                var header_o = header.Render(new { objects = objs, file = file, includeFile = Path.GetFullPath(dir + "../../" + file.path + "/" + file.name) });
 
                 var source_o = source.Render(new { include_name = Path.GetFileNameWithoutExtension(file.name) + ".generated.hpp", objects = objs });
 
@@ -132,11 +147,55 @@ void {{obj.name}}S::load(unsigned char *data, size_t size){
                 var source_p = Path.GetFullPath(dir + Path.GetFileNameWithoutExtension(file.name) + ".generated.cpp");
 
                 Directory.CreateDirectory(dir);
+                if (!(File.ReadAllText(header_p) == header_o))
+                {
+                    File.WriteAllText(header_p, header_o);
+                }
 
-                File.WriteAllText(header_p, header_o);
+                if (!(File.ReadAllText(source_p) == source_o))
+                {
+                    File.WriteAllText(source_p, source_o);
+                }
 
-                File.WriteAllText(source_p, source_o);
+            }
 
+            var registry = Template.Parse(@"
+#include <iomanip>
+
+#include ""Assets/AssetManager.hpp""
+{{ for i in includes }}
+#include ""{{ i }}""
+{{- end }}
+using namespace ckg;
+
+namespace ck
+{
+AssetS *AssetManager::getObject(unsigned char UUID)
+{
+    {{for obj in objs}}
+    {{obj.name}}S {{obj.name}};
+    {{- end }}
+    {{for obj in objs}}
+    if (UUID == {{ obj.name }}.getUUID())
+    {
+        return new {{ obj.name }}S();
+    }
+    else
+    {{- end }}
+    {
+        std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(4) << static_cast<int>(UUID);
+        LOG(ERROR) << ""Could not find asset of UUID: 0x"" << ss.str();
+        return nullptr;
+    }
+};
+}
+            ");
+            var registry_o = registry.Render(new { objs = totalObjs, includes = totalIncludes });
+            var registry_p = Path.GetFullPath(dir + "Registry.generated.cpp");
+            if (!(File.ReadAllText(registry_p) == registry_o))
+            {
+                File.WriteAllText(registry_p, registry_o);
             }
         }
     }
