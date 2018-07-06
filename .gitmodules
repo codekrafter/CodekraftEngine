@@ -4,3 +4,6 @@
 [submodule "engine/ThirdParty/glfw"]
 	path = engine/ThirdParty/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "CodekraftBuildTool"]
+	path = CodekraftBuildTool
+	url = https://github.com/codekrafter/CodekraftBuildTool.git
