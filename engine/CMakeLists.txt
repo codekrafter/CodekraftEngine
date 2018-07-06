@@ -35,12 +35,29 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 file(GLOB_RECURSE SRC "src/*.cpp" "src/*.c")# "src/*.inl")
 file(GLOB_RECURSE GEN_SRC "generated/code/*.cpp")
 #file(GLOB_RECURSE ThirdParty_SRC "include/*.c" "include/*.cpp" "include/*.inl")
-#file(GLOB_RECURSE HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/*.hpp" "include/*.h" "include/*.c" "include/*.inl")
+file(GLOB_RECURSE HEADERS_INCLUDE RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/include" "include/*.hpp" "include/*.h")
+file(GLOB_RECURSE HEADERS_SRC RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/src" "src/*.hpp" "src/*.h" "src/*.inl")
+file(GLOB_RECURSE HEADERS_GEN RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/generated/code/" "generated/code/*.hpp" "generated/code/*.h")
+set(HEADERS ${HEADERS_INCLUDE} ${HEADERS_SRC})
+
+set(${CMAKE_INSTALL_PREFIX} /opt/CodekraftEngine/)
 
 configure_file (
   "src/EngineConfig.hpp.in"
   "include/EngineConfig.hpp"
 )
+
+foreach(HEADER ${HEADERS_INCLUDE})
+configure_file(include/${HEADER} CK/${HEADER} COPYONLY)
+endforeach(HEADER ${HEADERS_INCLUDE})
+
+foreach(HEADER ${HEADERS_SRC})
+configure_file(src/${HEADER} CK/${HEADER} COPYONLY)
+endforeach(HEADER ${HEADERS_SRC})
+
+foreach(HEADER ${HEADERS_GEN})
+configure_file(generated/code/${HEADER} CK/${HEADER} COPYONLY)
+endforeach(HEADER ${HEADERS_GEN})
 
 #include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/CK/)
 #include_directories(/usr/local/GLFW/include)
@@ -64,6 +81,12 @@ endif()
 add_executable(CKTests test.cpp)
 target_link_libraries(CKTests CodekraftEngine)
 
-#install(TARGETS CodekraftEngine DESTINATION lib)
-#install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/CK       
-#         DESTINATION "include")
+install(TARGETS CodekraftEngine DESTINATION lib)
+
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/CK      
+         DESTINATION "include/")
+
+
+file(GLOB_RECURSE HEADERS_CONFIG RELATIVE "${CMAKE_CURRENT_BINARY_DIR}/include" "${CMAKE_CURRENT_BINARY_DIR}/include/*.hpp" "${CMAKE_CURRENT_BINARY_DIR}/include/*.h")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/${HEADERS_CONFIG}      
+         DESTINATION "include/CK/")
