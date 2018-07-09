@@ -26,10 +26,11 @@ branches:
 #before_install:
 
 script:
-   - mkdir build
-   - cd build
-   - cmake .. -G "Ninja"
-   - ninja all
+   - cd CodekraftBuildTool
+   - ./build-and-install.sh
+   - cd ..
+   - ckb -i engine/
+   - ckb testgame/
 
 after_success:
     # Creating report
