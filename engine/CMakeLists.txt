@@ -28,11 +28,17 @@ endif(NOT DEFINED ENV{WITH_CKB})
 
 set(CMAKE_BUILD_TYPE Debug)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -w -ferror-limit=2 -D_GLIBCXX_DEBUG")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics -DEDITOR")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB_RECURSE SRC "src/*.cpp" "src/*.c")# "src/*.inl")
+file(GLOB_RECURSE SRC_FRONTEND_BAD "src/Frontend/*.cpp" "src/Frontend/*.c")
+file(GLOB_RECURSE SRC_FRONTEND_GOOD "src/Frontend/CurrentFrontend.cpp")
+
+list(REMOVE_ITEM SRC ${SRC_FRONTEND_BAD})
+list(APPEND SRC ${SRC_FRONTEND_GOOD})
+
 file(GLOB_RECURSE GEN_SRC "generated/code/*.cpp")
 #file(GLOB_RECURSE ThirdParty_SRC "include/*.c" "include/*.cpp" "include/*.inl")
 file(GLOB_RECURSE HEADERS_INCLUDE RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/include" "include/*.hpp" "include/*.h")

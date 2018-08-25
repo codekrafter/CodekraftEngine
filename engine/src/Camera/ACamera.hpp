@@ -8,14 +8,13 @@ namespace ck
 
 class ACamera : public Actor
 {
-  private:
-    DirVectors dvectors;
-    float yaw;
-    float pitch;
-    //void updateVectors();
+private:
+  DirVectors dvectors;
+  float yaw;
+  float pitch;
+  //void updateVectors();
 
-  public:
-
+public:
 };
 
 } // namespace ck
