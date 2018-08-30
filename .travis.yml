@@ -19,7 +19,7 @@ addons:
             - xorg-dev
             - libglu1-mesa-dev
             - apt-transport-https
-            - libunwind-dev
+            - libunwind8
 
 branches:
   only:
