@@ -28,9 +28,9 @@
             "name": "Debug Build Tool",
             "type": "coreclr",
             "request": "launch",
-            "program": "${workspaceRoot}/build-tool/bin/Debug/netcoreapp2.0/ckbuild.dll",
-            "args": ["."],
-            "cwd": "${workspaceRoot}/engine/",
+            "program": "${workspaceRoot}/CodekraftBuildTool/bin/Debug/netcoreapp2.0/ckbuild.dll",
+            "args": ["engine/"],
+            "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
             "console": "internalConsole"
         }
