@@ -73,7 +73,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/generated/code/)
 link_directories()
 
 add_library(CodekraftEngine SHARED ${SRC} ${GEN_SRC})
-target_link_libraries(CodekraftEngine glfw g3logger ${OPENGL_LIBRARIES} pthread dl)
+target_link_libraries(CodekraftEngine glfw g3logger ${OPENGL_LIBRARIES} pthread dl stdc++fs)
 if("${UNIX}" AND NOT "${APPLE}")
   target_link_libraries(CodekraftEngine X11 Xrandr Xinerama Xi Xxf86vm Xcursor)
 endif()

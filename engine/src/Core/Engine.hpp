@@ -4,7 +4,7 @@
 //#include "Core/Config.hpp"
 
 #define CKClass()
-#define CKProperty()
+#define CKProperty(Arg, ...)
 #define CKEvent()
 
 namespace ck

@@ -227,6 +227,10 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
             LOG(ERROR) << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
                        << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            
+            LOG(ERROR) << "TYPE: " << type;
+            LOG(WARNING) << "VERTEX: " << vertex;
+            LOG(WARNING) << "vFILE: " << vfile;
         }
     }
     else

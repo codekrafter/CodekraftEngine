@@ -62,7 +62,10 @@
         "deque": "cpp",
         "unordered_map": "cpp",
         "numeric": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "unordered_set": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp"
     },
     "workbench.colorTheme": "Default Dark+",
     "files.exclude": {

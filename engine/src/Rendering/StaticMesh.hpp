@@ -6,14 +6,18 @@
 #include "Mesh.hpp"
 #include "ThirdParty/cereal/types/vector.hpp"
 
+namespace ckg {
+  struct StaticMeshS;
+}
+
 namespace ck
 {
 CKClass();
 class StaticMesh : public Asset
 {
 private:
-  friend struct StaticMeshS;
-  //CKProperty();
+  friend struct ckg::StaticMeshS;
+  CKProperty(Size=meshes.size());
   std::vector<Mesh *> meshes;
   //std::vector<Material*> materials;
 

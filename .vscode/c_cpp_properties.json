@@ -30,6 +30,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/build/engine/include/CK/",
+                "/usr/local/include/CK",
                 "/usr/include/c++/5",
                 "/usr/include/x86_64-linux-gnu/c++/5",
                 "/usr/include/c++/5/backward",

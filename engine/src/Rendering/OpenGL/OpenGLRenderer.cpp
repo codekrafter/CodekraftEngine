@@ -342,7 +342,7 @@ void OpenGLRenderer::render(StaticMesh *sm, Material *m, glm::mat4 model)
         init();
     }
 
-    // Check for uninitialized Material(It's Shader)
+    // Check for uninitialized Material
     if (m->getShader()->ID == 0)
     {
         LOG(WARNING) << "Initializing Material in render loop, please initialize before hand";

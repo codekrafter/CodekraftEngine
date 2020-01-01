@@ -21,7 +21,7 @@ Mesh::Mesh(objl::Mesh m, std::string directory)
         vertices.push_back(v);
     }
     objl::Material mmat = m.MeshMaterial;
-    mat = new Material(); //mmat.map_Kd, mmat.map_Ks, directory);
+    mat = new Material(AssetRef<Texture>()); //mmat.map_Kd, mmat.map_Ks, directory);
     indices = m.Indices;
 };
 Mesh::~Mesh()

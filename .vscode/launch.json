@@ -12,7 +12,7 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/testing",
-            "preLaunchTask": "deploy",
+            "preLaunchTask": "",
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",

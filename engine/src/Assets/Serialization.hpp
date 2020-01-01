@@ -7,6 +7,12 @@
 #include "Rendering/StaticMesh.hpp"
 #include "Rendering/Material/Material.hpp"
 #include "Rendering/Shader.hpp"
+#include "Logging.hpp"
+
+namespace ck
+{
+class AssetManager;
+}
 
 // Macros
 
@@ -36,7 +42,7 @@
         ptr = ptr + sizeof(UIntS);           \
     }
 
-#define S_SIGNED_INT(val)                  \
+#define S_SIGNED_INT(val)                    \
     {                                        \
         SIntS i = val;                       \
         std::memcpy(ptr, &i, sizeof(SIntS)); \
@@ -62,6 +68,13 @@
     }
 
 #define S_STD_STRING S_STRING
+
+#define S_ASSET(asset)                    \
+    {                                     \
+        DatSize ds = asset->save();       \
+        std::memcpy(ptr, d.data, d.size); \
+        ptr = ptr + ds.size;              \
+    }
 
 #define END_SAVE() \
     DatSize o;     \
@@ -96,7 +109,7 @@
         t_u_int = i.i;                       \
     }
 
-#define L_SIGNED_INT(t_s_int)              \
+#define L_SIGNED_INT(t_s_int)                \
     {                                        \
         SIntS i;                             \
         std::memcpy(&i, ptr, sizeof(SIntS)); \
@@ -112,6 +125,11 @@
         ptr = ptr + sizeof(struct);                \
     }
 
+#define L_ASSET(asset)             \
+    {                              \
+        std::memcpy(&asset, ptr, ) \
+    }
+
 #define END_LOAD()
 // End Macros
 
@@ -122,6 +140,97 @@ struct DatSize
 {
     unsigned char *data;
     size_t size;
+};
+
+struct TrackedData
+{
+private:
+    unsigned char *data;
+    unsigned char *current;
+
+public:
+    size_t size;
+
+    TrackedData(unsigned char *init_data, size_t init_size) : data(init_data), current(init_data), size(init_size){};
+
+    TrackedData(size_t init_size) : size(init_size)
+    {
+        data = (unsigned char *)malloc(init_size);
+
+        current = data;
+    }
+
+    ~TrackedData()
+    {
+        if (data != 0x0 && size > 0)
+        {
+            free(data);
+        }
+    }
+
+    TrackedData() : data(0x0), current(0x0), size(0){};
+
+    void addData(const unsigned char *data_in, size_t size_in)
+    {
+        if ((size_t)(current - data) + size_in <= size)
+        {
+            std::memcpy(current, data_in, size_in);
+            current += size_in;
+        }
+        else
+        {
+            LOG(ERROR) << "Tried adding more data to TrackedData than is allocated for" << std::endl;
+        }
+    }
+
+    void addData(const void *data_in, size_t size_in)
+    {
+        addData((const unsigned char *)data_in, size_in);
+    }
+
+    void resetCurrent()
+    {
+        current = data;
+    }
+
+    // Reset frees the data, soft reset does not
+
+    void reset(size_t new_size)
+    {
+        if (data != 0x0)
+        {
+            free(data);
+        }
+
+        soft_reset(size);
+    }
+
+    void reset(unsigned char *new_data, size_t new_size)
+    {
+        if (data != 0x0)
+        {
+            free(data);
+        }
+
+        soft_reset(new_data, new_size);
+    }
+
+    void soft_reset(unsigned char *new_data, size_t new_size)
+    {
+        current = data = new_data;
+        size = new_size;
+    }
+
+    void soft_reset(size_t new_size)
+    {
+        current = data = (unsigned char *)malloc(new_size);
+        size = new_size;
+    }
+
+    const unsigned char* getData()
+    {
+        return data;
+    }
 };
 
 struct TriInt
@@ -169,13 +278,14 @@ struct SIntS
 // Asset Serializer, one for every Asset that suports serializing
 struct AssetS
 {
-    // Export binary data, and size
-    virtual DatSize save() = 0;
+    // Export serialized binary data, and size
+    virtual TrackedData save() = 0;
     virtual void load(unsigned char *data, size_t size) = 0;
+    virtual size_t size() = 0;
     AssetS(){};
     virtual ~AssetS(){};
     virtual Asset *asset() = 0;
-    // IMPORTANT: Each AssetS should also define a constructor that takes the corresponding asset, and a "deconstructor"(AssetS::asset()) that returns a corresponding asset.
+    // IMPORTANT: Each AssetS must also define a constructor that takes the corresponding asset, and a "deconstructor"(AssetS::asset()) that returns a corresponding asset.
     //AssetS(Asset *a) {};
 
     const virtual unsigned char getUUID() = 0;
@@ -512,4 +622,83 @@ struct StaticMeshS : AssetS
         }
     };
 };*/
+
+/*
+ * Specific getSize overrides
+ */
+
+size_t getSize(ck::Asset *var);
+
+/*
+ * Template Implementations of getSize
+ */
+
+// Basic sizeof for everything else, should expand exceptions as times get added
+template <class T>
+size_t getSize(T var)
+{
+    if (std::is_pod<T>::value)
+    {
+        return sizeof(T);
+    }
+    else
+    {
+        LOG(WARNING) << "Using sizeof for non-POD type " << typeid(T).name() << ". Should implement specific implementation" << std::endl;
+        return sizeof(T);
+    }
+}
+
+template <class A>
+size_t getSize(ck::AssetRef<A> var)
+{
+    return ck::AssetManager::inst()->getObject(var.get())->size();
+}
+
+template <class V>
+size_t getSize(std::vector<V> var)
+{
+    LOG(INFO) << "Getting Size for Vector";
+    return 12;//sizeof(SizeS) + 4 * var.size();//var.size() * getSize(var[0]);
+}
+
+template <class T>
+void saveProp(TrackedData &data, T prop)
+{
+    if (!std::is_pod<T>::value)
+    {
+        LOG(WARNING) << "Using basic memcpy for non-POD type " << typeid(T).name() << ". This can be very dangerous and IS VERY LIKLEY to crash the program. You should implement specific implementation" << std::endl;
+    }
+
+    LOG(INFO) << "saving asset of type " << typeid(T).name() << ". size: " << getSize(prop) << " with generic saver" << std::endl;
+
+    size_t buf_size = getSize(prop);
+    void* buf_data =malloc(buf_size);
+    std::memcpy(buf_data, &prop, buf_size);
+    LOG(WARNING) << prop << std::endl;
+
+    data.addData(buf_data, buf_size);
+}
+
+template <class V>
+void saveProp(TrackedData &data, typename std::vector<V> prop)
+{
+    LOG(INFO) << "Saving std::vector";
+    /*SizeS s(prop.size());
+    data.addData(&s, sizeof(SizeS));
+
+    for (V obj : prop)
+    {
+        //TrackedData td(getSize(obj));
+        //unsigned char* pre = data.current;
+        //saveProp(data, obj);
+        data.addData("VEC", 4);
+        //unsigned char* post = data.current;
+        //data.addData()
+    }*/
+    //unsigned char data_raw = '1234';
+    //unsigned char* data = &data_raw;
+    data.addData("VECTOR_SAVE", 12);
+}
+//size_t getSize(std::string var);
+
 } // namespace ck

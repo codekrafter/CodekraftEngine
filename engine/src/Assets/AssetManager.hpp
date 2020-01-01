@@ -18,7 +18,7 @@ class AssetRef;
 
 class AssetManager
 {
-  private:
+private:
     template <class T>
     friend class AssetRef;
     std::map<std::string, std::map<std::string, Asset *>> map;
@@ -39,24 +39,30 @@ class AssetManager
     void loadf01(std::vector<unsigned char> d, std::string cname);
 
     //size_t getSize(std::string name);
-    AssetS *getObject(Asset *a);
-    AssetS *getObject(unsigned char UUID);
 
     unsigned char getUUID(Asset *a);
 
-  public:
+public:
     ~AssetManager();
     static AssetManager *inst();
     void save();
     //void save(std::string dir);
     void load();
     //void load(std::string dir);
+
+    AssetS *getObject(Asset *a);
+    AssetS *getObject(unsigned char UUID);
+};
+
+// Dummy Parent Class for AssetRef so that you can check if it is an AssetRef without templating
+class AssetRefParent
+{
 };
 
 template <class A>
-class AssetRef
+class AssetRef : AssetRefParent
 {
-  private:
+private:
     std::string ID;
     std::string chunk;
 
@@ -65,10 +71,10 @@ class AssetRef
     void *operator new[](size_t) { static_assert(true, "Do not create an AssetReference on the heap"); };         // array new
     void *operator new[](size_t, void *) { static_assert(true, "Do not create an AssetReference on the heap"); }; // placement array new
 
-  public:
+public:
     AssetRef() : AssetRef("")
     {
-        //LOG(WARNING) << "Creating blank asset reference, this is bad practice.";
+        LOG(WARNING) << "Creating blank asset reference, this is bad practice.";
         return;
     };
 

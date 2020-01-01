@@ -1,5 +1,6 @@
 #include "StaticMeshComponent.hpp"
 
+#include "Rendering/Texture.hpp"
 #include "GLM.hpp"
 #include "ThirdParty/ImGuizmo.hpp"
 #include "ECS/Actor.hpp"
@@ -39,7 +40,8 @@ void StaticMeshComponent::render()
 void StaticMeshComponent::onBeginPlay()
 {
   //ref->init();
-  mat = new Material();
+  AssetRef<Texture> texture("texture", "textures");
+  mat = new Material(texture);
   RenderingManager::inst()->getRenderer()->init(ref.get());
   RenderingManager::inst()->getRenderer()->init(mat);
   

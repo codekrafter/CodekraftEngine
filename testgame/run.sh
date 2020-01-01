@@ -4,7 +4,7 @@ cd ..
 
 cd engine
 
-ckb -i .
+ckb -e .
 
 
 cd ..

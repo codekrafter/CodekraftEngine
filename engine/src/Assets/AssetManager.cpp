@@ -240,7 +240,7 @@ void AssetManager::savef01(std::string name)
     header.push_back(0x004B);
     header.push_back(0x0044);
 
-    // End of transmisson block
+    // End of transmission block
     header.push_back(0x0017);
 
     // Version
@@ -262,15 +262,15 @@ void AssetManager::savef01(std::string name)
         std::memcpy(&header[s], &s_chunk, sizeof(SizeS));
     }
 
-    std::map<Asset *, DatSize> dsv;
+    std::map<Asset *, TrackedData> dataMap;
     std::map<Asset *, std::string> IDLookup;
 
     for (std::pair<std::string, Asset *> pair : chunk)
     {
 
         AssetS *as = getObject(pair.second);
-        DatSize ds = as->save();
-        dsv[pair.second] = ds;
+        //DatSize ds = as->save();
+        dataMap[pair.second] = as->save();//ds;
         IDLookup[pair.second] = pair.first;
         delete as;
     };
@@ -278,7 +278,7 @@ void AssetManager::savef01(std::string name)
     // CRC Lookup table
     CRC::Table<std::uint32_t, 32> table(CRC::CRC_32());
 
-    for (std::pair<Asset *, DatSize> p : dsv)
+    for (std::pair<Asset *, TrackedData> p : dataMap)
     {
         // UUID for Asset Type
         header.push_back(getUUID(p.first));
@@ -301,12 +301,14 @@ void AssetManager::savef01(std::string name)
         {
             std::uint32_t crc;
             //unsigned char bytes[4];
-            crc = CRC::Calculate(p.second.data, p.second.size, table);
+            crc = CRC::Calculate(p.second.getData(), p.second.size, table);
             LOG(INFO) << "old crc:" << crc;
+            LOG(INFO) << "CRC bytes: " << std::endl;
             for (int i = 0; i != 4; ++i)
             {
                 unsigned char b = (crc >> (24 - i * 8)) & 0xFF;
                 //bytes[i] = b;
+                LOG(INFO) << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(b);
                 header.push_back(b);
             }
         }
@@ -336,15 +338,18 @@ void AssetManager::savef01(std::string name)
     size_t pre_size = header.size();
     size_t expected_size = 0;
     size_t es2 = 0;
-    for (std::pair<Asset *, DatSize> p : dsv)
+    for (std::pair<Asset *, TrackedData> p : dataMap)
     {
         expected_size = expected_size + p.second.size;
         // Group Seperator
         //header.push_back(0x001D);
-
+        const unsigned char* asset_data = p.second.getData();
+        LOG(INFO) << "Data Size: " << p.second.size << std::endl;
         for (int i = 0; i < p.second.size; ++i)
         {
-            header.push_back(p.second.data[i]);
+            //LOG(INFO) << "Pushing Back Asset Data: " << std::setfill('0') << std::setw(2) << asset_data[i] << std::endl;
+            header.push_back(asset_data[i]);
+            //header.push_back(0x0066);
             es2 = es2 + 1;
         }
     };
@@ -576,7 +581,7 @@ void AssetManager::loadf01(std::vector<unsigned char> d, std::string cname)
     }
 };*/
 
-AssetS *AssetManager::getObject(Asset *a)
+/*AssetS *AssetManager::getObject(Asset *a)
 {
 
     if (typeid(*a) == typeid(Shader))
@@ -609,5 +614,5 @@ AssetS *AssetManager::getObject(Asset *a)
         LOG(ERROR) << "Could not find asset of type: '" << typeid(a).name() << "'";
         return nullptr;
     }
-};
+};*/
 } // namespace ck
