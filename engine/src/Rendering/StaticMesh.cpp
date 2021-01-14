@@ -29,7 +29,7 @@ void StaticMesh::loadRaw(std::string path)
 
     if (!loaded)
     {
-        LOG(ERROR) << "Could not load '" << path << "' for a static mesh";
+        LOG(LOG_ERROR) << "Could not load '" << path << "' for a static mesh";
         return;
     };
 

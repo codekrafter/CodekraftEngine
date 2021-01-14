@@ -1,5 +1,8 @@
 #include <algorithm>
+
+#ifndef _WIN32
 #include <cxxabi.h>
+#endif
 
 #include "ThirdParty/IMGUI/imgui.h"
 #include "ThirdParty/ImGuizmo.hpp"

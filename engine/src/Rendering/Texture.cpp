@@ -45,7 +45,7 @@ void Texture::loadRaw(std::string fname, int nn)
     data = stbi_load(fname.c_str(), &width, &height, &n, 0);
     if (!data || data == nullptr)
     {
-        LOG(ERROR) << "failed to load image '" << fname << "'" << std::endl;
+        LOG(LOG_ERROR) << "failed to load image '" << fname << "'" << std::endl;
     }
     /*if (nn != 0)
     {

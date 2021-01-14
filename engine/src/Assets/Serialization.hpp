@@ -179,7 +179,7 @@ public:
         }
         else
         {
-            LOG(ERROR) << "Tried adding more data to TrackedData than is allocated for" << std::endl;
+            LOG(LOG_ERROR) << "Tried adding more data to TrackedData than is allocated for" << std::endl;
         }
     }
 

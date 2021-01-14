@@ -225,10 +225,10 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-            LOG(ERROR) << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
+            LOG(LOG_ERROR) << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
                        << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
             
-            LOG(ERROR) << "TYPE: " << type;
+            LOG(LOG_ERROR) << "TYPE: " << type;
             LOG(WARNING) << "VERTEX: " << vertex;
             LOG(WARNING) << "vFILE: " << vfile;
         }
@@ -239,7 +239,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-            LOG(ERROR) << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
+            LOG(LOG_ERROR) << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
                        << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     }

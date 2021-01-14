@@ -266,7 +266,7 @@ void Material::init()
     specular->init();
     if (shader == nullptr)
     {
-        LOG(ERROR) << "Shader in material is nullptr";
+        LOG(LOG_ERROR) << "Shader in material is nullptr";
         return;
     }
     shader->init();

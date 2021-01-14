@@ -16,7 +16,7 @@ namespace ck
 {
 void GLFWWindow::error_callback(int error, const char *description)
 {
-    LOGF(ERROR, "Error %d: %s\n", error, description);
+    LOGF(LOG_ERROR, "Error %d: %s\n", error, description);
 };
 void GLFWWindow::init()
 {

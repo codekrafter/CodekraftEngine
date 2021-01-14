@@ -79,7 +79,7 @@ struct CustomSink
         {
             return GREEN;
         }
-        if (level.value == ERROR.value)
+        if (level.value == LOG_ERROR.value)
         {
             return RED;
         }
@@ -115,7 +115,7 @@ CKEngine::CKEngine(EngineConfig c)
         display = new opengl::DisplayOpenGL(c.rendering);
         break;
     default:
-        LOG(ERROR) << "Cannot Find Display for DisplayType " << demangle(typeid(c.rendering.draw).name());
+        LOG(LOG_ERROR) << "Cannot Find Display for DisplayType " << demangle(typeid(c.rendering.draw).name());
     }*/
     //display = new opengl::DisplayOpenGL(c.rendering);
 
